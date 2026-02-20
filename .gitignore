@@ -1,0 +1,41 @@
+# Large files
+*.zip
+*.mp4
+*.mov
+
+# Images (스크린샷/디자인 파일)
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# IDE and editor files
+.DS_Store
+.vscode/
+*.swp
+*.swo
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Node dependencies (향후)
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# IDE
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+Thumbs.db
+.DS_Store
