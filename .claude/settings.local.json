@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(unzip:*)",
+      "Bash(file:*)",
+      "Bash(ls:*)",
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh auth:*)",
+      "Bash(winget install:*)",
+      "Bash(powershell -NoProfile -Command \"gh auth status\":*)",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(python3:*)"
+    ]
+  }
+}
