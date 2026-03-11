@@ -155,9 +155,8 @@ art-prep/
 | CEO / Product | 오현서 | 전체 방향, 기획, 데이터 수집 관리, AI 프롬프트 설계 |
 | Marketing | TBD | 파일럿 사용자 모집, 콘텐츠 마케팅 |
 | UX/UI Design | TBD | 화면 설계, 디자인 시스템 |
-| Backend Dev | TBD (26.09 합류 예정) | 앱 개발, Supabase 연동, Edge Functions |
 
-> **Note**: Phase 0~3는 CEO + Claude 협업으로 진행. 백엔드 개발자 합류 후 코드 품질 개선 및 기능 확장.
+> **Note**: Phase 0~3는 CEO + Claude 협업으로 진행. 이후 코드 품질 개선 및 기능 확장.
 
 ---
 
