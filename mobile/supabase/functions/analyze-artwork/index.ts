@@ -1,6 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 
+const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY')!
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -8,8 +11,7 @@ const corsHeaders = {
 
 const SYSTEM_PROMPT = `당신은 15년 경력의 미대입시 전문 강사이자 AI 분석 전문가입니다.
 실기자료를 분석하여 수험생에게 객관적이고 실질적인 피드백을 제공합니다.
-분석 원칙: 객관적 평가, 구체적 근거, 건설적 피드백.
-반드시 JSON 형식으로만 응답하세요.`
+반드시 JSON 형식으로 응답하세요.`
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -52,38 +54,43 @@ serve(async (req) => {
       )
     }
 
-    // 3. GPT-4o Vision API 호출
-    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    // 3. 이미지 → base64 변환 (Gemini inline_data 방식)
+    const imageRes = await fetch(artwork.image_url)
+    const imageBuffer = await imageRes.arrayBuffer()
+    const imageBase64 = btoa(String.fromCharCode(...new Uint8Array(imageBuffer)))
+    const mimeType = imageRes.headers.get('content-type') ?? 'image/jpeg'
+
+    // 4. Gemini API 호출
+    const prompt = buildPrompt(artwork)
+
+    const geminiResponse = await fetch(GEMINI_API_URL, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${Deno.env.get('OPENAI_API_KEY')}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'gpt-4o',
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          {
-            role: 'user',
-            content: [
-              { type: 'text', text: buildPrompt(artwork) },
-              { type: 'image_url', image_url: { url: artwork.image_url, detail: 'high' } },
-            ],
-          },
-        ],
-        max_tokens: 2000,
-        response_format: { type: 'json_object' },
+        systemInstruction: {
+          parts: [{ text: SYSTEM_PROMPT }],
+        },
+        contents: [{
+          parts: [
+            { text: prompt },
+            { inline_data: { mime_type: mimeType, data: imageBase64 } },
+          ],
+        }],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          maxOutputTokens: 2000,
+        },
       }),
     })
 
-    if (!openaiResponse.ok) {
-      throw new Error(`OpenAI API 오류: ${openaiResponse.status}`)
+    if (!geminiResponse.ok) {
+      throw new Error(`Gemini API 오류: ${geminiResponse.status}`)
     }
 
-    const openaiData = await openaiResponse.json()
-    const reportData = JSON.parse(openaiData.choices[0].message.content)
+    const geminiData = await geminiResponse.json()
+    const reportData = JSON.parse(geminiData.candidates[0].content.parts[0].text)
 
-    // 4. DB 저장
+    // 5. DB 저장
     const { data: report, error: insertError } = await supabase
       .from('analysis_reports')
       .insert({ artwork_id, ...reportData })

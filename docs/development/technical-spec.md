@@ -1,6 +1,6 @@
 # Technical Spec — ArtPrep MVP
 
-**최종 업데이트**: 2026-03-11
+**최종 업데이트**: 2026-03-14
 
 ---
 
@@ -8,14 +8,16 @@
 
 | 항목 | 기술 | 버전 |
 |------|------|------|
-| 모바일 | Expo (React Native) | SDK 51+ |
+| 프레임워크 | Next.js (App Router) | 14+ |
 | 언어 | TypeScript | 5.x |
-| 라우팅 | Expo Router | v3 |
+| 라우팅 | Next.js App Router | 내장 |
+| UI 스타일링 | Tailwind CSS | v3 |
+| UI 컴포넌트 | shadcn/ui | 최신 |
 | 백엔드 | Supabase | 최신 |
 | DB | PostgreSQL (Supabase) | 15 |
 | 인증 | Supabase Auth | — |
 | 이미지 저장 | Supabase Storage | — |
-| AI | OpenAI GPT-4 Vision | gpt-4o |
+| AI | Google Gemini | gemini-2.0-flash |
 | Edge Function | Deno (Supabase) | — |
 
 ---
@@ -23,11 +25,11 @@
 ## 2. 환경변수 (.env.local)
 
 ```env
-EXPO_PUBLIC_SUPABASE_URL=https://[프로젝트ID].supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=[anon key]
+NEXT_PUBLIC_SUPABASE_URL=https://[프로젝트ID].supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=[anon key]
 ```
 
-> Edge Function에서는 Supabase 대시보드의 Secrets에 `OPENAI_API_KEY` 설정
+> Edge Function에서는 Supabase 대시보드의 Secrets에 `GEMINI_API_KEY` 설정
 
 ---
 
@@ -51,7 +53,7 @@ CREATE TABLE artworks (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   image_url TEXT NOT NULL,
   university TEXT NOT NULL,
-  region TEXT NOT NULL,         -- '서울' | '경기' | '지방'
+  region TEXT NOT NULL,         -- '서울' | '경기인천' | '지방'
   exam_type TEXT NOT NULL,      -- '수시' | '정시'
   artwork_type TEXT NOT NULL,
   year INTEGER,
@@ -192,7 +194,7 @@ serve(async (req) => {
   const { artwork_id, image_url } = await req.json()
 
   // 이미 분석된 경우 캐시 반환
-  // OpenAI GPT-4o Vision API 호출
+  // Gemini API 호출
   // 결과를 analysis_reports 테이블에 저장
   // 응답 반환
 })
@@ -205,31 +207,15 @@ serve(async (req) => {
 ## 7. Supabase 클라이언트 설정
 
 ```typescript
-// mobile/lib/supabase.ts
-import { createClient } from '@supabase/supabase-js'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { AppState } from 'react-native'
+// lib/supabase.ts
+import { createBrowserClient } from '@supabase/ssr'
 
-const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-  },
-})
-
-// 앱이 foreground로 돌아올 때 세션 갱신
-AppState.addEventListener('change', (state) => {
-  if (state === 'active') {
-    supabase.auth.startAutoRefresh()
-  } else {
-    supabase.auth.stopAutoRefresh()
-  }
-})
+export function createClient() {
+  return createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
 ```
 
 ---
@@ -270,35 +256,31 @@ const { data, error } = await supabase.functions.invoke('analyze-artwork', {
 ## 9. 폴더 구조 상세
 
 ```
-mobile/
-├── app/
-│   ├── _layout.tsx              ← 루트 레이아웃 (인증 체크)
+art-prep/
+├── app/                              ← Next.js App Router
+│   ├── layout.tsx                    ← 루트 레이아웃
+│   ├── page.tsx                      ← 홈 (큐레이션)
 │   ├── (auth)/
-│   │   ├── _layout.tsx
-│   │   ├── login.tsx
-│   │   └── signup.tsx
-│   ├── (onboarding)/
-│   │   ├── _layout.tsx
-│   │   └── goals.tsx
-│   ├── (tabs)/
-│   │   ├── _layout.tsx          ← 탭 네비게이션 정의
-│   │   ├── index.tsx            ← 홈 (큐레이션)
-│   │   ├── saved.tsx            ← 저장함
-│   │   └── settings.tsx         ← 설정
+│   │   ├── login/page.tsx
+│   │   └── signup/page.tsx
+│   ├── onboarding/
+│   │   └── goals/page.tsx
+│   ├── saved/page.tsx
+│   ├── settings/page.tsx
 │   └── artwork/
-│       └── [id].tsx             ← 작품 상세 (동적 라우트)
+│       └── [id]/page.tsx
 ├── components/
-│   ├── ArtworkCard.tsx          ← 작품 카드 컴포넌트
-│   ├── FilterChip.tsx           ← 필터 칩
-│   ├── AnalysisReport.tsx       ← 5단계 분석 리포트 컴포넌트
-│   └── LoadingSpinner.tsx
+│   ├── ArtworkCard.tsx
+│   ├── FilterChip.tsx
+│   ├── AnalysisReport.tsx
+│   └── ui/                           ← shadcn/ui 컴포넌트
 ├── lib/
-│   ├── supabase.ts              ← Supabase 클라이언트
-│   └── types.ts                 ← TypeScript 타입 정의
+│   ├── supabase.ts
+│   └── types.ts
 ├── hooks/
-│   ├── useArtworks.ts           ← 작품 데이터 훅
-│   ├── useAuth.ts               ← 인증 상태 훅
-│   └── useSaved.ts              ← 저장함 훅
+│   ├── useArtworks.ts
+│   ├── useAuth.ts
+│   └── useSaved.ts
 └── supabase/
     ├── migrations/
     │   └── 001_initial_schema.sql
@@ -312,7 +294,7 @@ mobile/
 ## 10. TypeScript 타입 정의
 
 ```typescript
-// mobile/lib/types.ts
+// lib/types.ts
 
 export type Artwork = {
   id: string
