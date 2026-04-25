@@ -2,6 +2,10 @@
 
 > **W9는 짧은 최종 주 (4일)**. 내부 마감(6/16)에서 밀린 작업 흡수 + 포트폴리오 자산 마감.
 
+
+> ⚠️ **2026-04-25부터 [`/calendar`](https://hyunseo-oh.vercel.app/calendar)가 source of truth.**
+> 본 문서는 비태스크 컨텍스트(결정·게이트·리스크) 보관용. 태스크는 calendar 또는 [/art-prep](https://hyunseo-oh.vercel.app/art-prep) Roadmap 탭에서 관리.
+
 ## 이번 주 주요 결정
 
 1. **최종 게이트 판정** — continue / pivot / kill
@@ -15,26 +19,14 @@
 | **pivot** | 숫자 애매, 특정 세그먼트 강한 반응 | 도메인 유지, 타겟·형태 재설계 |
 | **kill** | 100명 미달 + 재방문율 <10% | art-prep 종료, 미국 트랙 올인 |
 
-## 본인 산출물 (오현서, 4h 예산) — D-day 명시
+## 본인 산출물 (오현서)
 
-- [ ] **6/17(수)** 100명 미달 시 마지막 푸시 · 달성 시 결과 집계
-- [ ] **6/18(목)** 팀 전체 회고 미팅 + LinkedIn 포스트 1편 게시
-- [ ] **6/19(금)** 영어 case study 완성
-- [ ] **6/20(토)** 최종 게이트 판정 문서 (continue/pivot/kill) + 다음 스프린트 메모
+> Source: [/calendar](https://hyunseo-oh.vercel.app/calendar) — emoji 매핑 = 🎁 product · 🌈 fundraising · 🙋‍♀️ research
 
-## 데이터 팀 산출물
-
-- [ ] **6/19(금)** 까지 최종 리포트 — 8주+3일 데이터 파이프라인·AI 모델 결과 요약
-- [ ] 학습 데이터·모델 인수인계 문서
-
-## 혜진
-
-- [ ] 최종 마케팅 리포트
-- [ ] 후기·증언 수집 (case study용)
-
-## 우정민
-
-- [ ] 디자인 포트폴리오 아카이브 정리
+- [ ] 🌈 D2SF 일반 투자검토 신청
+- [ ] 🙋‍♀️ 아트프렙 자동화 운영 체계 확립
+- [ ] 🙋‍♀️ Phase 0 회고
+- [ ] 🙋‍♀️ Phase 1 플래닝
 
 ## 게이트/지표
 
