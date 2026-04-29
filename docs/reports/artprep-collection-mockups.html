@@ -1,0 +1,809 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ArtPrep 글 모음 — 시안 3종 비교</title>
+<style>
+  :root {
+    --ink: #111827;
+    --muted: #6B7280;
+    --line: #E5E7EB;
+    --bg: #FAFAFB;
+    --accent: #ff4d00;
+    --accent-soft: #ffe9dc;
+    --good: #16a34a;
+    --warn: #d97706;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .meta-bar {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 14px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .meta-bar-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .meta-bar h1 {
+    font-size: 16px;
+    margin: 0;
+    color: var(--accent);
+    font-weight: 800;
+  }
+  .meta-bar .sub {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .tabs {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+  }
+  .tab {
+    border: 1px solid var(--line);
+    background: #fff;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .stage {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px 96px;
+  }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .panel-intro {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+  .panel-intro h2 {
+    margin: 0 0 6px;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .panel-intro p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+    margin-right: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .badge.url { background: #ede9fe; color: #5b21b6; font-family: 'JetBrains Mono', monospace; text-transform: none; letter-spacing: 0; }
+  .badge.cost { background: #fef3c7; color: #92400e; }
+  .badge.auto { background: #dcfce7; color: #166534; }
+
+  /* === 시안 A — 인덱스 글 === */
+  .blog-page {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 48px 56px;
+  }
+  .blog-page .breadcrumb {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .blog-page .post-title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+    line-height: 1.25;
+  }
+  .blog-page .post-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+  }
+  .blog-page .post-meta .pill {
+    background: #ede9fe;
+    color: #5b21b6;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin: 16px 0 28px;
+  }
+  .week {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    background: #cbd5e1;
+  }
+  .week.done { background: var(--good); }
+  .week.now { background: var(--accent); }
+  .week.next { background: #93c5fd; color: #1e3a8a; }
+  .week .lbl { font-size: 9px; opacity: 0.85; margin-top: 2px; }
+  .track-section {
+    margin-bottom: 28px;
+  }
+  .track-section h3 {
+    font-size: 14px;
+    margin: 0 0 12px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+  }
+  .post-list-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+    gap: 12px;
+    font-size: 13px;
+  }
+  .post-list-item:last-child { border-bottom: none; }
+  .post-list-item .num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .post-list-item .title {
+    font-weight: 600;
+    flex: 1;
+  }
+  .post-list-item .reader {
+    font-size: 11px;
+    color: var(--muted);
+    background: #f4f4f8;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .milestone-list {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+  }
+  .milestone-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+    display: flex;
+    gap: 14px;
+  }
+  .milestone-list li:last-child { border-bottom: none; }
+  .milestone-list .date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+    min-width: 70px;
+  }
+
+  /* === 시안 B — 태그 페이지 === */
+  .blog-list {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 40px 48px;
+  }
+  .blog-list .breadcrumb {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .tag-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .tag-header .tag-symbol {
+    font-size: 22px;
+  }
+  .tag-header h2 {
+    font-size: 28px;
+    font-weight: 900;
+    margin: 0;
+  }
+  .tag-header .count {
+    background: var(--accent-soft);
+    color: var(--accent);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .tag-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+  }
+  .tag-filters {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .tag-filter {
+    border: 1px solid var(--line);
+    background: #fff;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .tag-filter.active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+  .post-card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .post-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .post-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .post-card .tags {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  .post-card .cat {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .cat.til { background: #e0f2fe; color: #075985; }
+  .cat.tech { background: #ede9fe; color: #5b21b6; }
+  .cat.essay { background: #dcfce7; color: #166534; }
+  .week-tag { background: #fef3c7; color: #92400e; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; }
+  .post-card h3 {
+    margin: 4px 0 6px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  .post-card .tldr {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.55;
+    margin: 0 0 8px;
+  }
+  .post-card .reader {
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* === 시안 C — 푸터 시리즈 네비 === */
+  .article-with-footer {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 48px 56px;
+  }
+  .article-body {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 32px;
+    margin-bottom: 24px;
+  }
+  .article-body p { font-size: 14px; color: var(--ink); margin: 8px 0; }
+  .article-body .truncate {
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+    margin: 16px 0;
+    font-size: 12.5px;
+  }
+  .series-footer {
+    background: linear-gradient(135deg, #fff 0%, var(--accent-soft) 100%);
+    border: 1px solid var(--accent-soft);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+  .series-footer .label {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .series-footer h4 {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 4px;
+  }
+  .series-footer .progress-text {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .series-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .series-list li {
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .series-list li:last-child { border-bottom: none; }
+  .series-list .num-circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.7);
+    color: var(--accent);
+    font-weight: 800;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .series-list .num-circle.current {
+    background: var(--accent);
+    color: #fff;
+  }
+  .series-list .current-row {
+    font-weight: 700;
+  }
+  .prev-next {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .prev-next a {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    text-decoration: none;
+    color: var(--ink);
+    font-size: 12px;
+    display: block;
+  }
+  .prev-next a:hover { border-color: var(--accent); }
+  .prev-next .dir {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .prev-next .ttl {
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .next-link { text-align: right; }
+
+  /* === 비교 표 === */
+  .compare {
+    margin-top: 32px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 28px 32px;
+  }
+  .compare h3 {
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .compare table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare th, .compare td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+  .compare th {
+    background: #f8f9fb;
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+  }
+  .compare td .yes { color: var(--good); font-weight: 700; }
+  .compare td .no { color: var(--warn); font-weight: 700; }
+
+  @media (max-width: 720px) {
+    .blog-page, .blog-list, .article-with-footer { padding: 32px 24px; }
+    .post-card-grid { grid-template-columns: 1fr; }
+    .progress-grid { grid-template-columns: repeat(5, 1fr); }
+    .prev-next { grid-template-columns: 1fr; }
+    .meta-bar-inner { flex-direction: column; align-items: flex-start; }
+    .tabs { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header class="meta-bar">
+  <div class="meta-bar-inner">
+    <h1>ArtPrep 글 모음 — 시안 3종 비교</h1>
+    <span class="sub">2026-04-29 · 클릭으로 전환 · 같은 7편을 어떻게 묶을지</span>
+    <div class="tabs">
+      <button class="tab active" data-target="a">A · 인덱스 글</button>
+      <button class="tab" data-target="b">B · 태그 페이지</button>
+      <button class="tab" data-target="c">C · 글 푸터 네비</button>
+    </div>
+  </div>
+</header>
+
+<main class="stage">
+
+<!-- ===================== A. 인덱스 글 ===================== -->
+<section class="panel active" id="panel-a">
+  <div class="panel-intro">
+    <h2>A · 인덱스 글 1편</h2>
+    <p>
+      <span class="badge url">/blog/artprep-index</span>
+      <span class="badge cost">유지: 글 추가 시 1줄 수동</span>
+      <span class="badge auto">코드 변경 0</span>
+      목차 페이지 같은 글 1편을 따로 발행. 회의/외부 공유 시 이 URL 하나만 보내면 끝.
+    </p>
+  </div>
+
+  <article class="blog-page">
+    <div class="breadcrumb">홈 / 블로그 / 작업 일지</div>
+    <h1 class="post-title">ArtPrep — 10주 스프린트 작업 일지 (인덱스)</h1>
+    <div class="post-meta">
+      <span class="pill">TIL</span>
+      <span>2026-04-29 발행 · 매주 갱신</span>
+      <span>약 4분</span>
+    </div>
+
+    <h3 style="font-size:14px;color:var(--accent);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 8px;font-weight:700;">10주 진척도</h3>
+    <div class="progress-grid">
+      <div class="week done">W1<span class="lbl">DONE</span></div>
+      <div class="week now">W2<span class="lbl">NOW</span></div>
+      <div class="week next">W3<span class="lbl">NEXT</span></div>
+      <div class="week">W4</div>
+      <div class="week">W5</div>
+      <div class="week">W6</div>
+      <div class="week">W7</div>
+      <div class="week">W8</div>
+      <div class="week">W9</div>
+      <div class="week">W10</div>
+    </div>
+
+    <div class="track-section">
+      <h3>W1 — 마무리 ✓</h3>
+      <div class="post-list-item">
+        <div class="num">1</div>
+        <div class="title">합격작 데이터 수집·태깅 프로세스 v1</div>
+        <span class="reader">정민·혜진</span>
+      </div>
+      <div class="post-list-item">
+        <div class="num">2</div>
+        <div class="title">저장 보드 페이지 구현 (하트 + 보드)</div>
+        <span class="reader">정민</span>
+      </div>
+    </div>
+
+    <div class="track-section">
+      <h3>W2 — 진행 중 · D-11 (D2SF 5/10)</h3>
+      <div class="post-list-item">
+        <div class="num">3</div>
+        <div class="title">V9 진단 — D2SF 매핑</div>
+        <span class="reader">혜진·정민</span>
+      </div>
+      <div class="post-list-item">
+        <div class="num">4</div>
+        <div class="title">D2SF 캠퍼스 공모전 착수 (5/10)</div>
+        <span class="reader">혜진·정민</span>
+      </div>
+      <div class="post-list-item">
+        <div class="num">5</div>
+        <div class="title">데이터 팀 킥오프 어젠다 (5/3 토 14:00)</div>
+        <span class="reader">정민·혜진</span>
+      </div>
+      <div class="post-list-item">
+        <div class="num">6</div>
+        <div class="title">Vercel 배포 결정 — 파이프라인 선결</div>
+        <span class="reader">정민</span>
+      </div>
+      <div class="post-list-item">
+        <div class="num">7</div>
+        <div class="title">타 대회 롱리스트 스캔 프레임워크</div>
+        <span class="reader">혜진</span>
+      </div>
+    </div>
+
+    <div class="track-section">
+      <h3>다가오는 마일스톤</h3>
+      <ul class="milestone-list">
+        <li><span class="date">5/3 토</span><span>데이터 팀 킥오프 (어젠다 #5)</span></li>
+        <li><span class="date">5/9 일</span><span>알파 인터뷰 1건 + D2SF 셀프 리허설</span></li>
+        <li><span class="date">5/10 월</span><span>D2SF 제출 18:00 마감</span></li>
+        <li><span class="date">5/17 일</span><span>베타 초대장 문구 확정·발송 준비</span></li>
+        <li><span class="date">6/16 / 20</span><span>내부 마감 / 공식 마감</span></li>
+      </ul>
+    </div>
+
+    <p style="margin-top:24px;font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px;">
+      🔧 <strong>작업 환경</strong> — art-prep 폴더 코드는 폐기, 다음 회차부터 새 프로젝트 폴더에서 작업.
+    </p>
+  </article>
+</section>
+
+<!-- ===================== B. 태그 페이지 ===================== -->
+<section class="panel" id="panel-b">
+  <div class="panel-intro">
+    <h2>B · 태그 페이지</h2>
+    <p>
+      <span class="badge url">/blog?tag=artprep</span>
+      <span class="badge auto">자동 갱신</span>
+      <span class="badge cost">코드 변경: BlogListPage 태그 필터 1회 추가</span>
+      'artprep' 태그가 붙은 글이 자동으로 모임. 새 글 발행 시 태그만 붙이면 끝.
+    </p>
+  </div>
+
+  <div class="blog-list">
+    <div class="breadcrumb">홈 / 블로그</div>
+    <div class="tag-header">
+      <span class="tag-symbol">🏷</span>
+      <h2>artprep</h2>
+      <span class="count">7개 글</span>
+    </div>
+    <p class="tag-desc">ArtPrep 10주 스프린트 작업 일지. W1(4/22~28) 마무리, W2(4/29~5/5) 진행 중.</p>
+
+    <div class="tag-filters">
+      <button class="tag-filter active">전체 7</button>
+      <button class="tag-filter">W1 (2)</button>
+      <button class="tag-filter">W2 (5)</button>
+      <button class="tag-filter">Tech (2)</button>
+      <button class="tag-filter">Essay (3)</button>
+      <button class="tag-filter">TIL (2)</button>
+    </div>
+
+    <div class="post-card-grid">
+      <div class="post-card">
+        <div class="tags"><span class="week-tag">W1</span><span class="cat til">TIL</span></div>
+        <h3>합격작 데이터 수집·태깅 프로세스 v1</h3>
+        <p class="tldr">첫 300건 시드 단계 출처·라벨·검수 운영 규칙. "동의 없는 작품은 DB에 안 넣는다"가 핵심.</p>
+        <div class="reader">→ 정민·혜진 · 약 3분</div>
+      </div>
+
+      <div class="post-card">
+        <div class="tags"><span class="week-tag">W1</span><span class="cat tech">Tech</span></div>
+        <h3>저장 보드 페이지 구현 (하트 + 보드)</h3>
+        <p class="tldr">하트(즉발 저장)와 보드(의도 분류) 분리한 저장함 UX 설계. 코드는 롤백, 설계 의도만 보존.</p>
+        <div class="reader">→ 정민 · 약 4분</div>
+      </div>
+
+      <div class="post-card">
+        <div class="tags"><span class="week-tag">W2</span><span class="cat essay">Essay</span></div>
+        <h3>V9 진단 — D2SF 캠퍼스 공모전 매핑</h3>
+        <p class="tldr">V9 강점 5개 / 업데이트 5개. P0 두 슬라이드(데이터 플라이휠 + 팀)부터 5/2까지 재집필.</p>
+        <div class="reader">→ 혜진·정민 · 약 5분</div>
+      </div>
+
+      <div class="post-card">
+        <div class="tags"><span class="week-tag">W2</span><span class="cat essay">Essay</span></div>
+        <h3>D2SF 캠퍼스 공모전 착수 (5/10 마감)</h3>
+        <p class="tldr">D-11. 제출물 6종 + 차별화 셀링 3개 + 일자별 일정 + 위험 요소.</p>
+        <div class="reader">→ 혜진·정민 · 약 4분</div>
+      </div>
+
+      <div class="post-card">
+        <div class="tags"><span class="week-tag">W2</span><span class="cat til">TIL</span></div>
+        <h3>데이터 팀 킥오프 어젠다 (5/3)</h3>
+        <p class="tldr">5/3(토) 14:00 회의 어젠다 0~4 + 결정 사항 빈칸 5개 + 사전 준비물 4종.</p>
+        <div class="reader">→ 정민·혜진 (둘 다) · 약 4분</div>
+      </div>
+
+      <div class="post-card">
+        <div class="tags"><span class="week-tag">W2</span><span class="cat tech">Tech</span></div>
+        <h3>Vercel 배포 결정 — 파이프라인 선결</h3>
+        <p class="tldr">"지금 배포 안 한다." 데이터 50장·Storage 정책·환경변수·Expo 셋업 4종 충족 후 W3에 배포.</p>
+        <div class="reader">→ 정민 · 약 3분</div>
+      </div>
+
+      <div class="post-card">
+        <div class="tags"><span class="week-tag">W2</span><span class="cat essay">Essay</span></div>
+        <h3>타 대회 롱리스트 스캔 프레임워크</h3>
+        <p class="tldr">4 트랙 × 4축 채점 → 16점 이상만 숏리스트. 동시 진행 3개 이하 운영 규칙.</p>
+        <div class="reader">→ 혜진 · 약 3분</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== C. 글 푸터 시리즈 네비 ===================== -->
+<section class="panel" id="panel-c">
+  <div class="panel-intro">
+    <h2>C · 글 푸터에 시리즈 네비게이션</h2>
+    <p>
+      <span class="badge url">기존 글 본문 하단</span>
+      <span class="badge cost">유지: 새 글 발행 시 7편 본문 일괄 갱신 또는 자동화</span>
+      <span class="badge auto">코드 변경 0 (수동) / 자동화 시 약간</span>
+      각 글 끝에 시리즈 박스 + 이전·다음 글 링크. 어느 글에서 시작해도 시리즈를 흝을 수 있음.
+    </p>
+  </div>
+
+  <article class="article-with-footer">
+    <div class="article-body">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">홈 / 블로그 / 글</div>
+      <h1 style="font-size:28px;font-weight:900;margin:0 0 16px;line-height:1.3;">D2SF 캠퍼스 공모전 착수 (5/10 마감)</h1>
+      <p>W2 task "D2SF 캠퍼스 공모전 지원서 양식 확인 → 착수 (5/10 마감)". 오늘(4/29) 기준 D-11.</p>
+      <p>주관: 네이버 D2SF (D2 Startup Factory). 대상: 대학생·대학원생 창업팀 — 법인 설립 여부, 기술 개발 단계, 팀 규모 무관. 서류 마감: 2026-05-10. 인터뷰 단계 → 최종 발표: 2026-06-23.</p>
+      <p class="truncate">— 본문 약 4분 분량 —</p>
+    </div>
+
+    <div class="series-footer">
+      <span class="label">📚 시리즈</span>
+      <h4>ArtPrep 10주 스프린트 작업 일지</h4>
+      <p class="progress-text">7편 중 4번째 글 · W1 ✓ · W2 진행 중 · 다음 글: 데이터 팀 킥오프 어젠다</p>
+
+      <ol class="series-list">
+        <li><span class="num-circle">1</span><span>W1 합격작 데이터 수집·태깅 프로세스 v1</span></li>
+        <li><span class="num-circle">2</span><span>W1 저장 보드 페이지 구현</span></li>
+        <li><span class="num-circle">3</span><span>W2 V9 진단 — D2SF 매핑</span></li>
+        <li class="current-row"><span class="num-circle current">4</span><span>W2 D2SF 캠퍼스 공모전 착수 (현재 글)</span></li>
+        <li><span class="num-circle">5</span><span>W2 데이터 팀 킥오프 어젠다 (5/3)</span></li>
+        <li><span class="num-circle">6</span><span>W2 Vercel 배포 결정</span></li>
+        <li><span class="num-circle">7</span><span>W2 타 대회 롱리스트 프레임워크</span></li>
+      </ol>
+    </div>
+
+    <div class="prev-next">
+      <a href="#">
+        <div class="dir">← 이전 글</div>
+        <div class="ttl">V9 진단 — D2SF 매핑</div>
+      </a>
+      <a href="#" class="next-link">
+        <div class="dir">다음 글 →</div>
+        <div class="ttl">데이터 팀 킥오프 어젠다 (5/3)</div>
+      </a>
+    </div>
+  </article>
+</section>
+
+<!-- ===================== 비교 표 (항상 표시) ===================== -->
+<div class="compare">
+  <h3>한눈에 비교</h3>
+  <table>
+    <tr>
+      <th>축</th>
+      <th>A · 인덱스 글</th>
+      <th>B · 태그 페이지</th>
+      <th>C · 푸터 네비</th>
+    </tr>
+    <tr>
+      <td><strong>새 글 추가 시 갱신</strong></td>
+      <td>인덱스 글 1줄 추가 (수동)</td>
+      <td><span class="yes">자동</span> (태그만 붙이면)</td>
+      <td>전체 글 푸터 갱신 (수동 또는 자동화)</td>
+    </tr>
+    <tr>
+      <td><strong>코드 변경</strong></td>
+      <td><span class="yes">0</span></td>
+      <td>BlogListPage 태그 필터 1회</td>
+      <td><span class="yes">0</span> (수동) / 약간 (자동화)</td>
+    </tr>
+    <tr>
+      <td><strong>회의 공유 URL</strong></td>
+      <td><span class="yes">1개</span></td>
+      <td><span class="yes">1개</span></td>
+      <td>각 글 7개 (또는 인덱스 별도 필요)</td>
+    </tr>
+    <tr>
+      <td><strong>스프린트 진척도 표시</strong></td>
+      <td><span class="yes">가능</span> (10주 칸 그리드 등)</td>
+      <td>제한적 (필터로만)</td>
+      <td>각 글 푸터에 일부</td>
+    </tr>
+    <tr>
+      <td><strong>외부 노출(투자자/심사위원) 적합도</strong></td>
+      <td><span class="yes">높음</span> (완성된 한 페이지)</td>
+      <td>중간 (검색 결과 느낌)</td>
+      <td>낮음 (글 안에 들어와야 보임)</td>
+    </tr>
+    <tr>
+      <td><strong>이번 회차 적합도</strong></td>
+      <td><span class="yes">★★★</span></td>
+      <td>★★ (W4~ 글 늘면 가치↑)</td>
+      <td>★ (글 6편 이상부터 의미)</td>
+    </tr>
+  </table>
+</div>
+
+</main>
+
+<script>
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.getAttribute('data-target');
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + target).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>

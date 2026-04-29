@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ArtPrep W1/W2 팀 미팅 · 2026-04-29</title>
+<style>
+  :root {
+    --ink: #111827;
+    --muted: #6B7280;
+    --line: #E5E7EB;
+    --bg: #FAFAFB;
+    --accent: #ff4d00;
+    --accent-soft: #ffe9dc;
+    --good: #16a34a;
+    --good-soft: #dcfce7;
+    --warn: #d97706;
+    --warn-soft: #fef3c7;
+    --bad: #dc2626;
+    --bad-soft: #fee2e2;
+    --decide: #7c3aed;
+    --decide-soft: #f3e8ff;
+    --gray-soft: #f3f4f6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 17px;
+  }
+  .deck { max-width: 1080px; margin: 0 auto; padding: 32px 24px 96px; }
+  .nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(250, 250, 251, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 24px;
+    margin: -32px -24px 28px;
+    display: flex; align-items: center; gap: 16px;
+    font-size: 13px;
+  }
+  .nav .brand { font-weight: 800; color: var(--accent); }
+  .nav .meta { color: var(--muted); }
+  .nav .links { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav .links a {
+    color: var(--muted); text-decoration: none; font-size: 13px;
+    padding: 6px 12px; border-radius: 6px; border: 1px solid var(--line);
+  }
+  .nav .links a:hover { color: var(--ink); border-color: var(--ink); background: #fff; }
+
+  /* slide 기본 */
+  .slide {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 56px 60px;
+    margin-bottom: 32px;
+    scroll-margin-top: 80px;
+    position: relative;
+  }
+  .slide .num {
+    position: absolute; top: 22px; right: 26px;
+    font-size: 12px; color: var(--muted);
+    letter-spacing: 0.06em; font-weight: 800;
+  }
+
+  /* 슬라이드의 한 줄 메시지 = 제목 위에 띄움 */
+  .slide .ask {
+    display: inline-block;
+    background: var(--gray-soft); color: var(--muted);
+    font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 5px 12px; border-radius: 999px;
+    margin-bottom: 14px; text-transform: uppercase;
+  }
+  .slide h1 { font-size: 38px; font-weight: 900; letter-spacing: -0.02em; line-height: 1.25; margin: 0; }
+  .slide h2 { font-size: 30px; font-weight: 800; margin: 0 0 12px; letter-spacing: -0.01em; line-height: 1.3; }
+  .slide .lede { font-size: 18px; color: var(--muted); margin: 8px 0 28px; max-width: 780px; }
+
+  /* 표지 */
+  .cover {
+    background: linear-gradient(135deg, #fff 0%, var(--accent-soft) 100%);
+    padding: 96px 60px;
+  }
+  .cover h1 { font-size: 50px; max-width: 880px; }
+  .cover .date {
+    font-size: 14px; color: var(--accent);
+    font-weight: 800; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .cover .summary {
+    font-size: 19px; color: var(--ink); margin-top: 18px;
+    max-width: 800px; line-height: 1.55;
+  }
+  .cover .agenda {
+    margin-top: 40px; max-width: 760px;
+    background: #fff; border-radius: 14px;
+    border: 1px solid var(--line); padding: 22px 28px;
+  }
+  .cover .agenda h3 {
+    margin: 0 0 12px; font-size: 13px; font-weight: 800;
+    color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .cover .agenda ol {
+    margin: 0; padding-left: 24px; font-size: 16px;
+    counter-reset: agenda;
+    list-style: none;
+  }
+  .cover .agenda ol li {
+    margin: 10px 0; padding-left: 6px; position: relative;
+    counter-increment: agenda;
+  }
+  .cover .agenda ol li::before {
+    content: counter(agenda);
+    position: absolute; left: -28px; top: 0;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--accent); color: #fff;
+    font-size: 12px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cover .agenda .time {
+    color: var(--muted); font-size: 13px; font-weight: 700;
+    margin-left: 8px;
+  }
+
+  /* Before/After */
+  .ba {
+    display: grid;
+    grid-template-columns: 1fr 60px 1fr;
+    gap: 20px;
+    align-items: stretch;
+    margin: 16px 0;
+  }
+  .ba-box {
+    border-radius: 12px; padding: 18px 22px;
+    border: 1px solid var(--line);
+  }
+  .ba-before {
+    background: var(--gray-soft);
+    color: #4b5563;
+  }
+  .ba-after {
+    background: var(--good-soft);
+    color: #064e3b;
+    border-color: #86efac;
+  }
+  .ba-box .tag {
+    display: inline-block; font-size: 11px; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .ba-before .tag { background: #fff; color: var(--muted); }
+  .ba-after .tag { background: #fff; color: var(--good); }
+  .ba-box h4 { margin: 0 0 6px; font-size: 16px; font-weight: 800; line-height: 1.4; }
+  .ba-box p { margin: 0; font-size: 14.5px; line-height: 1.55; }
+  .ba-box code { font-size: 13px; background: rgba(255,255,255,0.6); padding: 1px 5px; border-radius: 3px; }
+  .ba-arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; font-weight: 800; color: var(--accent);
+  }
+
+  /* 4개 Before/After 묶음 */
+  .ba-list { display: flex; flex-direction: column; gap: 14px; }
+  .ba-list .ba-row {
+    display: grid;
+    grid-template-columns: 32px 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+  .ba-list .ba-row > .label-num {
+    background: var(--accent); color: #fff;
+    font-weight: 900; font-size: 16px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* 숫자 카드 */
+  .stats {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 18px; margin: 16px 0 8px;
+  }
+  .stat-card {
+    background: #fff; border-radius: 12px;
+    padding: 22px 24px; border: 1px solid var(--line);
+  }
+  .stat-card .v { font-size: 36px; font-weight: 900; color: var(--accent); line-height: 1; }
+  .stat-card .k { font-size: 13px; color: var(--muted); margin-top: 8px; font-weight: 700; }
+
+  /* 캘린더 */
+  .timeline-cal {
+    margin: 16px 0;
+    display: flex; flex-direction: column; gap: 0;
+  }
+  .timeline-cal .row {
+    display: grid; grid-template-columns: 100px 1fr 80px;
+    gap: 18px; align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .timeline-cal .row:last-child { border-bottom: none; }
+  .timeline-cal .row .date {
+    font-weight: 800; font-size: 16px;
+    color: var(--ink);
+  }
+  .timeline-cal .row .what {
+    font-size: 16px;
+  }
+  .timeline-cal .row .dday {
+    text-align: right; font-size: 13px;
+    color: var(--muted); font-weight: 700;
+  }
+  .timeline-cal .row.flag {
+    background: var(--bad-soft);
+    border-radius: 10px;
+    padding: 14px 18px;
+    border-bottom: none;
+    margin: 4px 0;
+  }
+  .timeline-cal .row.flag .date { color: var(--bad); }
+  .timeline-cal .row.flag .what { color: var(--bad); font-weight: 800; }
+  .timeline-cal .row.flag .dday { color: var(--bad); }
+
+  /* 결정 카드 */
+  .decide-list { display: flex; flex-direction: column; gap: 16px; }
+  .decide {
+    border: 2px solid var(--decide); border-radius: 14px;
+    padding: 22px 26px;
+    background: linear-gradient(180deg, #fff 0%, var(--decide-soft) 100%);
+  }
+  .decide .head {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 10px;
+  }
+  .decide .d-num {
+    background: var(--decide); color: #fff;
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 900; font-size: 14px;
+  }
+  .decide h4 { margin: 0; font-size: 19px; font-weight: 800; }
+  .decide .why {
+    font-size: 14.5px; color: #4b5563;
+    margin: 0 0 12px; line-height: 1.55;
+  }
+  .decide .options {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .decide .opt {
+    background: #fff; border: 1px solid var(--line);
+    padding: 8px 14px; border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+  }
+  .decide .opt b { color: var(--decide); margin-right: 4px; }
+  .decide .blank {
+    margin-top: 12px; padding: 10px 14px;
+    background: #fff; border: 1px dashed var(--decide);
+    border-radius: 8px; font-size: 13px; color: var(--muted);
+  }
+
+  /* 마무리 정리 */
+  .summary-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px; margin-top: 20px;
+  }
+  .sum-card {
+    background: #fff; border: 1px solid var(--line);
+    border-radius: 12px; padding: 22px 24px;
+  }
+  .sum-card .label {
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 8px;
+  }
+  .sum-card h4 { margin: 0 0 6px; font-size: 17px; font-weight: 800; }
+  .sum-card p { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+  code { background: #f1f3f7; padding: 2px 6px; border-radius: 4px; font-size: 14px; font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  @media (max-width: 760px) {
+    .slide { padding: 36px 28px; }
+    .ba { grid-template-columns: 1fr; }
+    .ba-arrow { transform: rotate(90deg); }
+    .ba-list .ba-row { grid-template-columns: 1fr; }
+    .ba-list .ba-row > .label-num { width: 32px; height: 28px; }
+    .stats, .summary-grid { grid-template-columns: 1fr; }
+    .timeline-cal .row { grid-template-columns: 80px 1fr; }
+    .timeline-cal .row .dday { display: none; }
+    .cover { padding: 56px 28px; }
+    .cover h1 { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <nav class="nav">
+    <span class="brand">ArtPrep · 팀 미팅</span>
+    <span class="meta">10분 · 혜진 / 정민 · 2026-04-29</span>
+    <span class="links">
+      <a href="#m1">달라진 점</a>
+      <a href="#m2">그 외 작업</a>
+      <a href="#m3">5월 일정</a>
+      <a href="#m4">결정 필요</a>
+      <a href="#m5">정리</a>
+    </span>
+  </nav>
+
+  <!-- 표지 -->
+  <section class="slide cover" id="m0">
+    <div class="num">00</div>
+    <div class="date">2026 · 04 · 29 · 화 · 10분</div>
+    <h1>오늘 보여드릴 것 — 페이지에 무엇이 새로 생겼고, 다음 11일을 어떻게 쓸지</h1>
+    <p class="summary">오늘 하루에 ArtPrep 페이지의 4가지가 "보이기만 하던 것"에서 "진짜로 작동하는 것"으로 바뀌었어요. 이걸 보여드리고, 5월 마감 3개(5/3 · 5/9 · 5/10)를 어떻게 통과할지, 그 전에 두 분한테 받을 결정 1건만 같이 정해요.</p>
+
+    <div class="agenda">
+      <h3>10분 어젠다</h3>
+      <ol>
+        <li><strong>오늘 4가지가 진짜로 작동하기 시작했어요 (개발)</strong> <span class="time">3분</span></li>
+        <li><strong>그 외 작업 — 문서·펀드 전략·블로그</strong> <span class="time">2분</span></li>
+        <li><strong>5월 일정 — 마감 3개</strong> <span class="time">1분</span></li>
+        <li><strong>받을 결정 1건 — 5/9 알파 인터뷰 후보</strong> <span class="time">2분</span></li>
+        <li><strong>마무리 + Q&amp;A + 메모</strong> <span class="time">2분</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 1. 달라진 점 -->
+  <section class="slide" id="m1">
+    <div class="num">01</div>
+    <span class="ask">오늘 무엇이 달라졌나</span>
+    <h2>"화면만 있던 것" → "진짜로 데이터가 흐르는 것"</h2>
+    <p class="lede">필터 / 저장 / 업로드 / 내 작품 — 네 영역이 같은 날 한꺼번에 살아났어요. 왼쪽이 어제까지, 오른쪽이 오늘부터.</p>
+
+    <div class="ba-list">
+
+      <div class="ba-row">
+        <div class="label-num">1</div>
+        <div class="ba">
+          <div class="ba-box ba-before">
+            <span class="tag">어제까지</span>
+            <h4>필터 옵션을 코드 안에 박아둠</h4>
+            <p>"홍대" "서울대" 같은 항목을 추가하려면 매번 개발자가 코드를 고쳐야 했어요.</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box ba-after">
+            <span class="tag">오늘부터</span>
+            <h4>DB에서 항목 추가·삭제</h4>
+            <p>운영자가 코드 손 안 대고 옵션을 바꿀 수 있어요. "미지정"은 항상 맨 뒤로 자동 정렬.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-row">
+        <div class="label-num">2</div>
+        <div class="ba">
+          <div class="ba-box ba-before">
+            <span class="tag">어제까지</span>
+            <h4>하트 = 가짜 카운터</h4>
+            <p>새로고침하면 사라지는 화면용 숫자였어요. "저장한 작품" 목록이 만들어질 수 없는 상태.</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box ba-after">
+            <span class="tag">오늘부터</span>
+            <h4>진짜 저장 + <code>/saved</code> 페이지</h4>
+            <p>하트를 누르면 DB에 저장되고, 새로고침해도 살아있어요. 빠르게 두 번 눌러도 안전하게 처리.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-row">
+        <div class="label-num">3</div>
+        <div class="ba">
+          <div class="ba-box ba-before">
+            <span class="tag">어제까지</span>
+            <h4>업로드 = 가짜 알림창</h4>
+            <p>버튼을 누르면 "백엔드 연동 후 완성됩니다" 알림창만 떴어요. 사진이 어디로도 가지 않음.</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box ba-after">
+            <span class="tag">오늘부터</span>
+            <h4>진짜 업로드 + 자동 정리</h4>
+            <p>사진이 실제로 올라가고 DB에 저장돼요. 도중에 실패하면 올라간 사진을 자동으로 지워서 쓰레기 파일이 안 남게 했어요.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-row">
+        <div class="label-num">4</div>
+        <div class="ba">
+          <div class="ba-box ba-before">
+            <span class="tag">어제까지</span>
+            <h4>내가 올린 작품을 볼 곳이 없음</h4>
+            <p>업로드를 해도 다시 찾아볼 수 없었어요.</p>
+          </div>
+          <div class="ba-arrow">→</div>
+          <div class="ba-box ba-after">
+            <span class="tag">오늘부터</span>
+            <h4>"내 업로드" 페이지 신설</h4>
+            <p>본인이 올린 작품만 모아 보고, 한 자리에서 삭제할 수 있어요. 삭제하면 사진 파일도 같이 정리.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="stats">
+      <div class="stat-card"><div class="v">4</div><div class="k">새로 작동하기 시작한 영역</div></div>
+      <div class="stat-card"><div class="v">2</div><div class="k">새로 만든 페이지 (<code>/saved</code> · <code>/my-uploads</code>)</div></div>
+      <div class="stat-card"><div class="v">7</div><div class="k">함께 발행한 블로그 글 (<code>/blog</code>)</div></div>
+    </div>
+  </section>
+
+  <!-- 2. 그 외 작업 (비개발) -->
+  <section class="slide" id="m2">
+    <div class="num">02</div>
+    <span class="ask">개발 외에 무엇을 했나</span>
+    <h2>그 외 작업 — 문서 · 펀드 전략 · 블로그</h2>
+    <p class="lede">코드 작업과 같은 날 함께 진행한 비개발 작업 6가지. 5월 마감을 통과하기 위한 사전 정리.</p>
+
+    <div class="summary-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+      <div class="sum-card">
+        <div class="label">데이터 정책</div>
+        <h4>합격작 수집·태깅 v1</h4>
+        <p>출처별 신뢰도 4단계, 라벨 6필드, 2인 1조 검수. 핵심 — <strong>"동의 안 받은 합격작은 DB에 안 넣는다"</strong>.</p>
+      </div>
+      <div class="sum-card">
+        <div class="label">펀드 전략</div>
+        <h4>D2SF 5/10 준비 — V9 진단 + 양식 매핑</h4>
+        <p>V9 사업계획서 강점 5 / 업데이트 5 / P0~P2 우선순위. 4/29~5/10 일정표 + 차별화 셀링 포인트 3개.</p>
+      </div>
+      <div class="sum-card">
+        <div class="label">회의 준비</div>
+        <h4>5/3 데이터 팀 킥오프 어젠다</h4>
+        <p>3시간 회의 어젠다 + 결정 사항 빈칸 5개. 파이프라인 · 모델 · 태깅 스키마 · 2주 행동.</p>
+      </div>
+      <div class="sum-card">
+        <div class="label">리서치 프레임</div>
+        <h4>타 대회 롱리스트 스캔</h4>
+        <p>4 트랙 (정부 / 민간AC / 에듀테크 / 해외) × 4축 채점. 16점 이상만 숏리스트.</p>
+      </div>
+      <div class="sum-card">
+        <div class="label">산출물</div>
+        <h4>블로그 7편 발행</h4>
+        <p>오늘 처리한 task 하나당 한 글씩, <code>/blog</code>에 published 상태로 즉시 노출.</p>
+      </div>
+      <div class="sum-card">
+        <div class="label">결정</div>
+        <h4>Vercel 배포 — "지금은 안 한다"</h4>
+        <p>"데이터 파이프라인 선결" 단서를 그대로 결정으로 채택. 알파 인터뷰(5/9)와 빈 페이지가 만나면 안 됨.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 5월 일정 -->
+  <section class="slide" id="m3">
+    <div class="num">03</div>
+    <span class="ask">5월에 무엇을 통과해야 하나</span>
+    <h2>5월 마감 3개 — 5/3 킥오프 · 5/9 알파 · 5/10 D2SF 제출</h2>
+    <p class="lede">D2SF 5/10이 페이스메이커예요. 11일 안에 슬라이드 다듬고, 양식에 부어 넣고, 인터뷰 1건 넣고 제출.</p>
+
+    <div class="timeline-cal">
+      <div class="row">
+        <div class="date">4/30</div>
+        <div class="what">P0 슬라이드 ① — 데이터 플라이휠 다이어그램 새로 그리기</div>
+        <div class="dday">D-10</div>
+      </div>
+      <div class="row">
+        <div class="date">5/1~2</div>
+        <div class="what">P0 슬라이드 ② — 팀 슬라이드를 "미대 도메인-네이티브" 내러티브로 다시</div>
+        <div class="dday">D-8</div>
+      </div>
+      <div class="row flag">
+        <div class="date">5/3 (일)</div>
+        <div class="what">데이터 팀 킥오프 15:00 — 어젠다 5개 빈칸 같이 채우기</div>
+        <div class="dday">D-7</div>
+      </div>
+      <div class="row">
+        <div class="date">5/4~8</div>
+        <div class="what">V9.1 통합본 → D2SF 양식 부어 넣기 (트랙션 숫자 갱신 포함)</div>
+        <div class="dday">D-2</div>
+      </div>
+      <div class="row flag">
+        <div class="date">5/9</div>
+        <div class="what">알파 인터뷰 1건 + 자문 학원 1차 리뷰 + 셀프 리허설</div>
+        <div class="dday">D-1</div>
+      </div>
+      <div class="row flag">
+        <div class="date">5/10</div>
+        <div class="what">D2SF 제출 마감 — 13:00 마지막 점검 → 18:00 이전 제출</div>
+        <div class="dday">D-Day</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 결정 필요 (1건) -->
+  <section class="slide" id="m4">
+    <div class="num">04</div>
+    <span class="ask">두 분한테 받을 결정</span>
+    <h2>5/9 알파 인터뷰 후보 — 30분, 1명</h2>
+    <p class="lede">다른 결정들(사진 정책 / 라벨링 / 저장 숫자 / 사진 청소)은 미리 정해뒀어요. 회의에서는 이 1건만 같이 정해요.</p>
+
+    <div class="decide-list">
+
+      <div class="decide">
+        <div class="head"><span class="d-num">!</span><h4>5/9에 미대 입시생(또는 학부모) 1명과 30분 인터뷰</h4></div>
+        <p class="why">D2SF 양식의 "사용자 인터뷰" 자리를 채우는 1건이에요. 인터뷰가 비면 펀드 양식의 한 칸이 빈 채로 제출돼요. 정할 건 두 가지 — <strong>누구와</strong>, <strong>몇 시에</strong>.</p>
+
+        <div style="margin-top:16px;">
+          <div style="font-size:12px; font-weight:800; color:var(--decide); margin-bottom:8px; letter-spacing:0.06em; text-transform:uppercase;">후보 4개 중 하나</div>
+          <div class="options">
+            <span class="opt"><b>A.</b> 혜진 네트워크</span>
+            <span class="opt"><b>B.</b> 정민 네트워크</span>
+            <span class="opt"><b>C.</b> 자문 학원 통해</span>
+            <span class="opt"><b>D.</b> 콜드 컨택 공고</span>
+          </div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <div style="font-size:12px; font-weight:800; color:var(--decide); margin-bottom:8px; letter-spacing:0.06em; text-transform:uppercase;">5/9 (금) 30분 슬롯</div>
+          <div class="options">
+            <span class="opt">오전</span>
+            <span class="opt">점심 (12~13시)</span>
+            <span class="opt">오후</span>
+            <span class="opt">저녁 (18~21시)</span>
+          </div>
+        </div>
+
+        <div class="blank">후보 → __________ · 일정 → __________ · 컨택 마감 → __________</div>
+      </div>
+
+    </div>
+
+    <h3 style="font-size:13px; color:var(--accent); margin:32px 0 10px; text-transform:uppercase; letter-spacing:0.06em; font-weight:800;">참고 — 30분 인터뷰에서 물어볼 것 (초안)</h3>
+    <ul style="font-size:15px; padding-left:22px; margin:8px 0; line-height:1.7;">
+      <li>지금까지 입시 준비를 어떻게 해왔는지 (학원 / 독학 / 자료)</li>
+      <li>합격작은 어디서 봤고, 봤을 때 무엇이 가장 도움이 됐는지</li>
+      <li>지금 입시 준비에서 가장 부족하다고 느끼는 것 1개</li>
+      <li>ArtPrep 화면을 5분 보여줬을 때 — 어디에 손이 가는지, 어디가 헷갈리는지</li>
+      <li>월 ____원이면 쓸 의향이 있는지 (가격 민감도)</li>
+    </ul>
+  </section>
+
+  <!-- 5. 마무리 -->
+  <section class="slide" id="m5">
+    <div class="num">05</div>
+    <span class="ask">마무리</span>
+    <h2>한 페이지로 정리</h2>
+
+    <div class="summary-grid">
+      <div class="sum-card">
+        <div class="label">오늘</div>
+        <h4>4가지 영역 작동 시작</h4>
+        <p>필터 · 저장 · 업로드 · 내 업로드. 페이지가 처음으로 데이터로 채워지기 시작.</p>
+      </div>
+      <div class="sum-card">
+        <div class="label">5월 마감</div>
+        <h4>5/3 · 5/9 · 5/10</h4>
+        <p>킥오프 · 알파 인터뷰 · D2SF 제출. D2SF 5/10이 페이스메이커.</p>
+      </div>
+      <div class="sum-card">
+        <div class="label">받을 결정</div>
+        <h4>1건</h4>
+        <p>5/9 알파 인터뷰 후보 1명. 다른 4건은 미리 정해뒀어요.</p>
+      </div>
+    </div>
+
+    <p style="font-size:15px; color:var(--muted); margin-top:32px; border-top:1px solid var(--line); padding-top:18px;">상세 자료 — 풀 보고서: <code>art-prep/docs/reports/2026-04-29-w1w2-execution.html</code> · 블로그 7편: <code>/blog</code></p>
+
+    <div style="margin-top:36px; padding:28px 30px; background:var(--gray-soft); border:1px dashed #cbd5e1; border-radius:14px;">
+      <div style="font-size:12px; font-weight:800; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:14px;">메모 · 회의 중 작성</div>
+      <p style="font-size:16px; color:#9ca3af; line-height:1.8; margin:0;">여기에 회의 중 메모를 작성하세요. 혜진 / 정민 코멘트, 추가 액션, 5/3 킥오프 사전 준비물 등 자유롭게.</p>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>
