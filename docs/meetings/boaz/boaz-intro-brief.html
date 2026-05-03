@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ArtPrep × BOAZ — 4/11 후속 미팅 (축약본)</title>
+<style>
+  :root {
+    --navy: #1a3a5c;
+    --navy-deep: #0f2540;
+    --coral: #e85d3a;
+    --coral-soft: #f4a58c;
+    --beige: #faf7f2;
+    --paper: #ffffff;
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-muted: #8a8a8a;
+    --line: #e6e0d6;
+    --green: #2f8a52;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: #2a2a2a;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    color: var(--ink);
+    overflow: hidden;
+  }
+
+  .deck { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .slide {
+    display: none;
+    width: 1280px; height: 720px;
+    background: var(--beige);
+    border-radius: 4px;
+    padding: 56px 72px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    flex-direction: column;
+  }
+  .slide.active { display: flex; }
+
+  .slide-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 20px; }
+  .slide-eyebrow { font-size: 12px; color: var(--coral); letter-spacing: 2px; font-weight: 600; text-transform: uppercase; }
+  .slide-num { font-size: 12px; color: var(--ink-muted); letter-spacing: 1px; }
+  .slide-title { font-size: 28px; font-weight: 700; color: var(--navy); margin-bottom: 4px; letter-spacing: -0.5px; }
+  .slide-subtitle { font-size: 14px; color: var(--ink-soft); font-weight: 400; margin-bottom: 16px; }
+  .slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .footnote { position: absolute; bottom: 28px; left: 72px; right: 72px; font-size: 11px; color: var(--ink-muted); line-height: 1.6; border-top: 1px dashed var(--line); padding-top: 8px; }
+
+  .reply-badge { display: inline-block; background: var(--green); color: white; font-size: 10px; letter-spacing: 1px; font-weight: 700; padding: 3px 8px; border-radius: 100px; margin-left: 6px; vertical-align: middle; }
+
+  .nav { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; background: rgba(0,0,0,0.5); color: white; padding: 8px 18px; border-radius: 100px; font-size: 13px; backdrop-filter: blur(10px); z-index: 100; }
+  .nav button { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; }
+  .nav button:hover { background: rgba(255,255,255,0.15); }
+  .nav-counter { min-width: 50px; text-align: center; }
+
+  /* Cover */
+  .cover { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%); color: white; align-items: flex-start; justify-content: center; padding: 100px 100px; }
+  .cover .accent-line { width: 60px; height: 4px; background: var(--coral); margin-bottom: 28px; }
+  .cover-eyebrow { color: var(--coral-soft); font-size: 14px; letter-spacing: 4px; margin-bottom: 22px; font-weight: 500; }
+  .cover h1 { font-size: 56px; line-height: 1.1; font-weight: 800; margin-bottom: 20px; letter-spacing: -1.5px; }
+  .cover h2 { font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.75); line-height: 1.5; max-width: 700px; margin-bottom: 36px; }
+  .cover-followup { background: rgba(232, 93, 58, 0.15); border-left: 3px solid var(--coral); padding: 14px 18px; border-radius: 4px; max-width: 640px; font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.9); }
+  .cover-followup strong { color: var(--coral-soft); display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 2px; }
+  .cover-meta { position: absolute; bottom: 80px; left: 100px; display: flex; gap: 56px; font-size: 13px; color: rgba(255,255,255,0.5); letter-spacing: 1px; }
+  .cover-meta strong { color: white; font-weight: 500; display: block; margin-bottom: 4px; letter-spacing: 0; font-size: 15px; }
+
+  /* Meeting Goals (cover) */
+  .meeting-goals { margin: 20px 0 24px; max-width: 980px; }
+  .meeting-goals-label {
+    font-size: 11px; letter-spacing: 3px;
+    color: var(--coral-soft); font-weight: 700;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 14px;
+    text-transform: uppercase;
+  }
+  .meeting-goals-label::before {
+    content: ''; width: 28px; height: 1px;
+    background: var(--coral); display: inline-block;
+  }
+  .meeting-goals-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  }
+  .goal-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 14px 16px 18px;
+    position: relative;
+    overflow: hidden;
+  }
+  .goal-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0;
+    width: 3px; height: 100%;
+    background: var(--coral);
+  }
+  .goal-card-num {
+    font-size: 10px; letter-spacing: 2px;
+    color: var(--coral); font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .goal-card-head {
+    font-size: 14px; font-weight: 700;
+    color: white; margin-bottom: 6px;
+    letter-spacing: -0.3px; line-height: 1.3;
+  }
+  .goal-card-detail {
+    font-size: 11px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.5;
+  }
+
+  /* Slide 2: 문제+솔루션 */
+  .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; height: 100%; }
+  .ps-side h3 { font-size: 13px; color: var(--coral); letter-spacing: 2px; font-weight: 700; margin-bottom: 14px; }
+  .stat-mini { display: flex; align-items: baseline; gap: 14px; padding: 12px 0; border-bottom: 1px dotted var(--line); }
+  .stat-mini-num { font-size: 32px; font-weight: 800; color: var(--navy); min-width: 120px; line-height: 1; }
+  .stat-mini-num small { font-size: 16px; font-weight: 600; color: var(--ink-soft); }
+  .stat-mini-label { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .ps-headline { margin-top: 14px; font-size: 16px; color: var(--navy-deep); font-weight: 600; line-height: 1.5; }
+  .ps-solution-card { background: var(--paper); border-left: 4px solid var(--coral); padding: 20px 24px; border-radius: 6px; margin-bottom: 14px; }
+  .ps-solution-card h4 { font-size: 16px; color: var(--navy); margin-bottom: 6px; }
+  .ps-solution-card p { font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+  .ps-time { text-align: center; background: rgba(232, 93, 58, 0.08); padding: 16px; border-radius: 6px; margin-top: auto; }
+  .ps-time-label { font-size: 12px; color: var(--ink-muted); letter-spacing: 1px; }
+  .ps-time-value { font-size: 20px; font-weight: 700; color: var(--navy); margin-top: 6px; }
+  .ps-time-value strong { color: var(--coral); }
+
+  /* Slide 3: persona + flow */
+  .persona-line { display: flex; gap: 12px; margin-bottom: 20px; }
+  .persona-mini { flex: 1; background: var(--paper); padding: 12px 16px; border-radius: 6px; border-top: 3px solid var(--coral); }
+  .persona-mini-name { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .persona-mini-desc { font-size: 11px; color: var(--ink-soft); line-height: 1.5; }
+  .flow-row-mini { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .flow-step-mini { background: var(--paper); padding: 14px 10px; border-radius: 6px; text-align: center; border: 1px solid var(--line); }
+  .flow-step-mini.phase2 { background: #fdf6f1; border: 1px dashed var(--coral); }
+  .flow-num-mini { width: 22px; height: 22px; background: var(--coral); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin: 0 auto 8px; }
+  .flow-title-mini { font-size: 12px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+  .flow-data-mini { margin-top: 6px; padding: 5px; background: var(--beige); border-radius: 4px; font-size: 9px; color: var(--navy); font-family: 'Consolas', monospace; line-height: 1.3; }
+
+  /* Slide 4: ERD */
+  .erd-canvas { position: relative; width: 100%; height: 460px; }
+  .erd-table { position: absolute; background: var(--paper); border: 2px solid var(--navy); border-radius: 6px; width: 200px; overflow: hidden; }
+  .erd-table.phase2 { border: 2px dashed var(--coral); }
+  .erd-th { background: var(--navy); color: white; padding: 8px 12px; font-size: 13px; font-weight: 700; text-align: center; font-family: 'Consolas', monospace; }
+  .erd-table.phase2 .erd-th { background: var(--coral); }
+  .erd-fields { padding: 8px 12px; font-size: 11px; color: var(--ink-soft); line-height: 1.7; font-family: 'Consolas', monospace; }
+  .erd-fields .pk { color: var(--coral); font-weight: 700; }
+  .erd-fields .fk { color: var(--navy); font-weight: 600; }
+
+  /* Slide 5 [NEW]: 데이터 + 로드맵 */
+  .data-roadmap-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px; }
+  .data-roadmap-side h3 { font-size: 13px; color: var(--coral); letter-spacing: 2px; font-weight: 700; margin-bottom: 12px; }
+  .data-row-mini { display: grid; grid-template-columns: 110px 50px 1fr; gap: 8px; align-items: baseline; padding: 6px 0; border-bottom: 1px dotted var(--line); font-size: 12px; }
+  .data-row-name-mini { font-family: 'Consolas', monospace; color: var(--navy); font-weight: 700; }
+  .data-row-num-mini { font-size: 16px; font-weight: 800; color: var(--navy); text-align: right; font-variant-numeric: tabular-nums; }
+  .data-row-num-mini.zero { color: #ef4444; }
+  .data-row-num-mini.live { color: var(--green); }
+  .data-row-note-mini { font-size: 10px; color: var(--ink-muted); }
+  .data-current-card-mini { background: var(--paper); border-left: 4px solid #ef4444; padding: 14px 18px; border-radius: 6px; margin-bottom: 10px; }
+  .data-current-card-mini.live { border-left-color: var(--green); }
+
+  .roadmap-mini { background: var(--paper); border-radius: 6px; padding: 14px 18px; }
+  .roadmap-week-row-mini { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; margin-bottom: 12px; }
+  .roadmap-week-mini { background: var(--beige); padding: 6px 3px; border-radius: 3px; text-align: center; border-bottom: 2px solid transparent; }
+  .roadmap-week-mini.now { background: rgba(232, 93, 58, 0.15); border-bottom-color: var(--coral); }
+  .roadmap-week-mini.gate { background: rgba(99, 102, 241, 0.15); border-bottom-color: #6366f1; }
+  .roadmap-week-num-mini { font-size: 9px; font-weight: 700; color: var(--navy); }
+  .roadmap-week-mini.now .roadmap-week-num-mini { color: var(--coral); }
+  .roadmap-week-mini.gate .roadmap-week-num-mini { color: #6366f1; }
+
+  .milestone-row { display: grid; grid-template-columns: 90px 1fr 70px; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px dotted var(--line); font-size: 11px; }
+  .milestone-row:last-child { border-bottom: none; }
+  .milestone-row .when { color: var(--coral); font-weight: 700; letter-spacing: 1px; }
+  .milestone-row .what { color: var(--navy); }
+  .milestone-row .what strong { display: block; }
+  .milestone-row .num { color: var(--ink-muted); text-align: right; font-family: 'Consolas', monospace; }
+
+  /* Slide 6: 행동+AI */
+  .split-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; height: 100%; }
+  .split-side h3 { font-size: 13px; color: var(--coral); letter-spacing: 2px; font-weight: 700; margin-bottom: 12px; }
+  .behavior-mini { background: var(--paper); padding: 14px 18px; border-radius: 6px; border-top: 3px solid var(--navy); margin-bottom: 12px; }
+  .behavior-mini h4 { font-size: 14px; color: var(--navy); font-family: 'Consolas', monospace; margin-bottom: 6px; }
+  .behavior-mini p { font-size: 12px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 8px; }
+  .behavior-mini .use { font-size: 11px; color: var(--coral); font-weight: 600; padding: 6px 10px; background: rgba(232, 93, 58, 0.08); border-radius: 4px; }
+  .pipe-grid-mini { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+  .pipe-mini { background: var(--paper); padding: 12px 8px; border-radius: 6px; border-top: 3px solid var(--coral); text-align: center; }
+  .pipe-mini-num { font-size: 22px; font-weight: 800; color: var(--coral); line-height: 1; margin-bottom: 4px; }
+  .pipe-mini-name { font-size: 11px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .pipe-mini-detail { font-size: 10px; color: var(--ink-soft); line-height: 1.4; }
+
+  /* Slide 7 [NEW]: 수집 전략 + BM */
+  .strategy-grid-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .strategy-card-mini { background: var(--paper); border-radius: 8px; padding: 18px 22px; border-top: 3px solid var(--navy); }
+  .strategy-card-mini.bm { border-top-color: var(--coral); }
+  .strategy-card-mini h4 { font-size: 15px; color: var(--navy); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .strategy-step-mini { display: grid; grid-template-columns: 26px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px dotted var(--line); }
+  .strategy-step-mini:last-child { border-bottom: none; }
+  .strategy-num-mini { width: 22px; height: 22px; background: var(--coral); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; }
+  .strategy-text-mini { font-size: 12px; color: var(--ink-soft); line-height: 1.5; }
+  .strategy-text-mini strong { color: var(--navy); display: block; margin-bottom: 2px; }
+  .bm-stage-mini { display: grid; grid-template-columns: 70px 1fr; gap: 10px; align-items: baseline; padding: 8px 0; border-bottom: 1px dotted var(--line); }
+  .bm-stage-mini:last-child { border-bottom: none; }
+  .bm-when-mini { font-size: 10px; color: var(--coral); font-weight: 700; letter-spacing: 1px; }
+  .bm-what-mini { font-size: 12px; color: var(--navy); line-height: 1.4; }
+  .bm-what-mini strong { display: block; }
+
+  /* Slide 8: 스택 + 협업 */
+  .stack-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 22px; height: 100%; }
+  .arch-mini { background: var(--paper); padding: 16px 18px; border-radius: 6px; }
+  .arch-mini h4 { font-size: 12px; color: var(--coral); letter-spacing: 1px; margin-bottom: 4px; font-weight: 700; }
+  .arch-mini-row { padding: 9px 0; border-bottom: 1px dotted var(--line); }
+  .arch-mini-row:last-child { border-bottom: none; }
+  .arch-mini-row.onprem { background: rgba(47, 138, 82, 0.06); margin: 0 -18px; padding: 9px 18px; border-left: 3px solid var(--green); }
+  .arch-mini-name { font-size: 13px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+  .arch-mini-row.onprem .arch-mini-name::before { content: '★ '; color: var(--green); }
+  .arch-mini-tech { font-size: 11px; color: var(--ink-soft); font-family: 'Consolas', monospace; }
+
+  .matrix-grid-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .matrix-card-mini { background: var(--paper); padding: 13px 16px; border-radius: 6px; border-left: 4px solid var(--line); position: relative; }
+  .matrix-card-mini.priority { border-left-color: var(--coral); background: linear-gradient(135deg, #fff 0%, #fff5f0 100%); }
+  .matrix-card-mini h4 { font-size: 13px; color: var(--navy); margin-bottom: 6px; }
+  .matrix-num-mini { display: inline-block; background: var(--coral); color: white; width: 18px; height: 18px; border-radius: 50%; font-size: 10px; text-align: center; line-height: 18px; margin-right: 6px; font-weight: 700; }
+  .matrix-card-mini:not(.priority) .matrix-num-mini { background: var(--ink-muted); }
+  .priority-tag-mini { position: absolute; top: 9px; right: 12px; background: var(--coral); color: white; font-size: 8px; letter-spacing: 1px; font-weight: 700; padding: 2px 6px; border-radius: 100px; }
+  .matrix-tables-mini { display: flex; flex-wrap: wrap; gap: 4px; margin: 5px 0; }
+  .matrix-table-mini { background: var(--beige); padding: 2px 7px; border-radius: 100px; font-size: 9px; color: var(--navy); font-family: 'Consolas', monospace; border: 1px solid var(--line); }
+  .matrix-desc-mini { font-size: 11px; color: var(--ink-soft); line-height: 1.4; }
+
+  /* Slide 9: closing */
+  .closing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .closing-side { background: var(--paper); padding: 24px 28px; border-radius: 8px; }
+  .closing-side h3 { font-size: 13px; color: var(--coral); letter-spacing: 2px; font-weight: 700; margin-bottom: 12px; }
+  .closing-side.done { border-top: 3px solid var(--green); }
+  .closing-side.done h3 { color: var(--green); }
+  .closing-item { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px dotted var(--line); }
+  .closing-item:last-child { border-bottom: none; }
+  .closing-box { width: 18px; height: 18px; border: 2px solid var(--coral); border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+  .closing-box.checked { background: var(--green); border-color: var(--green); position: relative; }
+  .closing-box.checked::after { content: '✓'; position: absolute; top: -3px; left: 2px; color: white; font-size: 14px; font-weight: 700; }
+  .closing-text { font-size: 12px; color: var(--navy-deep); line-height: 1.5; }
+  .closing-text strong { color: var(--navy); display: block; margin-bottom: 2px; font-size: 13px; }
+
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    html, body { background: white; overflow: visible; }
+    .deck { display: block; height: auto; }
+    .slide { display: flex !important; page-break-after: always; box-shadow: none; border-radius: 0; width: 1280px; height: 720px; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- ============== SLIDE 1: COVER ============== -->
+  <section class="slide cover active" data-idx="1">
+    <div class="accent-line"></div>
+    <div class="cover-eyebrow">ARTPREP × BOAZ — 4/11 후속 (15분 축약본)</div>
+    <h1>4/11 후속 —<br/>진행 상황을 정리했습니다</h1>
+    <div class="meeting-goals">
+      <div class="meeting-goals-label">오늘 미팅의 목표</div>
+      <div class="meeting-goals-grid">
+        <div class="goal-card">
+          <div class="goal-card-num">01</div>
+          <div class="goal-card-head">진행 상황 공유</div>
+          <div class="goal-card-detail">4/11 합의 사항이<br/>어디까지 갔는지 정리</div>
+        </div>
+        <div class="goal-card">
+          <div class="goal-card-num">02</div>
+          <div class="goal-card-head">우선순위 확정</div>
+          <div class="goal-card-detail">추천 / step2 VLM<br/>1·2번 작업 분담</div>
+        </div>
+        <div class="goal-card">
+          <div class="goal-card-num">03</div>
+          <div class="goal-card-head">접근·인프라 셋업</div>
+          <div class="goal-card-detail">데이터 권한 +<br/>학습 노드 활용</div>
+        </div>
+        <div class="goal-card">
+          <div class="goal-card-num">04</div>
+          <div class="goal-card-head">1차 점검 합의</div>
+          <div class="goal-card-detail">5/21 BOAZ 측<br/>산출물 형태 결정</div>
+        </div>
+      </div>
+    </div>
+    <div class="cover-followup">
+      <strong>4/11 미팅의 핵심 메시지</strong>
+      "목적을 분명히 하라, 어떤 데이터를 쓸지 정하라, 데이터 적거나 목적 모호하면 포기하라" — 그 기준에 맞춰 정리했습니다.
+    </div>
+    <div class="cover-meta">
+      <div><strong>2026년 5월 3일 (일) · W2</strong>발표 일자</div>
+      <div><strong>BOAZ × ArtPrep</strong>대상 팀</div>
+      <div><strong>9장 / 15분</strong>분량</div>
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 2: 문제+솔루션 ============== -->
+  <section class="slide" data-idx="2">
+    <div class="slide-header">
+      <span class="slide-eyebrow">문제와 해결</span>
+      <span class="slide-num">02 / 09</span>
+    </div>
+    <div class="slide-body">
+      <div class="ps-grid">
+        <div class="ps-side" style="display: flex; flex-direction: column;">
+          <h3>현재 — 정보 격차의 시장</h3>
+          <div class="stat-mini">
+            <div class="stat-mini-num">132<small>분</small></div>
+            <div class="stat-mini-label">수험생이 SNS에서 매일<br/>참고작을 찾는 평균 시간</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-num">65<small>%</small></div>
+            <div class="stat-mini-label">탐색해서 본 작품 중<br/>합격에 도움 안 되는 비율</div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-num">5<small>만명</small></div>
+            <div class="stat-mini-label">매년 미대 입시 응시생<br/>(연간 누적)</div>
+          </div>
+          <div class="ps-headline">학원비 월 200만원을 감당할 수 없는 학생일수록 정보 격차로 인한 불합격 가능성이 커진다.</div>
+        </div>
+        <div class="ps-side" style="display: flex; flex-direction: column;">
+          <h3>ArtPrep — AI 큐레이션</h3>
+          <div class="ps-solution-card">
+            <h4>합격 작품 DB를 AI가 골라준다</h4>
+            <p>학생의 목표 대학·전형·취향을 학습해 합격 가능성이 높은 작품을 자동 추천. 검증된 합격작 DB가 출발점.</p>
+          </div>
+          <div class="ps-solution-card">
+            <h4>5단계 AI 분석 = step2 VLM</h4>
+            <p>학생이 작품을 업로드하면 출제의도부터 합격 가능성까지 5단계로 분해해 코칭. 4/11에 함께 다룬 기능.</p>
+          </div>
+          <div class="ps-time">
+            <div class="ps-time-label">소요 시간 변화</div>
+            <div class="ps-time-value">132분 → <strong>약 10초</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      출처 — ArtPrep 자체 사용자 조사(2025) 및 한국대학교육협의회 미대 정시 응시자 통계 기반 추정치.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 3: 사용자+플로우 ============== -->
+  <section class="slide" data-idx="3">
+    <div class="slide-header">
+      <span class="slide-eyebrow">사용자와 흐름</span>
+      <span class="slide-num">03 / 09</span>
+    </div>
+    <h2 class="slide-title">학생이 서비스를 쓰는 흐름과 쌓이는 데이터</h2>
+    <p class="slide-subtitle">10대 후반~20대 초반 미대 입시생 — 가입에서 분석까지 5단계 여정.</p>
+    <div class="slide-body">
+      <div class="persona-line">
+        <div class="persona-mini">
+          <div class="persona-mini-name">A. 현역 입시생</div>
+          <div class="persona-mini-desc">학원 다니지만 더 다양한 합격작을 보고 싶음</div>
+        </div>
+        <div class="persona-mini">
+          <div class="persona-mini-name">B. 재수생</div>
+          <div class="persona-mini-desc">학원비 부담, 데이터로 합격 방향을 검증하고 싶음</div>
+        </div>
+        <div class="persona-mini">
+          <div class="persona-mini-name">C. 지방 정시생</div>
+          <div class="persona-mini-desc">근처 학원 없음, 정보 격차로 SNS 헤맴</div>
+        </div>
+      </div>
+      <div class="flow-row-mini">
+        <div class="flow-step-mini">
+          <div class="flow-num-mini">1</div>
+          <div class="flow-title-mini">가입</div>
+          <div class="flow-data-mini">→ profiles</div>
+        </div>
+        <div class="flow-step-mini">
+          <div class="flow-num-mini">2</div>
+          <div class="flow-title-mini">목표 설정</div>
+          <div class="flow-data-mini">→ profiles<br/>(target)</div>
+        </div>
+        <div class="flow-step-mini">
+          <div class="flow-num-mini">3</div>
+          <div class="flow-title-mini">큐레이션 탐색</div>
+          <div class="flow-data-mini">→ curation_<br/>sessions</div>
+        </div>
+        <div class="flow-step-mini">
+          <div class="flow-num-mini">4</div>
+          <div class="flow-title-mini">저장 (♡)</div>
+          <div class="flow-data-mini">→ saved_items</div>
+        </div>
+        <div class="flow-step-mini phase2">
+          <div class="flow-num-mini">5</div>
+          <div class="flow-title-mini">AI 분석<br/>(Phase 2)</div>
+          <div class="flow-data-mini">→ analysis_<br/>reports</div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      각 단계마다 어떤 데이터가 어느 테이블에 쌓이는지 — BOAZ 팀이 데이터에 접근할 때의 출처가 된다.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 4: ERD ============== -->
+  <section class="slide" data-idx="4">
+    <div class="slide-header">
+      <span class="slide-eyebrow">데이터 모델</span>
+      <span class="slide-num">04 / 09</span>
+    </div>
+    <h2 class="slide-title">데이터베이스 구조 한눈에 보기</h2>
+    <p class="slide-subtitle">5/3 기준 실제 스키마 — LIVE 4개 + Phase 2 예정 2개.</p>
+    <div class="slide-body">
+      <div class="erd-canvas">
+        <img src="../assets/erd.svg" alt="ArtPrep ERD — 5개 테이블 관계도" style="width:100%; height:100%; object-fit:contain; display:block;"/>
+      </div>
+    </div>
+    <div class="footnote">
+      LIVE 태그 = 실제 운영 중. 컬럼은 핵심만 표시. 모든 user_id는 auth.users 참조.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 5 [NEW]: 데이터 + 로드맵 ============== -->
+  <section class="slide" data-idx="5">
+    <div class="slide-header">
+      <span class="slide-eyebrow">현재 데이터 + 10주 로드맵</span>
+      <span class="slide-num">05 / 09</span>
+    </div>
+    <h2 class="slide-title">현재 0건, 6/20에 5,000건까지 <span class="reply-badge">4/11 ②③</span></h2>
+    <p class="slide-subtitle">4/11에 함께 짚었던 "데이터 양 적음"은 사실. 현황을 솔직히 보여드리고, 10주 안에 어디까지 채울지 약속한다.</p>
+    <div class="slide-body">
+      <div class="data-roadmap-grid">
+        <div class="data-roadmap-side">
+          <h3>현재 ArtPrep DB (5/3 기준)</h3>
+          <div class="data-current-card-mini">
+            <div class="data-row-mini">
+              <div class="data-row-name-mini">artworks</div>
+              <div class="data-row-num-mini zero">0</div>
+              <div class="data-row-note-mini">합격 작품 — 수집 전</div>
+            </div>
+            <div class="data-row-mini">
+              <div class="data-row-name-mini">profiles</div>
+              <div class="data-row-num-mini zero">0</div>
+              <div class="data-row-note-mini">사용자 — 배포 전</div>
+            </div>
+            <div class="data-row-mini">
+              <div class="data-row-name-mini">saved_items</div>
+              <div class="data-row-num-mini">2</div>
+              <div class="data-row-note-mini">QA용 더미</div>
+            </div>
+          </div>
+          <div class="data-current-card-mini live">
+            <div class="data-row-mini">
+              <div class="data-row-name-mini">filter_options</div>
+              <div class="data-row-num-mini live">15</div>
+              <div class="data-row-note-mini">필터 마스터</div>
+            </div>
+            <div class="data-row-mini">
+              <div class="data-row-name-mini">└ university</div>
+              <div class="data-row-num-mini">8</div>
+              <div class="data-row-note-mini">대학</div>
+            </div>
+            <div class="data-row-mini">
+              <div class="data-row-name-mini">└ art_type</div>
+              <div class="data-row-num-mini">4</div>
+              <div class="data-row-note-mini">실기 유형</div>
+            </div>
+            <div class="data-row-mini">
+              <div class="data-row-name-mini">└ academy_type</div>
+              <div class="data-row-num-mini">3</div>
+              <div class="data-row-note-mini">학원 분류</div>
+            </div>
+          </div>
+        </div>
+        <div class="data-roadmap-side">
+          <h3>10주 스프린트 + 마일스톤</h3>
+          <div class="roadmap-mini">
+            <div class="roadmap-week-row-mini">
+              <div class="roadmap-week-mini"><div class="roadmap-week-num-mini">W1</div></div>
+              <div class="roadmap-week-mini now"><div class="roadmap-week-num-mini">W2</div></div>
+              <div class="roadmap-week-mini"><div class="roadmap-week-num-mini">W3</div></div>
+              <div class="roadmap-week-mini"><div class="roadmap-week-num-mini">W4</div></div>
+              <div class="roadmap-week-mini gate"><div class="roadmap-week-num-mini">W5🏁</div></div>
+              <div class="roadmap-week-mini"><div class="roadmap-week-num-mini">W6</div></div>
+              <div class="roadmap-week-mini"><div class="roadmap-week-num-mini">W7</div></div>
+              <div class="roadmap-week-mini"><div class="roadmap-week-num-mini">W8</div></div>
+              <div class="roadmap-week-mini gate"><div class="roadmap-week-num-mini">W9🏁</div></div>
+              <div class="roadmap-week-mini"><div class="roadmap-week-num-mini">W10</div></div>
+            </div>
+            <div class="milestone-row">
+              <div class="when">W2 · 5/3</div>
+              <div class="what"><strong>BOAZ 미팅 (오늘)</strong></div>
+              <div class="num">+ 계획</div>
+            </div>
+            <div class="milestone-row">
+              <div class="when">W4 · 5/11~</div>
+              <div class="what"><strong>1차 핀터레스트형 수집</strong></div>
+              <div class="num">~500</div>
+            </div>
+            <div class="milestone-row">
+              <div class="when">W5 · 5/21</div>
+              <div class="what"><strong>1차 점검 + 학원 협조</strong></div>
+              <div class="num">~1,000</div>
+            </div>
+            <div class="milestone-row">
+              <div class="when">W7~8</div>
+              <div class="what"><strong>학원 직접 수령 + 라벨링</strong></div>
+              <div class="num">~3,000</div>
+            </div>
+            <div class="milestone-row">
+              <div class="when">W9 · 6/20</div>
+              <div class="what"><strong>최종 점검 / 100명 베타</strong></div>
+              <div class="num">~5,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      4/11 BOAZ 제안 "한예종·과기대 비실기 확장"은 W9에 반영. 10주 스프린트 = 4/22~6/27.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 6: BEHAVIOR + AI = step2 VLM ============== -->
+  <section class="slide" data-idx="6">
+    <div class="slide-header">
+      <span class="slide-eyebrow">행동 데이터 + AI 분석</span>
+      <span class="slide-num">06 / 09</span>
+    </div>
+    <h2 class="slide-title">행동 데이터 + 5단계 VLM 분석 <span class="reply-badge">4/11 ⑤ step2 VLM</span></h2>
+    <p class="slide-subtitle">사용자 행동이 모두 기록된다. Phase 2 5단계 분석 = 4/11에 함께 다룬 step2 VLM*이다.</p>
+    <div class="slide-body">
+      <div class="split-grid">
+        <div class="split-side">
+          <h3>행동 데이터 (현재)</h3>
+          <div class="behavior-mini">
+            <h4>saved_items</h4>
+            <p>학생이 ♡로 저장하는 모든 행동 기록.</p>
+            <div class="use">▸ 협업 필터링 / 콘텐츠 기반 추천 학습</div>
+          </div>
+          <div class="behavior-mini">
+            <h4>curation_sessions</h4>
+            <p>필터 조건과 결과를 모두 저장.</p>
+            <div class="use">▸ 노출 vs 저장 전환율, 의도 클러스터링</div>
+          </div>
+        </div>
+        <div class="split-side">
+          <h3>AI 분석 5단계 = step2 VLM (Phase 2)</h3>
+          <div class="pipe-grid-mini">
+            <div class="pipe-mini">
+              <div class="pipe-mini-num">1</div>
+              <div class="pipe-mini-name">출제 의도</div>
+              <div class="pipe-mini-detail">시험 주제 파악</div>
+            </div>
+            <div class="pipe-mini">
+              <div class="pipe-mini-num">2</div>
+              <div class="pipe-mini-name">학교 성향</div>
+              <div class="pipe-mini-detail">목표 대학과 매칭</div>
+            </div>
+            <div class="pipe-mini">
+              <div class="pipe-mini-num">3</div>
+              <div class="pipe-mini-name">조형 요소</div>
+              <div class="pipe-mini-detail">구도·명암·색채</div>
+            </div>
+            <div class="pipe-mini">
+              <div class="pipe-mini-num">4</div>
+              <div class="pipe-mini-name">평가 기준</div>
+              <div class="pipe-mini-detail">강·약점 도출</div>
+            </div>
+            <div class="pipe-mini">
+              <div class="pipe-mini-num">5</div>
+              <div class="pipe-mini-name">합격 가능성</div>
+              <div class="pipe-mini-detail">학교별 확률</div>
+            </div>
+          </div>
+          <div class="behavior-mini" style="margin-top: 14px;">
+            <h4>analysis_reports</h4>
+            <p>5단계 분석 결과를 step1~5 JSONB 컬럼에 저장 — 단계별 데이터 모두 보존, BOAZ 후속 분석 가능.</p>
+            <div class="use">▸ 베이스라인 Gemini 2.0 Flash, 자체 파인튜닝은 ArtPrep 보유 학습 노드(500만원 GPU 데스크탑)에서</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      * VLM (Vision Language Model) — 이미지와 텍스트를 함께 이해하는 AI 모델. RLS(행 단위 접근 제어)로 보안 유지.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 7 [NEW]: 수집전략 + BM ============== -->
+  <section class="slide" data-idx="7">
+    <div class="slide-header">
+      <span class="slide-eyebrow">데이터 수집 + 비즈니스 모델</span>
+      <span class="slide-num">07 / 09</span>
+    </div>
+    <h2 class="slide-title">저작권 안전 + B2B 먼저 — 4/11 합의대로 <span class="reply-badge">4/11 ④ 폐쇄적 도메인</span></h2>
+    <p class="slide-subtitle">4/11 BOAZ 제안 "학원 협조 + 핀터레스트형 + B2B 먼저"를 그대로 작동 가능한 단계로 풀었다.</p>
+    <div class="slide-body">
+      <div class="strategy-grid-mini">
+        <div class="strategy-card-mini">
+          <h4>데이터 수집 전략 (3단계)</h4>
+          <div class="strategy-step-mini">
+            <div class="strategy-num-mini">1</div>
+            <div class="strategy-text-mini">
+              <strong>핀터레스트형 큐레이션 (W4~)</strong>
+              공개 합격작 썸네일 + 출처 링크. 이미지 직접 호스팅 안 함 → 저작권 마찰 최소
+            </div>
+          </div>
+          <div class="strategy-step-mini">
+            <div class="strategy-num-mini">2</div>
+            <div class="strategy-text-mini">
+              <strong>학원 협조 수령 (W5~)</strong>
+              아는 학원에서 이미지 직접 받아 업로드. 후원·홍보 베네핏 제공 (저작권 클리어)
+            </div>
+          </div>
+          <div class="strategy-step-mini">
+            <div class="strategy-num-mini">3</div>
+            <div class="strategy-text-mini">
+              <strong>API 자동 수집은 후순위</strong>
+              4/11 BOAZ 의견 그대로 — 저작권 리스크 큼, 안정화 후 검토
+            </div>
+          </div>
+        </div>
+        <div class="strategy-card-mini bm">
+          <h4>비즈니스 모델 — B2B 먼저</h4>
+          <div class="bm-stage-mini">
+            <div class="bm-when-mini">~ W9</div>
+            <div class="bm-what-mini"><strong>B2B 학원 후원</strong>학원이 이미지 제공, 노출 베네핏 수령</div>
+          </div>
+          <div class="bm-stage-mini">
+            <div class="bm-when-mini">W9 ~</div>
+            <div class="bm-what-mini"><strong>B2C 베타 (100명)</strong>학생 무료, 행동 데이터 축적</div>
+          </div>
+          <div class="bm-stage-mini">
+            <div class="bm-when-mini">하반기</div>
+            <div class="bm-what-mini"><strong>B2C 구독 정식</strong>월 29,900원 (학원비 1.5%)</div>
+          </div>
+          <div class="bm-stage-mini">
+            <div class="bm-when-mini">Phase 3</div>
+            <div class="bm-what-mini"><strong>B2B 학원 대시보드</strong>학생 관리 + 인사이트 SaaS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      4/11에 합의된 "B2B 먼저, B2C 후" 순서를 그대로 따름. 저작권 마찰 없는 핀터레스트 모델로 시작해 학원 협조로 단계적 확장.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 8: STACK + BOAZ MATRIX ============== -->
+  <section class="slide" data-idx="8">
+    <div class="slide-header">
+      <span class="slide-eyebrow">기술 스택과 협업 영역</span>
+      <span class="slide-num">08 / 09</span>
+    </div>
+    <h2 class="slide-title">스택 + BOAZ 협업 4영역 (1·2 우선순위) <span class="reply-badge">4/11 ⑤⑥</span></h2>
+    <p class="slide-subtitle">왼쪽은 스택 + ArtPrep 보유 학습 노드. 오른쪽은 4/11에 함께 정한 두 영역을 1·2번에 못박은 매트릭스.</p>
+    <div class="slide-body">
+      <div class="stack-grid">
+        <div class="arch-mini">
+          <h4>기술 스택 + 인프라</h4>
+          <div class="arch-mini-row">
+            <div class="arch-mini-name">Frontend</div>
+            <div class="arch-mini-tech">Next.js + React 19, Vercel 배포</div>
+          </div>
+          <div class="arch-mini-row">
+            <div class="arch-mini-name">Auth + Database</div>
+            <div class="arch-mini-tech">Supabase Auth + PostgreSQL + RLS</div>
+          </div>
+          <div class="arch-mini-row">
+            <div class="arch-mini-name">Storage</div>
+            <div class="arch-mini-tech">Supabase Storage</div>
+          </div>
+          <div class="arch-mini-row">
+            <div class="arch-mini-name">Edge Function</div>
+            <div class="arch-mini-tech">서버리스 (AI 호출 중계)</div>
+          </div>
+          <div class="arch-mini-row">
+            <div class="arch-mini-name">External AI (baseline)</div>
+            <div class="arch-mini-tech">Google Gemini 2.0 Flash</div>
+          </div>
+          <div class="arch-mini-row onprem">
+            <div class="arch-mini-name">보유 학습 노드 (ArtPrep)</div>
+            <div class="arch-mini-tech">데스크탑 GPU · 500만원 사양<br/>BOAZ 학습·실험 자유 사용</div>
+          </div>
+        </div>
+        <div>
+          <div class="matrix-grid-mini">
+            <div class="matrix-card-mini priority">
+              <span class="priority-tag-mini">★ 4/11 우선 1</span>
+              <h4><span class="matrix-num-mini">1</span>추천 / 큐레이션</h4>
+              <div class="matrix-tables-mini">
+                <span class="matrix-table-mini">saved_items</span>
+                <span class="matrix-table-mini">curation_sessions</span>
+                <span class="matrix-table-mini">profiles</span>
+              </div>
+              <div class="matrix-desc-mini">저장·탐색 로그로 협업 필터링 / 콘텐츠 기반 추천 학습.</div>
+            </div>
+            <div class="matrix-card-mini priority">
+              <span class="priority-tag-mini">★ 4/11 우선 2</span>
+              <h4><span class="matrix-num-mini">2</span>이미지 분석 / VLM</h4>
+              <div class="matrix-tables-mini">
+                <span class="matrix-table-mini">artworks</span>
+                <span class="matrix-table-mini">analysis_reports</span>
+              </div>
+              <div class="matrix-desc-mini">조형 요소 자동 추출, step2 VLM 정확도 개선. 보유 학습 노드 파인튜닝.</div>
+            </div>
+            <div class="matrix-card-mini">
+              <h4><span class="matrix-num-mini">3</span>사용자 / 시장 분석</h4>
+              <div class="matrix-tables-mini">
+                <span class="matrix-table-mini">profiles</span>
+                <span class="matrix-table-mini">curation_sessions</span>
+              </div>
+              <div class="matrix-desc-mini">전형·지역별 패턴 (W9 베타 이후 의미있게).</div>
+            </div>
+            <div class="matrix-card-mini">
+              <h4><span class="matrix-num-mini">4</span>전환율 / GTM</h4>
+              <div class="matrix-tables-mini">
+                <span class="matrix-table-mini">profiles</span>
+                <span class="matrix-table-mini">sessions</span>
+                <span class="matrix-table-mini">saved</span>
+              </div>
+              <div class="matrix-desc-mini">단계별 전환율 (베타 100명 기준선 확보 후).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      VLM (Vision Language Model) — 이미지+텍스트 멀티모달 AI. GTM (Go-To-Market) — 시장 진입 전략.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 9: CLOSING ============== -->
+  <section class="slide" data-idx="9">
+    <div class="slide-header">
+      <span class="slide-eyebrow">다음 단계 + Q&A</span>
+      <span class="slide-num">09 / 09</span>
+    </div>
+    <h2 class="slide-title">4/11 합의는 처리, 5/3 결정 사항은 함께</h2>
+    <p class="slide-subtitle">왼쪽은 4/11 합의 진행 상황. 오른쪽은 오늘 결정해야 할 사항.</p>
+    <div class="slide-body">
+      <div class="closing-grid">
+        <div class="closing-side done">
+          <h3>4/11 합의 — 진행 상황</h3>
+          <div class="closing-item">
+            <div class="closing-box checked"></div>
+            <div class="closing-text">
+              <strong>도메인 결정 — ArtPrep 확정</strong>
+              4월 말 결정 완료. plan B 미선택, 미술 입시 도메인 진행.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box checked"></div>
+            <div class="closing-text">
+              <strong>마일스톤 수립</strong>
+              10주 스프린트 + 1·2차 점검 + 100명 베타.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box checked"></div>
+            <div class="closing-text">
+              <strong>MVP 명확화</strong>
+              핀터레스트형 → step2 VLM → 추천 → B2B SaaS.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box checked"></div>
+            <div class="closing-text">
+              <strong>데이터팀 정식 합류</strong>
+              ArtPrep 대시보드 owner 4명 중 한 자리.
+            </div>
+          </div>
+        </div>
+        <div class="closing-side">
+          <h3>오늘 5/3 결정 사항</h3>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>1·2 우선순위 확정</strong>
+              추천 모델과 step2 VLM 중 누가 먼저, 단일 또는 병렬.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>데이터 접근 권한</strong>
+              Supabase 읽기 전용 계정, 자리에서 5분.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>협업 채널 + 정기 싱크</strong>
+              Slack/디스코드, 주 1회 싱크 요일·시간.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>학습 노드 활용 여부</strong>
+              ArtPrep 보유 GPU 데스크탑(500만원). BOAZ가 학습·실험에 사용할지, SSH/원격 방식 결정.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button>
+  <span class="nav-counter" id="counter">1 / 9</span>
+  <button id="next">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const total = slides.length;
+  let idx = 0;
+  function show(i) {
+    if (i < 0 || i >= total) return;
+    slides[idx].classList.remove('active');
+    idx = i;
+    slides[idx].classList.add('active');
+    counter.textContent = `${idx + 1} / ${total}`;
+  }
+  document.getElementById('prev').onclick = () => show(idx - 1);
+  document.getElementById('next').onclick = () => show(idx + 1);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { show(idx + 1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(total - 1);
+    if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+</script>
+</body>
+</html>

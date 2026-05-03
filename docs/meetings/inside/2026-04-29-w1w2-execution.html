@@ -197,7 +197,7 @@
     <div class="num">00 · COVER</div>
     <div class="date">2026 · 04 · 29 (D-48 · W2 시작일)</div>
     <h1>ArtPrep W1/W2 — 7개 task + 보너스 4건, 7편 블로그로 결착, 새 폴더에서 코드 3커밋으로 데이터가 흐르기 시작</h1>
-    <p class="lede">대표(현서) 담당 task 7개를 한 회차에 처리. 산출물은 ceo-staff 블로그 7편으로 보존되고, 기존 art-prep 폴더의 mobile 코드는 폐기. ArtPrep 서비스의 실제 작업 폴더는 <code>c:\claude-class\art-gallery</code>(폴더명만 art-gallery, <strong>서비스명은 art-prep</strong>)로 옮겨 그 자리에서 데이터 레이어 3개 축을 동시에 실선으로 만들었다.</p>
+    <p class="lede">대표(현서) 담당 task 7개를 한 회차에 처리. 산출물은 ceo-staff 블로그 7편으로 보존되고, 기존 art-prep-docs 폴더의 mobile 코드는 폐기. ArtPrep 서비스의 실제 작업 폴더는 <code>c:\claude-class\art-prep</code>(폴더명만 art-prep, <strong>서비스명은 art-prep</strong>)로 옮겨 그 자리에서 데이터 레이어 3개 축을 동시에 실선으로 만들었다.</p>
     <div class="stats">
       <div class="stat"><div class="v">11</div><div class="k">처리한 TASK (7 + 보너스 4)</div></div>
       <div class="stat"><div class="v">7</div><div class="k">발행 블로그 (PUBLISHED)</div></div>
@@ -230,12 +230,12 @@
     <h3>참고한 자료</h3>
     <ul class="tight">
       <li>ceo-staff Supabase <code>calendar_tracks</code> + <code>art_prep_features</code> (53 rows의 owner=오현서 필터)</li>
-      <li><code>art-prep/docs/business-plan/business-plan-V9.md</code> (V9 사업계획서, 475 라인)</li>
+      <li><code>art-prep-docs/docs/business-plan/business-plan-V9.md</code> (V9 사업계획서, 475 라인)</li>
       <li>D2SF 공식 사이트 + 외부 보도자료 (5/10 마감, 6/23 발표 정보)</li>
-      <li><code>c:\claude-class\art-gallery/docs/modify-info.md</code> · <code>PRD.md</code> · <code>PRD-v2-search.md</code> (실제 코드 작업의 결정 로그)</li>
+      <li><code>c:\claude-class\art-prep/docs/modify-info.md</code> · <code>PRD.md</code> · <code>PRD-v2-search.md</code> (실제 코드 작업의 결정 로그)</li>
     </ul>
 
-    <p class="footnote">"art-gallery" 폴더는 클래스 초기 셋업 시 붙은 폴더명일 뿐, 그 안에서 빌드되는 서비스의 이름은 <strong>art-prep</strong>이다. 본 문서에서는 코드 위치를 가리킬 때만 폴더명을 쓰고, 그 외에는 "art-prep"으로 통일한다.</p>
+    <p class="footnote">"art-prep" 폴더는 클래스 초기 셋업 시 붙은 폴더명일 뿐, 그 안에서 빌드되는 서비스의 이름은 <strong>art-prep</strong>이다. 본 문서에서는 코드 위치를 가리킬 때만 폴더명을 쓰고, 그 외에는 "art-prep"으로 통일한다.</p>
   </section>
 
   <!-- 2. 결정 흐름 -->
@@ -250,7 +250,7 @@
       </div>
       <div class="step">
         <h4>2단계 · mobile/(Expo) 폴더에서 코드 시도</h4>
-        <p>task #2(저장한 작품)는 Expo 앱 폴더(<code>art-prep/mobile</code>)에서 시도. <code>(tabs)/saved.tsx</code> 재작성, <code>boards/[id].tsx</code> 신규, <code>lib/types.ts</code> 타입 추가. task #6(Vercel)은 "데이터 파이프라인 선결" 결정 + <code>vercel.json</code>/<code>DEPLOY.md</code> 시드.</p>
+        <p>task #2(저장한 작품)는 Expo 앱 폴더(<code>art-prep-docs/mobile</code>)에서 시도. <code>(tabs)/saved.tsx</code> 재작성, <code>boards/[id].tsx</code> 신규, <code>lib/types.ts</code> 타입 추가. task #6(Vercel)은 "데이터 파이프라인 선결" 결정 + <code>vercel.json</code>/<code>DEPLOY.md</code> 시드.</p>
       </div>
       <div class="step">
         <h4>3단계 · 다른 터미널 충돌 우려 → mobile/ 롤백</h4>
@@ -258,7 +258,7 @@
       </div>
       <div class="step">
         <h4>4단계 · ArtPrep 서비스의 작업 폴더 자체를 이전</h4>
-        <p>사용자 결정: 앞으로 ArtPrep 코드 작업은 별도 폴더(<code>c:\claude-class\art-gallery</code>)에서 진행한다. 기존 <code>art-prep/mobile/</code>(Expo 앱) + 보조 스크립트 + 캐시는 모두 삭제하고 git 커밋(<code>0b6658b</code>). docs(V9, PRD, sprint, 본 보고서)와 README는 자료로 보존.</p>
+        <p>사용자 결정: 앞으로 ArtPrep 코드 작업은 별도 폴더(<code>c:\claude-class\art-prep</code>)에서 진행한다. 기존 <code>art-prep-docs/mobile/</code>(Expo 앱) + 보조 스크립트 + 캐시는 모두 삭제하고 git 커밋(<code>0b6658b</code>). docs(V9, PRD, sprint, 본 보고서)와 README는 자료로 보존.</p>
       </div>
       <div class="step">
         <h4>5단계 · 새 폴더에서 같은 날 코드 3커밋 — 데이터가 흐르기 시작</h4>
@@ -266,7 +266,7 @@
       </div>
     </div>
 
-    <p class="footnote">최종 상태: blog_posts 7편(ceo-staff) + art-prep/docs (자료) + 본 보고서 + git commit 4건(art-prep 폴더 1 chore + art-gallery 폴더 3 feat). art-prep Supabase는 새 폴더에서 <code>filter_options</code>(신규) · <code>saved_items</code>(사용 시작) 두 객체가 추가되어 운영 상태로 진입.</p>
+    <p class="footnote">최종 상태: blog_posts 7편(ceo-staff) + art-prep-docs/docs (자료) + 본 보고서 + git commit 4건(art-prep-docs 폴더 1 chore + art-prep 폴더 3 feat). art-prep Supabase는 새 폴더에서 <code>filter_options</code>(신규) · <code>saved_items</code>(사용 시작) 두 객체가 추가되어 운영 상태로 진입.</p>
   </section>
 
   <!-- 3. W1 -->
@@ -284,7 +284,7 @@
     </ul>
 
     <h3>② 저장한 작품 페이지 구현 <span class="pill done">DONE (코드 적용)</span></h3>
-    <p>핀터레스트의 "좋아요 = 즉시 저장" 멘탈모델을 그대로 가져옴. <strong>하트(즉발적 저장)로 모은 작품을 <code>/saved</code> 페이지에서 다시 본다</strong>는 단일 흐름. 새 폴더(<code>c:\claude-class\art-gallery</code>)에서 같은 날 실제 코드로 적용 완료.</p>
+    <p>핀터레스트의 "좋아요 = 즉시 저장" 멘탈모델을 그대로 가져옴. <strong>하트(즉발적 저장)로 모은 작품을 <code>/saved</code> 페이지에서 다시 본다</strong>는 단일 흐름. 새 폴더(<code>c:\claude-class\art-prep</code>)에서 같은 날 실제 코드로 적용 완료.</p>
 
     <table>
       <tr><th>구성요소</th><th>구현 내용</th><th>최종 상태</th></tr>
@@ -357,7 +357,7 @@
   <section class="slide" id="s6">
     <div class="num">06 · CODE WORK</div>
     <h2>art-prep 코드 작업 — 새 폴더에서 한 회차에 3커밋</h2>
-    <p class="lede"><code>c:\claude-class\art-gallery</code> · React 19 + Vite 8 + React Router 7 + Supabase. 외형은 "목업이 동작하는 척" → 내부는 "실제로 데이터가 흐른다"로 진입.</p>
+    <p class="lede"><code>c:\claude-class\art-prep</code> · React 19 + Vite 8 + React Router 7 + Supabase. 외형은 "목업이 동작하는 척" → 내부는 "실제로 데이터가 흐른다"로 진입.</p>
 
     <h3>커밋 3건</h3>
     <div class="commit-card">
@@ -467,11 +467,11 @@
   <!-- 9. 폴더 정리 -->
   <section class="slide" id="s9">
     <div class="num">09 · FOLDERS</div>
-    <h2>폴더 정리 — 자료(art-prep) ↔ 코드(art-gallery 폴더)</h2>
+    <h2>폴더 정리 — 자료(art-prep-docs) ↔ 코드(art-prep 폴더)</h2>
 
     <h3>git 커밋 4건</h3>
     <div class="commit-card">
-<span class="sha">0b6658b</span> <span class="meta">[art-prep]</span> <span class="tag">chore:</span> mobile 코드/스크립트/캐시 제거 (다른 폴더로 이전)
+<span class="sha">0b6658b</span> <span class="meta">[art-prep-docs]</span> <span class="tag">chore:</span> mobile 코드/스크립트/캐시 제거 (다른 폴더로 이전)
 <span class="meta">- mobile/ (Expo 앱 전체) 삭제</span>
 <span class="meta">- convert_notion.py 삭제</span>
 <span class="meta">- .env.local.example 삭제</span>
@@ -479,17 +479,17 @@
 <span class="meta">- 16 files changed, 1403 deletions(-)</span>
     </div>
     <div class="commit-card">
-<span class="sha">5059bec</span> <span class="meta">[art-gallery 폴더]</span> <span class="tag">feat:</span> filter_options + saved_items + DetailModal 제거 (+747 / -192)
+<span class="sha">5059bec</span> <span class="meta">[art-prep 폴더]</span> <span class="tag">feat:</span> filter_options + saved_items + DetailModal 제거 (+747 / -192)
     </div>
     <div class="commit-card">
-<span class="sha">8b4191c</span> <span class="meta">[art-gallery 폴더]</span> <span class="tag">feat:</span> UploadModal 실 업로드 + MyUploadsPage (+413 / -29)
+<span class="sha">8b4191c</span> <span class="meta">[art-prep 폴더]</span> <span class="tag">feat:</span> UploadModal 실 업로드 + MyUploadsPage (+413 / -29)
     </div>
     <div class="commit-card">
-<span class="sha">9391f72</span> <span class="meta">[art-gallery 폴더]</span> <span class="tag">style:</span> UploadModal 필수/선택 시각화 (+19 / -9)
+<span class="sha">9391f72</span> <span class="meta">[art-prep 폴더]</span> <span class="tag">style:</span> UploadModal 필수/선택 시각화 (+19 / -9)
     </div>
 
-    <h3>art-prep 폴더 (자료 보존)</h3>
-    <div class="filetree">art-prep/
+    <h3>art-prep-docs 폴더 (자료 보존)</h3>
+    <div class="filetree">art-prep-docs/
 ├── <span class="keep">.git/</span>                                  <span class="ann"># history 보존</span>
 ├── <span class="keep">.gitignore</span>
 ├── <span class="keep">.claude/</span>
@@ -504,8 +504,8 @@
 ├── <span class="gone">.env.local.example</span>                    <span class="ann"># 삭제</span>
 └── <span class="gone">.playwright-mcp/</span>                      <span class="ann"># 삭제</span></div>
 
-    <h3>art-gallery 폴더 = ArtPrep 서비스의 실제 작업 폴더</h3>
-    <div class="filetree">c:\claude-class\art-gallery/
+    <h3>art-prep 폴더 = ArtPrep 서비스의 실제 작업 폴더</h3>
+    <div class="filetree">c:\claude-class\art-prep/
 ├── <span class="keep">.git/</span>                                  <span class="ann"># 코드 history</span>
 ├── <span class="keep">package.json</span>                            <span class="ann"># React 19 + Vite 8 + Supabase + Radix UI</span>
 ├── <span class="keep">vite.config.js</span> · <span class="keep">tailwind.config.js</span>
@@ -538,7 +538,7 @@
         └── <span class="new">04_filter_options.sql</span>          <span class="ann"># 신규</span></div>
 
     <h3>art-prep Supabase 상태</h3>
-    <p>새 폴더의 마이그레이션 03/04 적용으로 <code>saved_items</code>·<code>filter_options</code>가 운영 진입. <code>artworks</code>·<code>profiles</code>는 어제 상태 유지. 기존 <code>art-prep/mobile</code>에서 시도했던 <code>boards</code>/<code>board_items</code>는 3단계 롤백 시 DROP, 이번 task의 정정(저장한 작품 = 단일 페이지)으로 더 이상 필요 없음.</p>
+    <p>새 폴더의 마이그레이션 03/04 적용으로 <code>saved_items</code>·<code>filter_options</code>가 운영 진입. <code>artworks</code>·<code>profiles</code>는 어제 상태 유지. 기존 <code>art-prep-docs/mobile</code>에서 시도했던 <code>boards</code>/<code>board_items</code>는 3단계 롤백 시 DROP, 이번 task의 정정(저장한 작품 = 단일 페이지)으로 더 이상 필요 없음.</p>
   </section>
 
   <!-- 10. 다음 -->
@@ -559,7 +559,7 @@
       <tr><td>W2 후반</td><td>타 대회 12개 슬롯 채우기 → 4축 채점 → 숏리스트 5개</td><td>⑦</td></tr>
     </table>
 
-    <h3>새 폴더(art-gallery)에서 이어갈 코드 작업 — 일일 보고서가 짚은 부채</h3>
+    <h3>새 폴더(art-prep)에서 이어갈 코드 작업 — 일일 보고서가 짚은 부채</h3>
     <ul class="checks">
       <li class="todo"><strong>filter_options 적용 확인</strong> — modify-info.md에 따르면 MCP 충돌로 자동 실행이 미뤄진 적 있음. 현 환경에서 적용 여부 재확인.</li>
       <li class="todo"><strong>FilterBar / UploadModal 중복 쿼리 통합</strong> — 동일 fetch가 두 컴포넌트에 분산. React Context 또는 SWR/React Query로 한 곳으로.</li>
@@ -573,11 +573,11 @@
     <ul class="tight">
       <li><strong>블로그</strong> — <code>/blog</code> 7편 published 상태로 즉시 노출</li>
       <li><strong>어드민</strong> — <code>/art-prep</code> 캘린더 동기화로 task 상태 자동 반영</li>
-      <li><strong>본 HTML</strong> — <code>art-prep/docs/reports/2026-04-29-w1w2-execution.html</code> (자료 폴더에 남김)</li>
-      <li><strong>코드 디테일 원본</strong> — <code>c:\claude-class\art-gallery\docs\2026-04-29_daily-report.md</code> (커밋·라인·모듈명까지 포함)</li>
+      <li><strong>본 HTML</strong> — <code>art-prep-docs/docs/reports/2026-04-29-w1w2-execution.html</code> (자료 폴더에 남김)</li>
+      <li><strong>코드 디테일 원본</strong> — <code>c:\claude-class\art-prep\docs\2026-04-29_daily-report.md</code> (커밋·라인·모듈명까지 포함)</li>
     </ul>
 
-    <p class="footnote">생성: 2026-04-29 · ArtPrep 10주 스프린트 D-48 (내부 마감 6/16) · D-52 (공식 마감 6/20) · "art-gallery 폴더 = art-prep 서비스의 실제 작업 폴더" 확정 반영</p>
+    <p class="footnote">생성: 2026-04-29 · ArtPrep 10주 스프린트 D-48 (내부 마감 6/16) · D-52 (공식 마감 6/20) · "art-prep 폴더 = art-prep 서비스의 실제 작업 폴더" 확정 반영</p>
   </section>
 
 </div>

@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ArtPrep × BOAZ — 4/11 후속 미팅 (풀버전)</title>
+<style>
+  :root {
+    --navy: #1a3a5c;
+    --navy-deep: #0f2540;
+    --coral: #e85d3a;
+    --coral-soft: #f4a58c;
+    --beige: #faf7f2;
+    --paper: #ffffff;
+    --ink: #1a1a1a;
+    --ink-soft: #4a4a4a;
+    --ink-muted: #8a8a8a;
+    --line: #e6e0d6;
+    --gold: #c89968;
+    --green: #2f8a52;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    background: #2a2a2a;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    color: var(--ink);
+    overflow: hidden;
+  }
+
+  .deck {
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 1280px; height: 720px;
+    background: var(--beige);
+    border-radius: 4px;
+    padding: 56px 72px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    flex-direction: column;
+  }
+  .slide.active { display: flex; }
+
+  .slide-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px; margin-bottom: 22px;
+  }
+  .slide-eyebrow {
+    font-size: 12px; color: var(--coral);
+    letter-spacing: 2px; font-weight: 600; text-transform: uppercase;
+  }
+  .slide-num { font-size: 12px; color: var(--ink-muted); letter-spacing: 1px; }
+  .slide-title {
+    font-size: 30px; font-weight: 700; color: var(--navy);
+    margin-bottom: 4px; letter-spacing: -0.5px;
+  }
+  .slide-subtitle {
+    font-size: 15px; color: var(--ink-soft);
+    font-weight: 400; margin-bottom: 18px;
+  }
+  .slide-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+  .footnote {
+    position: absolute; bottom: 28px; left: 72px; right: 72px;
+    font-size: 11px; color: var(--ink-muted);
+    line-height: 1.6;
+    border-top: 1px dashed var(--line);
+    padding-top: 8px;
+  }
+
+  /* 4/11 주제 배지 */
+  .reply-badge {
+    display: inline-block;
+    background: var(--green); color: white;
+    font-size: 10px; letter-spacing: 1px; font-weight: 700;
+    padding: 3px 8px; border-radius: 100px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  /* Nav */
+  .nav {
+    position: fixed; bottom: 24px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(0,0,0,0.5); color: white;
+    padding: 8px 18px; border-radius: 100px;
+    font-size: 13px; backdrop-filter: blur(10px);
+    z-index: 100;
+  }
+  .nav button {
+    background: transparent; color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+    width: 28px; height: 28px; border-radius: 50%;
+    cursor: pointer; font-size: 14px;
+  }
+  .nav button:hover { background: rgba(255,255,255,0.15); }
+  .nav-counter { min-width: 60px; text-align: center; }
+
+  /* Cover */
+  .cover {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
+    color: white;
+    align-items: flex-start; justify-content: center;
+    padding: 100px 100px;
+  }
+  .cover .accent-line { width: 60px; height: 4px; background: var(--coral); margin-bottom: 28px; }
+  .cover-eyebrow { color: var(--coral-soft); font-size: 14px; letter-spacing: 4px; margin-bottom: 22px; font-weight: 500; }
+  .cover h1 { font-size: 60px; line-height: 1.1; font-weight: 800; margin-bottom: 20px; letter-spacing: -1.5px; }
+  .cover h2 { font-size: 21px; font-weight: 400; color: rgba(255,255,255,0.75); line-height: 1.5; margin-bottom: 50px; max-width: 720px; }
+  .cover-followup {
+    background: rgba(232, 93, 58, 0.15);
+    border-left: 3px solid var(--coral);
+    padding: 14px 18px; border-radius: 4px;
+    max-width: 640px;
+    font-size: 14px; line-height: 1.6;
+    color: rgba(255,255,255,0.9);
+  }
+  .cover-followup strong { color: var(--coral-soft); display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 2px; }
+  .cover-meta {
+    position: absolute; bottom: 80px; left: 100px;
+    display: flex; gap: 56px;
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+  }
+  .cover-meta strong { color: white; font-weight: 500; display: block; margin-bottom: 4px; letter-spacing: 0; font-size: 15px; }
+
+  /* Meeting Goals (cover) */
+  .meeting-goals { margin: 36px 0 30px; max-width: 980px; }
+  .meeting-goals-label {
+    font-size: 12px; letter-spacing: 3px;
+    color: var(--coral-soft); font-weight: 700;
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 14px;
+    text-transform: uppercase;
+  }
+  .meeting-goals-label::before {
+    content: ''; width: 28px; height: 1px;
+    background: var(--coral); display: inline-block;
+  }
+  .meeting-goals-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .goal-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 18px 18px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .goal-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0;
+    width: 3px; height: 100%;
+    background: var(--coral);
+  }
+  .goal-card-num {
+    font-size: 11px; letter-spacing: 2px;
+    color: var(--coral); font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .goal-card-head {
+    font-size: 16px; font-weight: 700;
+    color: white; margin-bottom: 8px;
+    letter-spacing: -0.3px; line-height: 1.3;
+  }
+  .goal-card-detail {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    line-height: 1.55;
+  }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; margin: 24px 0; }
+  .stat-card {
+    background: var(--paper);
+    border-left: 4px solid var(--coral);
+    padding: 28px 24px; border-radius: 4px;
+  }
+  .stat-num {
+    font-size: 52px; font-weight: 800; color: var(--navy);
+    line-height: 1; margin-bottom: 10px; letter-spacing: -2px;
+  }
+  .stat-num small { font-size: 22px; font-weight: 600; color: var(--ink-soft); margin-left: 4px; }
+  .stat-label { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+
+  .lead-msg {
+    margin-top: 16px;
+    padding: 18px 22px;
+    background: rgba(232, 93, 58, 0.08);
+    border-radius: 6px;
+    font-size: 16px; color: var(--navy-deep);
+    font-weight: 500; line-height: 1.5;
+  }
+  .lead-msg::before { content: '"'; color: var(--coral); font-size: 24px; margin-right: 4px; font-weight: 700; }
+  .lead-msg::after { content: '"'; color: var(--coral); font-size: 24px; margin-left: 4px; font-weight: 700; }
+
+  /* Before/After */
+  .ba-grid { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 0; align-items: center; margin: 12px 0; }
+  .ba-card { background: var(--paper); padding: 26px 26px 32px; border-radius: 8px; height: 340px; display: flex; flex-direction: column; justify-content: space-between; }
+  .ba-card.before { border: 2px solid var(--line); }
+  .ba-card.after { border: 2px solid var(--coral); background: linear-gradient(135deg, #fff 0%, #fff5f0 100%); }
+  .ba-label { font-size: 11px; letter-spacing: 3px; font-weight: 700; margin-bottom: 12px; }
+  .ba-card.before .ba-label { color: var(--ink-muted); }
+  .ba-card.after .ba-label { color: var(--coral); }
+  .ba-headline { font-size: 21px; font-weight: 700; color: var(--navy); line-height: 1.3; margin-bottom: 14px; }
+  .ba-flow { display: flex; flex-direction: column; gap: 8px; }
+  .ba-step { background: var(--beige); padding: 10px 14px; border-radius: 4px; font-size: 13px; color: var(--ink-soft); }
+  .ba-card.after .ba-step { background: rgba(232, 93, 58, 0.1); color: var(--navy-deep); font-weight: 500; }
+  .ba-time { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 13px; color: var(--ink-muted); }
+  .ba-time strong { color: var(--navy); font-size: 18px; }
+  .ba-card.after .ba-time strong { color: var(--coral); }
+  .ba-arrow { display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--coral); }
+
+  /* Persona */
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 8px; }
+  .persona { background: var(--paper); padding: 24px 20px; border-radius: 8px; border-top: 3px solid var(--coral); height: 360px; display: flex; flex-direction: column; }
+  .persona-icon { width: 44px; height: 44px; background: var(--navy); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; margin-bottom: 14px; }
+  .persona-name { font-size: 17px; font-weight: 700; color: var(--navy); margin-bottom: 5px; }
+  .persona-tag { font-size: 12px; color: var(--coral); margin-bottom: 12px; font-weight: 600; letter-spacing: 0.5px; }
+  .persona-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.6; margin-bottom: 12px; }
+  .persona-pain { margin-top: auto; padding: 12px 14px; background: var(--beige); border-radius: 4px; font-size: 12px; color: var(--navy-deep); line-height: 1.5; }
+  .persona-pain strong { color: var(--coral); display: block; margin-bottom: 4px; font-size: 11px; letter-spacing: 1px; }
+
+  /* Flow */
+  .flow-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin-top: 24px; align-items: stretch; }
+  .flow-step { background: var(--paper); padding: 20px 14px; border-radius: 6px; text-align: center; position: relative; border: 1px solid var(--line); margin-right: 4px; }
+  .flow-step.phase2 { background: #fdf6f1; border: 1px dashed var(--coral); }
+  .flow-num { width: 26px; height: 26px; background: var(--coral); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; margin: 0 auto 10px; }
+  .flow-title { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .flow-desc { font-size: 11px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 10px; }
+  .flow-data { margin-top: 6px; padding: 6px; background: var(--beige); border-radius: 4px; font-size: 10px; color: var(--navy); font-family: 'Consolas', monospace; line-height: 1.4; }
+  .phase-tag { display: inline-block; padding: 2px 8px; background: var(--coral); color: white; border-radius: 100px; font-size: 10px; font-weight: 600; margin-top: 6px; }
+
+  /* ERD */
+  .erd-canvas { position: relative; width: 100%; height: 460px; margin-top: 8px; }
+  .erd-table { position: absolute; background: var(--paper); border: 2px solid var(--navy); border-radius: 6px; width: 200px; overflow: hidden; }
+  .erd-table.phase2 { border: 2px dashed var(--coral); }
+  .erd-th { background: var(--navy); color: white; padding: 8px 12px; font-size: 13px; font-weight: 700; text-align: center; font-family: 'Consolas', monospace; }
+  .erd-table.phase2 .erd-th { background: var(--coral); }
+  .erd-fields { padding: 8px 12px; font-size: 11px; color: var(--ink-soft); line-height: 1.7; font-family: 'Consolas', monospace; }
+  .erd-fields .pk { color: var(--coral); font-weight: 700; }
+  .erd-fields .fk { color: var(--navy); font-weight: 600; }
+
+  /* === [NEW] 데이터 규모 === */
+  .data-status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    height: 100%;
+  }
+  .data-side h3 {
+    font-size: 13px; color: var(--coral);
+    letter-spacing: 2px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .data-current-card {
+    background: var(--paper);
+    border-left: 4px solid var(--ink-muted);
+    padding: 18px 22px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+  }
+  .data-current-card.zero { border-left-color: #ef4444; }
+  .data-current-card.live { border-left-color: var(--green); }
+  .data-row {
+    display: grid;
+    grid-template-columns: 130px 60px 1fr;
+    gap: 8px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dotted var(--line);
+  }
+  .data-row:last-child { border-bottom: none; }
+  .data-row-name { font-family: 'Consolas', monospace; font-size: 13px; color: var(--navy); font-weight: 700; }
+  .data-row-num { font-size: 18px; font-weight: 800; color: var(--navy); text-align: right; font-variant-numeric: tabular-nums; }
+  .data-row-num.zero { color: #ef4444; }
+  .data-row-num.live { color: var(--green); }
+  .data-row-note { font-size: 11px; color: var(--ink-muted); }
+
+  .timeline {
+    background: var(--paper);
+    padding: 20px 24px;
+    border-radius: 8px;
+    border-top: 3px solid var(--coral);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .timeline-step {
+    display: grid;
+    grid-template-columns: 70px 1fr 80px;
+    gap: 10px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--line);
+  }
+  .timeline-step:last-child { border-bottom: none; }
+  .timeline-when {
+    font-size: 11px;
+    color: var(--coral);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .timeline-what {
+    font-size: 13px;
+    color: var(--navy);
+    line-height: 1.5;
+  }
+  .timeline-what strong { display: block; margin-bottom: 2px; font-weight: 700; }
+  .timeline-num {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--navy);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* table detail */
+  .table-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; margin-top: 8px; }
+  .col-list { background: var(--paper); padding: 22px 24px; border-radius: 8px; border-left: 4px solid var(--navy); }
+  .col-list h4 { font-size: 14px; color: var(--navy); margin-bottom: 14px; font-family: 'Consolas', monospace; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .col-row { display: grid; grid-template-columns: 140px 80px 1fr; gap: 8px; font-size: 12px; padding: 5px 0; border-bottom: 1px dotted var(--line); align-items: center; }
+  .col-row:last-child { border-bottom: none; }
+  .col-name { font-family: 'Consolas', monospace; color: var(--navy); font-weight: 600; }
+  .col-type { color: var(--coral); font-size: 10px; font-family: 'Consolas', monospace; }
+  .col-desc { color: var(--ink-soft); font-size: 11px; }
+  .row-example { background: var(--paper); padding: 22px 24px; border-radius: 8px; border-left: 4px solid var(--coral); }
+  .row-example h4 { font-size: 14px; color: var(--coral); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+  .row-image { width: 100%; height: 140px; background: linear-gradient(135deg, #d4d0c8 0%, #a89888 100%); border-radius: 4px; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; letter-spacing: 1px; }
+  .row-meta { font-size: 12px; line-height: 1.7; color: var(--ink-soft); }
+  .row-meta strong { color: var(--navy); }
+  .row-meta .tag { display: inline-block; background: var(--beige); padding: 2px 8px; border-radius: 100px; font-size: 10px; margin-right: 4px; margin-top: 4px; color: var(--navy); }
+
+  /* Behavior */
+  .behavior-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
+  .behavior-card { background: var(--paper); padding: 24px; border-radius: 8px; border-top: 3px solid var(--coral); }
+  .behavior-card h4 { font-size: 16px; color: var(--navy); margin-bottom: 6px; font-family: 'Consolas', monospace; }
+  .behavior-card .sub { font-size: 12px; color: var(--ink-muted); margin-bottom: 14px; }
+  .seq-step { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 12px; color: var(--ink-soft); border-bottom: 1px dotted var(--line); }
+  .seq-step:last-child { border-bottom: none; }
+  .seq-icon { width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .seq-step code { background: var(--beige); padding: 1px 6px; border-radius: 3px; font-size: 11px; color: var(--coral); }
+  .behavior-use { margin-top: 12px; padding: 12px 14px; background: rgba(232, 93, 58, 0.08); border-radius: 4px; font-size: 12px; color: var(--navy-deep); line-height: 1.5; }
+  .behavior-use strong { color: var(--coral); }
+
+  /* AI Pipeline */
+  .pipe-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 16px; }
+  .pipe-step { background: var(--paper); padding: 16px 12px; border-radius: 6px; text-align: center; position: relative; border-top: 3px solid var(--coral); min-height: 200px; }
+  .pipe-num { font-size: 30px; font-weight: 800; color: var(--coral); line-height: 1; margin-bottom: 8px; }
+  .pipe-name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+  .pipe-detail { font-size: 11px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 8px; }
+  .pipe-out { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--line); font-size: 10px; color: var(--navy); font-family: 'Consolas', monospace; }
+
+  /* === [NEW] Strategy + BM === */
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 8px;
+  }
+  .strategy-card {
+    background: var(--paper);
+    border-radius: 8px;
+    padding: 22px 24px;
+    border-top: 3px solid var(--navy);
+  }
+  .strategy-card.bm { border-top-color: var(--coral); }
+  .strategy-card h4 {
+    font-size: 16px; color: var(--navy);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .strategy-step {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px dotted var(--line);
+  }
+  .strategy-step:last-child { border-bottom: none; }
+  .strategy-num {
+    width: 26px; height: 26px;
+    background: var(--coral); color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+  }
+  .strategy-text { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+  .strategy-text strong { color: var(--navy); display: block; margin-bottom: 2px; }
+
+  .bm-stage {
+    display: grid;
+    grid-template-columns: 80px 1fr 80px;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dotted var(--line);
+  }
+  .bm-stage:last-child { border-bottom: none; }
+  .bm-when { font-size: 11px; color: var(--coral); font-weight: 700; letter-spacing: 1px; }
+  .bm-what { font-size: 13px; color: var(--navy); line-height: 1.4; }
+  .bm-what strong { display: block; font-weight: 700; }
+  .bm-rev { font-size: 11px; color: var(--ink-soft); text-align: right; line-height: 1.4; font-family: 'Consolas', monospace; }
+
+  /* Architecture */
+  .arch-canvas { position: relative; width: 100%; height: 480px; margin-top: 8px; }
+  .arch-box { position: absolute; background: var(--paper); border-radius: 8px; padding: 14px 18px; border: 1px solid var(--line); text-align: center; }
+  .arch-box .arch-label { font-size: 10px; color: var(--ink-muted); letter-spacing: 1px; margin-bottom: 4px; }
+  .arch-box .arch-name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+  .arch-box .arch-tech { font-size: 11px; color: var(--coral); font-family: 'Consolas', monospace; }
+  .arch-box.onprem { background: linear-gradient(135deg, #fff 0%, #f4f8f0 100%); border-left: 4px solid var(--green); }
+  .arch-box.onprem .arch-label { color: var(--green); font-weight: 700; }
+
+  /* BOAZ matrix */
+  .matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+  .matrix-card { background: var(--paper); padding: 20px 24px; border-radius: 8px; border-left: 4px solid var(--line); height: 230px; display: flex; flex-direction: column; position: relative; }
+  .matrix-card.priority { border-left-color: var(--coral); background: linear-gradient(135deg, #fff 0%, #fff5f0 100%); }
+  .matrix-card h4 { font-size: 15px; color: var(--navy); margin-bottom: 8px; }
+  .matrix-num { display: inline-block; background: var(--coral); color: white; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; text-align: center; line-height: 22px; margin-right: 8px; font-weight: 700; }
+  .matrix-card:not(.priority) .matrix-num { background: var(--ink-muted); }
+  .priority-tag {
+    position: absolute; top: 14px; right: 16px;
+    background: var(--coral); color: white;
+    font-size: 9px; letter-spacing: 1px; font-weight: 700;
+    padding: 3px 8px; border-radius: 100px;
+  }
+  .matrix-tables { margin: 6px 0; display: flex; flex-wrap: wrap; gap: 5px; }
+  .matrix-table { background: var(--beige); padding: 3px 8px; border-radius: 100px; font-size: 10px; color: var(--navy); font-family: 'Consolas', monospace; border: 1px solid var(--line); }
+  .matrix-desc { margin-top: auto; font-size: 12px; color: var(--ink-soft); line-height: 1.5; padding-top: 10px; border-top: 1px dotted var(--line); }
+
+  /* === [NEW] Roadmap === */
+  .roadmap-canvas {
+    background: var(--paper);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 8px;
+  }
+  .roadmap-week-row {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin-bottom: 10px;
+  }
+  .roadmap-week {
+    background: var(--beige);
+    padding: 8px 4px;
+    border-radius: 4px;
+    text-align: center;
+    border-bottom: 3px solid transparent;
+  }
+  .roadmap-week.now { background: rgba(232, 93, 58, 0.15); border-bottom-color: var(--coral); }
+  .roadmap-week.gate { background: rgba(99, 102, 241, 0.15); border-bottom-color: #6366f1; }
+  .roadmap-week-num {
+    font-size: 11px; font-weight: 700; color: var(--navy);
+    letter-spacing: 1px;
+  }
+  .roadmap-week-date {
+    font-size: 9px; color: var(--ink-muted);
+    margin-top: 2px;
+  }
+  .roadmap-week.now .roadmap-week-num { color: var(--coral); }
+  .roadmap-week.gate .roadmap-week-num { color: #6366f1; }
+
+  .milestone-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 12px;
+  }
+  .milestone-card {
+    background: var(--paper);
+    padding: 16px 20px;
+    border-radius: 6px;
+    border-left: 3px solid var(--coral);
+  }
+  .milestone-when {
+    font-size: 11px; color: var(--coral);
+    letter-spacing: 1px; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .milestone-what {
+    font-size: 14px; color: var(--navy);
+    font-weight: 700; margin-bottom: 4px;
+  }
+  .milestone-detail {
+    font-size: 11px; color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  /* Closing */
+  .closing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 6px; }
+  .closing-side { background: var(--paper); padding: 24px 28px; border-radius: 8px; }
+  .closing-side h3 { font-size: 13px; color: var(--coral); letter-spacing: 2px; font-weight: 700; margin-bottom: 12px; }
+  .closing-side.done { border-top: 3px solid var(--green); }
+  .closing-side.done h3 { color: var(--green); }
+  .closing-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px dotted var(--line); }
+  .closing-item:last-child { border-bottom: none; }
+  .closing-box { width: 18px; height: 18px; border: 2px solid var(--coral); border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+  .closing-box.checked { background: var(--green); border-color: var(--green); position: relative; }
+  .closing-box.checked::after { content: '✓'; position: absolute; top: -3px; left: 2px; color: white; font-size: 14px; font-weight: 700; }
+  .closing-text { flex: 1; font-size: 12px; color: var(--navy-deep); line-height: 1.5; }
+  .closing-text strong { color: var(--navy); display: block; margin-bottom: 2px; font-size: 13px; }
+
+  /* Print */
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    html, body { background: white; overflow: visible; }
+    .deck { display: block; height: auto; }
+    .slide { display: flex !important; page-break-after: always; box-shadow: none; border-radius: 0; width: 1280px; height: 720px; }
+    .nav { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- ============== SLIDE 1: COVER ============== -->
+  <section class="slide cover active" data-idx="1">
+    <div class="accent-line"></div>
+    <div class="cover-eyebrow">ARTPREP × BOAZ — 4/11 후속 미팅</div>
+    <div class="meeting-goals">
+      <div class="meeting-goals-label">오늘 미팅의 목표</div>
+      <div class="meeting-goals-grid">
+        <div class="goal-card">
+          <div class="goal-card-num">01</div>
+          <div class="goal-card-head">진행 상황 공유</div>
+          <div class="goal-card-detail">4/11 합의 사항이<br/>어디까지 갔는지 함께 정리</div>
+        </div>
+        <div class="goal-card">
+          <div class="goal-card-num">02</div>
+          <div class="goal-card-head">우선순위 확정</div>
+          <div class="goal-card-detail">추천 / step2 VLM<br/>1·2번 작업 분담</div>
+        </div>
+        <div class="goal-card">
+          <div class="goal-card-num">03</div>
+          <div class="goal-card-head">접근·인프라 셋업</div>
+          <div class="goal-card-detail">데이터 권한 +<br/>학습 노드 활용 방식</div>
+        </div>
+        <div class="goal-card">
+          <div class="goal-card-num">04</div>
+          <div class="goal-card-head">1차 점검 합의</div>
+          <div class="goal-card-detail">5/21까지 BOAZ 측<br/>산출물 형태 결정</div>
+        </div>
+      </div>
+    </div>
+    <div class="cover-meta">
+      <div><strong>2026년 5월 3일 일요일 · W2</strong>미팅 일자</div>
+      <div><strong>BOAZ × ArtPrep</strong>참석자</div>
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 2: PROBLEM ============== -->
+  <section class="slide" data-idx="2">
+    <div class="slide-header">
+      <span class="slide-eyebrow">우리가 푸는 문제</span>
+      <span class="slide-num">02 / 15</span>
+    </div>
+    <h2 class="slide-title">수험생은 어디서 무엇을 보고 그릴지 모른다 <span class="reply-badge">4/11 ① 목적 명확화</span></h2>
+    <p class="slide-subtitle">미대 입시 시장의 정보 격차 — 학원에 다니지 않으면 합격작에 접근할 길이 없다.</p>
+    <div class="slide-body">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num">132<small>분</small></div>
+          <div class="stat-label">수험생 1명이 SNS·블로그에서<br/>참고작을 찾는 데 쓰는<br/><strong>일일 평균 시간</strong></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">65<small>%</small></div>
+          <div class="stat-label">탐색 끝에 본 작품 중<br/>실제 합격에 도움 안 되는<br/><strong>잘못된 참고작 비율</strong></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">5<small>만명</small></div>
+          <div class="stat-label">매년 미대 입시에 응시하는<br/>국내 수험생 규모<br/><strong>(연간 누적)</strong></div>
+        </div>
+      </div>
+      <div class="lead-msg">
+        학원비 월 200만원을 감당할 수 없는 학생일수록 정보 격차로 인한 불합격 가능성이 커진다.
+      </div>
+    </div>
+    <div class="footnote">
+      출처 — ArtPrep 자체 사용자 조사(2025) 및 한국대학교육협의회 미대 정시 응시자 통계 기반 추정치.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 3: SOLUTION ============== -->
+  <section class="slide" data-idx="3">
+    <div class="slide-header">
+      <span class="slide-eyebrow">우리의 솔루션</span>
+      <span class="slide-num">03 / 15</span>
+    </div>
+    <h2 class="slide-title">합격 작품 DB를 AI가 큐레이션한다</h2>
+    <p class="slide-subtitle">학생의 목표 대학·전형·취향을 학습해, 합격 가능성이 높은 작품을 골라준다.</p>
+    <div class="slide-body">
+      <div class="ba-grid">
+        <div class="ba-card before">
+          <div>
+            <div class="ba-label">BEFORE</div>
+            <div class="ba-headline">SNS와 블로그를<br/>닥치는 대로 헤맨다</div>
+          </div>
+          <div class="ba-flow">
+            <div class="ba-step">학생이 검색어를 입력</div>
+            <div class="ba-step">합격작인지 알 수 없는<br/>이미지를 한참 본다</div>
+            <div class="ba-step">결국 무엇을 참고해야<br/>할지 모른 채 종료</div>
+          </div>
+          <div class="ba-time">소요 시간 <strong>132분 / 일</strong></div>
+        </div>
+        <div class="ba-arrow">▶</div>
+        <div class="ba-card after">
+          <div>
+            <div class="ba-label">AFTER (ArtPrep)</div>
+            <div class="ba-headline">AI가 학생에 맞춰<br/>합격작을 골라준다</div>
+          </div>
+          <div class="ba-flow">
+            <div class="ba-step">학생이 목표 대학·전형 입력</div>
+            <div class="ba-step">AI가 검증된 합격 DB에서<br/>학생 취향에 맞는 작품 추천</div>
+            <div class="ba-step">바로 저장하고 분석 리포트로 학습</div>
+          </div>
+          <div class="ba-time">소요 시간 <strong>약 10초</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 4: PERSONA ============== -->
+  <section class="slide" data-idx="4">
+    <div class="slide-header">
+      <span class="slide-eyebrow">사용자</span>
+      <span class="slide-num">04 / 15</span>
+    </div>
+    <h2 class="slide-title">누가 이 서비스를 쓰는가</h2>
+    <p class="slide-subtitle">10대 후반~20대 초반 미대 입시 수험생. 정보 접근에 따라 세 부류로 나뉜다.</p>
+    <div class="slide-body">
+      <div class="persona-grid">
+        <div class="persona">
+          <div class="persona-icon">A</div>
+          <div class="persona-name">현역 입시생</div>
+          <div class="persona-tag">10대 후반 · 학원 다님</div>
+          <div class="persona-desc">학원에서 보여주는 자료 외에 더 다양한 합격작을 보고 싶어 한다. 학원 자료가 한정적이라 갈증이 있다.</div>
+          <div class="persona-pain">
+            <strong>핵심 니즈</strong>
+            학원 외부의 다양한 합격작을 빠르게 비교
+          </div>
+        </div>
+        <div class="persona">
+          <div class="persona-icon">B</div>
+          <div class="persona-name">재수생</div>
+          <div class="persona-tag">20대 초반 · 정시 준비</div>
+          <div class="persona-desc">학원비 부담으로 혼자 공부하는 비중이 크다. 어떤 작품이 합격에 가까운지 데이터로 판단하고 싶다.</div>
+          <div class="persona-pain">
+            <strong>핵심 니즈</strong>
+            학원 없이도 데이터로 방향 검증
+          </div>
+        </div>
+        <div class="persona">
+          <div class="persona-icon">C</div>
+          <div class="persona-name">지방 정시생</div>
+          <div class="persona-tag">학원 안 다님 · 정보 격차</div>
+          <div class="persona-desc">지방에는 미대 입시 학원이 거의 없다. SNS와 블로그를 헤매며 자료를 찾지만 합격 여부를 알 수 없다.</div>
+          <div class="persona-pain">
+            <strong>핵심 니즈</strong>
+            지역과 무관하게 검증된 합격작 접근
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 5: USER FLOW ============== -->
+  <section class="slide" data-idx="5">
+    <div class="slide-header">
+      <span class="slide-eyebrow">사용자 플로우</span>
+      <span class="slide-num">05 / 15</span>
+    </div>
+    <h2 class="slide-title">학생이 서비스를 쓰는 흐름과 쌓이는 데이터</h2>
+    <p class="slide-subtitle">각 단계마다 어떤 데이터가 어느 테이블에 쌓이는지 — BOAZ 팀이 데이터에 접근할 때의 출처가 된다.</p>
+    <div class="slide-body">
+      <div class="flow-row">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div class="flow-title">가입</div>
+          <div class="flow-desc">이메일 또는 소셜 로그인으로 계정 생성</div>
+          <div class="flow-data">→ profiles<br/>(id, user_type)</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div class="flow-title">목표 설정</div>
+          <div class="flow-desc">목표 대학·전형·실기 유형 입력</div>
+          <div class="flow-data">→ profiles<br/>(target_university,<br/>target_major, exam_types)</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div class="flow-title">큐레이션 탐색</div>
+          <div class="flow-desc">AI 추천 + 필터 칩으로 작품 그리드 탐색</div>
+          <div class="flow-data">→ curation_<br/>sessions</div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div class="flow-title">저장 (♡)</div>
+          <div class="flow-desc">마음에 드는 작품을 ♡로 저장</div>
+          <div class="flow-data">→ saved_items</div>
+        </div>
+        <div class="flow-step phase2">
+          <div class="flow-num">5</div>
+          <div class="flow-title">AI 분석 리포트</div>
+          <div class="flow-desc">5단계 AI 분석으로 합격 가능성 점검</div>
+          <div class="flow-data">→ analysis_<br/>reports</div>
+          <div class="phase-tag">PHASE 2</div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      Phase 2 — 현재 MVP는 1~4단계까지 구현. 5단계 AI 분석 리포트는 4/11에 함께 다룬 step2 VLM에 해당.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 6: ERD ============== -->
+  <section class="slide" data-idx="6">
+    <div class="slide-header">
+      <span class="slide-eyebrow">데이터 모델</span>
+      <span class="slide-num">06 / 15</span>
+    </div>
+    <h2 class="slide-title">데이터베이스 구조 한눈에 보기</h2>
+    <p class="slide-subtitle">5/3 기준 실제 Supabase 스키마. LIVE 4개(profiles · artworks · saved_items · filter_options) + Phase 2 예정 2개(점선).</p>
+    <div class="slide-body">
+      <div class="erd-canvas">
+        <img src="../assets/erd.svg" alt="ArtPrep ERD — 5개 테이블 관계도" style="width:100%; height:100%; object-fit:contain; display:block;"/>
+      </div>
+    </div>
+    <div class="footnote">
+      박스 안 LIVE 태그 = 5/3 기준 실제 테이블. 컬럼은 핵심만 표시 (실제 컬럼 수가 더 많음). 모든 user_id는 Supabase Auth(auth.users) 참조.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 7 [NEW]: DATA SCALE & PLAN ============== -->
+  <section class="slide" data-idx="7">
+    <div class="slide-header">
+      <span class="slide-eyebrow">데이터 현황 + 수집 계획</span>
+      <span class="slide-num">07 / 15</span>
+    </div>
+    <h2 class="slide-title">현재 데이터는 거의 0이다 — 그 위에 수집 계획을 정리했다 <span class="reply-badge">4/11 ③ 데이터 부족</span></h2>
+    <p class="slide-subtitle">4/11에 함께 짚었던 "데이터 양 적음" 그대로다. 현황을 솔직히 보여드리고, 5월 안에 어디까지 채울지를 약속한다.</p>
+    <div class="slide-body">
+      <div class="data-status-grid">
+        <div class="data-side" style="display:flex; flex-direction:column;">
+          <h3>현재 ArtPrep DB (5/3 기준)</h3>
+          <div class="data-current-card zero">
+            <div class="data-row">
+              <div class="data-row-name">artworks</div>
+              <div class="data-row-num zero">0</div>
+              <div class="data-row-note">합격 작품 — 수집 시작 전</div>
+            </div>
+            <div class="data-row">
+              <div class="data-row-name">profiles</div>
+              <div class="data-row-num zero">0</div>
+              <div class="data-row-note">사용자 — 정식 배포 전</div>
+            </div>
+            <div class="data-row">
+              <div class="data-row-name">saved_items</div>
+              <div class="data-row-num">2</div>
+              <div class="data-row-note">QA용 더미 데이터</div>
+            </div>
+          </div>
+          <div class="data-current-card live">
+            <div class="data-row">
+              <div class="data-row-name">filter_options</div>
+              <div class="data-row-num live">15</div>
+              <div class="data-row-note">필터 옵션 마스터</div>
+            </div>
+            <div class="data-row">
+              <div class="data-row-name">└ university</div>
+              <div class="data-row-num">8</div>
+              <div class="data-row-note">대학 옵션</div>
+            </div>
+            <div class="data-row">
+              <div class="data-row-name">└ art_type</div>
+              <div class="data-row-num">4</div>
+              <div class="data-row-note">실기 유형 (기초디자인 등)</div>
+            </div>
+            <div class="data-row">
+              <div class="data-row-name">└ academy_type</div>
+              <div class="data-row-num">3</div>
+              <div class="data-row-note">학원 분류</div>
+            </div>
+          </div>
+        </div>
+        <div class="data-side" style="display:flex; flex-direction:column;">
+          <h3>5~6월 데이터 수집 계획</h3>
+          <div class="timeline">
+            <div class="timeline-step">
+              <div class="timeline-when">W2 · 5/3</div>
+              <div class="timeline-what"><strong>BOAZ 미팅 (오늘)</strong>수집 전략 합의, 작업 분담</div>
+              <div class="timeline-num">+ 계획</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-when">W4 · 5/11~17</div>
+              <div class="timeline-what"><strong>1차 수집 — 핀터레스트형</strong>인터넷 공개 합격작 크롤링</div>
+              <div class="timeline-num">~500</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-when">W5 · 5/21</div>
+              <div class="timeline-what"><strong>1차 점검</strong>학원 협조 1차 컨택, 라벨링 시작</div>
+              <div class="timeline-num">~1,000</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-when">W7~8 · 6월 초</div>
+              <div class="timeline-what"><strong>학원 직접 수령</strong>저작권 클리어 데이터 추가</div>
+              <div class="timeline-num">~3,000</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-when">W9 · 6/20</div>
+              <div class="timeline-what"><strong>최종 점검 / 100명 베타</strong>학교 8개 + 한예종·과기대 비실기 확장</div>
+              <div class="timeline-num">~5,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      4/11에 함께 논의된 "선택지 늘리기 → 한예종·과기대 비실기까지" 방향을 W9 단계에 반영.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 8: artworks detail ============== -->
+  <section class="slide" data-idx="8">
+    <div class="slide-header">
+      <span class="slide-eyebrow">핵심 테이블</span>
+      <span class="slide-num">08 / 15</span>
+    </div>
+    <h2 class="slide-title">artworks — 합격 작품 데이터</h2>
+    <p class="slide-subtitle">서비스의 모든 추천과 분석은 이 테이블에서 출발한다. 이미지·태그·합격 정보가 함께 저장된다.</p>
+    <div class="slide-body">
+      <div class="table-grid">
+        <div class="col-list">
+          <h4>artworks 컬럼 구조 (실제 16개 중 핵심 14개)</h4>
+          <div class="col-row"><span class="col-name">id</span><span class="col-type">bigint</span><span class="col-desc">기본 키 (identity)</span></div>
+          <div class="col-row"><span class="col-name">user_id</span><span class="col-type">uuid</span><span class="col-desc">업로더 (→ auth.users)</span></div>
+          <div class="col-row"><span class="col-name">title</span><span class="col-type">text</span><span class="col-desc">작품 제목</span></div>
+          <div class="col-row"><span class="col-name">image_url</span><span class="col-type">text</span><span class="col-desc">Supabase Storage URL</span></div>
+          <div class="col-row"><span class="col-name">university</span><span class="col-type">text</span><span class="col-desc">합격 대학</span></div>
+          <div class="col-row"><span class="col-name">art_type</span><span class="col-type">text</span><span class="col-desc">실기 유형 (기초디자인 등)</span></div>
+          <div class="col-row"><span class="col-name">academy_type</span><span class="col-type">text</span><span class="col-desc">학원 분류</span></div>
+          <div class="col-row"><span class="col-name">region</span><span class="col-type">text</span><span class="col-desc">지역</span></div>
+          <div class="col-row"><span class="col-name">year</span><span class="col-type">int4</span><span class="col-desc">합격 연도</span></div>
+          <div class="col-row"><span class="col-name">tags</span><span class="col-type">text[]</span><span class="col-desc">스타일·기법 태그</span></div>
+          <div class="col-row"><span class="col-name">passed</span><span class="col-type">bool</span><span class="col-desc">합격 여부 (default true)</span></div>
+          <div class="col-row"><span class="col-name">like_count</span><span class="col-type">int4</span><span class="col-desc">좋아요 수</span></div>
+          <div class="col-row"><span class="col-name">created_at</span><span class="col-type">timestamptz</span><span class="col-desc">등록 시각</span></div>
+          <div class="col-row"><span class="col-name">updated_at</span><span class="col-type">timestamptz</span><span class="col-desc">수정 시각</span></div>
+        </div>
+        <div class="row-example">
+          <h4>예시 row 1개 (수집 후 형태)</h4>
+          <div class="row-image">[ artwork image preview ]</div>
+          <div class="row-meta">
+            <strong>university</strong> 홍익대 미술계열<br/>
+            <strong>art_type</strong> 기초디자인<br/>
+            <strong>academy_type</strong> 입시미술<br/>
+            <strong>region</strong> 서울 · <strong>year</strong> 2025<br/>
+            <strong>passed</strong> true · <strong>like_count</strong> 0<br/>
+            <strong>tags</strong>
+            <span class="tag">정물</span><span class="tag">고채도</span><span class="tag">사선구도</span><span class="tag">하이라이트</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      현재 보유 0건. 6/20 최종 점검 시점에 약 5,000건 적재 목표. 표에서 빠진 2개: <code>description</code>, <code>image_path</code>. 이미지는 Supabase Storage에 저장.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 9: BEHAVIOR DATA ============== -->
+  <section class="slide" data-idx="9">
+    <div class="slide-header">
+      <span class="slide-eyebrow">사용자 행동 데이터</span>
+      <span class="slide-num">09 / 15</span>
+    </div>
+    <h2 class="slide-title">추천 모델을 학습시킬 두 개의 행동 데이터</h2>
+    <p class="slide-subtitle">사용자가 "좋아한 작품"과 "탐색한 흐름"이 모두 기록된다. 이 두 데이터로 개인화 모델을 만들 수 있다.</p>
+    <div class="slide-body">
+      <div class="behavior-grid">
+        <div class="behavior-card">
+          <h4>saved_items</h4>
+          <div class="sub">사용자가 작품을 저장(♡)할 때마다 한 행이 쌓인다</div>
+          <div class="seq-step">
+            <div class="seq-icon">1</div>
+            <div>학생 A가 작품 카드의 ♡ 클릭</div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-icon">2</div>
+            <div><code>{ user_id, artwork_id, created_at }</code> 한 행이 INSERT</div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-icon">3</div>
+            <div>UNIQUE 제약으로 중복 저장 불가 — 항상 1:1 매핑</div>
+          </div>
+          <div class="behavior-use">
+            <strong>활용 ▸</strong> 사용자별 선호 학교·태그·구도 분포 추출 → 협업 필터링 / 콘텐츠 기반 추천 학습
+          </div>
+        </div>
+        <div class="behavior-card">
+          <h4>curation_sessions</h4>
+          <div class="sub">사용자가 큐레이션 화면을 열 때마다 한 행이 쌓인다</div>
+          <div class="seq-step">
+            <div class="seq-icon">1</div>
+            <div>학생이 필터 칩(학교·전형·태그) 선택</div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-icon">2</div>
+            <div><code>filter_params</code> JSONB로 어떤 조건을 걸었는지 저장</div>
+          </div>
+          <div class="seq-step">
+            <div class="seq-icon">3</div>
+            <div><code>result_ids</code>에 보여준 작품 ID 배열 저장</div>
+          </div>
+          <div class="behavior-use">
+            <strong>활용 ▸</strong> 노출 vs 저장 전환율 측정, 검색 의도 클러스터링, 추천 결과 품질 검증
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      두 테이블 모두 RLS(사용자별 행 단위 접근 제어) 적용 — 사용자는 본인 데이터만 조회 가능. BOAZ 팀에는 별도 읽기 전용 계정 발급 예정.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 10: AI 5-step Pipeline = step2 VLM ============== -->
+  <section class="slide" data-idx="10">
+    <div class="slide-header">
+      <span class="slide-eyebrow">Phase 2 — AI 분석 리포트</span>
+      <span class="slide-num">10 / 15</span>
+    </div>
+    <h2 class="slide-title">5단계 AI 분석 = 4/11에 다룬 step2 VLM* <span class="reply-badge">4/11 ⑤ step2 VLM</span></h2>
+    <p class="slide-subtitle">학생이 자신의 작품 또는 합격작을 업로드하면, VLM(Vision Language Model)이 5단계 리포트를 생성한다. 4/11에 함께 논의했던 그 기능이다.</p>
+    <div class="slide-body">
+      <div class="pipe-row">
+        <div class="pipe-step">
+          <div class="pipe-num">1</div>
+          <div class="pipe-name">출제 의도</div>
+          <div class="pipe-detail">이 작품이 어떤 시험 주제·요구에 응답하고 있는지 파악</div>
+          <div class="pipe-out">in: image<br/>out: 의도 텍스트</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">2</div>
+          <div class="pipe-name">학교 성향</div>
+          <div class="pipe-detail">목표 대학이 선호하는 스타일·기법과 얼마나 맞는지 매칭</div>
+          <div class="pipe-out">in: 1단계+학교<br/>out: 매칭 점수</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">3</div>
+          <div class="pipe-name">조형 요소</div>
+          <div class="pipe-detail">구도·명암·색채·디테일을 항목별로 분해해 분석</div>
+          <div class="pipe-out">in: image<br/>out: 항목별 점수</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">4</div>
+          <div class="pipe-name">평가 기준</div>
+          <div class="pipe-detail">대학별 채점 기준에 비추어 강점·약점 도출</div>
+          <div class="pipe-out">in: 2+3<br/>out: 강·약점 리스트</div>
+        </div>
+        <div class="pipe-step">
+          <div class="pipe-num">5</div>
+          <div class="pipe-name">합격 가능성</div>
+          <div class="pipe-detail">앞 4단계를 종합해 학교별 합격 확률을 산출</div>
+          <div class="pipe-out">in: 1~4<br/>out: 확률 + 코칭</div>
+        </div>
+      </div>
+      <div class="lead-msg" style="margin-top: 18px;">
+        결과는 analysis_reports 테이블의 step1~5 JSONB 컬럼에 저장 — 단계별 분석 데이터를 모두 보존해 BOAZ가 후속 분석에 활용 가능.
+      </div>
+    </div>
+    <div class="footnote">
+      * VLM (Vision Language Model) — 이미지와 텍스트를 함께 이해하는 AI 모델. 베이스라인은 Gemini 2.0 Flash, 자체 모델 파인튜닝은 ArtPrep이 보유한 학습 노드(다음 슬라이드)에서 가능.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 11 [NEW]: STRATEGY + BM ============== -->
+  <section class="slide" data-idx="11">
+    <div class="slide-header">
+      <span class="slide-eyebrow">데이터 수집 전략 + 비즈니스 모델</span>
+      <span class="slide-num">11 / 15</span>
+    </div>
+    <h2 class="slide-title">저작권 이슈를 안전하게 — 4/11 합의대로 <span class="reply-badge">4/11 ④ 폐쇄적 도메인</span></h2>
+    <p class="slide-subtitle">4/11에 함께 정한 "학원 협조 + 핀터레스트형 + B2B 먼저" 방향을 그대로 작동 가능한 단계로 풀었다.</p>
+    <div class="slide-body">
+      <div class="strategy-grid">
+        <div class="strategy-card">
+          <h4>데이터 수집 전략 — 3단계</h4>
+          <div class="strategy-step">
+            <div class="strategy-num">1</div>
+            <div class="strategy-text">
+              <strong>핀터레스트형 큐레이션 (W4~)</strong>
+              인터넷에 이미 공개된 합격작을 모아 썸네일 + 출처 링크로 표시. 이미지 직접 호스팅 안 함 → 저작권 마찰 최소
+            </div>
+          </div>
+          <div class="strategy-step">
+            <div class="strategy-num">2</div>
+            <div class="strategy-text">
+              <strong>학원 협조 수령 (W5~)</strong>
+              아는 학원에서 이미지 파일을 직접 받아 업로드. 후원·홍보 베네핏을 학원에 제공해 협조 유도 (저작권 클리어)
+            </div>
+          </div>
+          <div class="strategy-step">
+            <div class="strategy-num">3</div>
+            <div class="strategy-text">
+              <strong>API 자동 수집은 후순위</strong>
+              4/11 BOAZ 의견 반영 — API 수집은 저작권 리스크 큼. 안정화 후 검토
+            </div>
+          </div>
+        </div>
+        <div class="strategy-card bm">
+          <h4>비즈니스 모델 — B2B 먼저, B2C 확장</h4>
+          <div class="bm-stage">
+            <div class="bm-when">~ W9</div>
+            <div class="bm-what"><strong>B2B 학원 후원</strong>학원이 이미지 제공, 노출·홍보 베네핏 수령</div>
+            <div class="bm-rev">무과금 / 협조</div>
+          </div>
+          <div class="bm-stage">
+            <div class="bm-when">W9 ~</div>
+            <div class="bm-what"><strong>B2C 베타 (100명)</strong>학생 무료 사용, 행동 데이터 축적</div>
+            <div class="bm-rev">무료</div>
+          </div>
+          <div class="bm-stage">
+            <div class="bm-when">하반기</div>
+            <div class="bm-what"><strong>B2C 구독 정식</strong>월 29,900원 — 학원비 200만원의 약 1.5%</div>
+            <div class="bm-rev">29,900원/월</div>
+          </div>
+          <div class="bm-stage">
+            <div class="bm-when">Phase 3</div>
+            <div class="bm-what"><strong>B2B 학원 대시보드</strong>학생 관리 + 인사이트 리포트 (B2B SaaS)</div>
+            <div class="bm-rev">학원당 월정액</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      4/11에 합의된 "B2B 먼저, B2C 후" 순서를 그대로 따른다. 저작권 마찰 없는 핀터레스트 모델로 시작해 학원 협조로 단계적 확장.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 12: ARCHITECTURE ============== -->
+  <section class="slide" data-idx="12">
+    <div class="slide-header">
+      <span class="slide-eyebrow">기술 스택 + 인프라</span>
+      <span class="slide-num">12 / 15</span>
+    </div>
+    <h2 class="slide-title">서비스 아키텍처 + 보유 학습 노드 <span class="reply-badge">4/11 ⑥ 인프라 + 보안</span></h2>
+    <p class="slide-subtitle">프론트는 Vercel, 백엔드·DB는 Supabase(RLS 적용). 자체 GPU 학습 노드(500만원짜리 데스크탑, ArtPrep 보유)를 BOAZ가 학습·실험에 자유롭게 사용할 수 있다.</p>
+    <div class="slide-body">
+      <div class="arch-canvas">
+        <svg width="100%" height="100%" viewBox="0 0 1120 480" style="position:absolute; top:0; left:0;">
+          <defs>
+            <marker id="arrow2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill="#1a3a5c"/>
+            </marker>
+            <marker id="arrow3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill="#e85d3a"/>
+            </marker>
+            <marker id="arrow4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <polygon points="0 0, 8 4, 0 8" fill="#2f8a52"/>
+            </marker>
+          </defs>
+          <line x1="170" y1="120" x2="280" y2="120" stroke="#1a3a5c" stroke-width="2" marker-end="url(#arrow2)"/>
+          <line x1="500" y1="120" x2="610" y2="120" stroke="#1a3a5c" stroke-width="2" marker-end="url(#arrow2)"/>
+          <line x1="830" y1="280" x2="830" y2="380" stroke="#e85d3a" stroke-width="2" marker-end="url(#arrow3)"/>
+          <line x1="850" y1="380" x2="850" y2="280" stroke="#e85d3a" stroke-width="2" marker-end="url(#arrow3)"/>
+          <line x1="500" y1="280" x2="200" y2="380" stroke="#2f8a52" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow4)"/>
+          <line x1="200" y1="370" x2="500" y2="270" stroke="#2f8a52" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow4)"/>
+          <text x="280" y="345" font-size="10" fill="#2f8a52" font-weight="700">학습 / 추론 (BOAZ 사용)</text>
+          <rect x="600" y="80" width="430" height="220" rx="12" fill="none" stroke="#1a3a5c" stroke-width="2" stroke-dasharray="6,4"/>
+          <text x="615" y="98" font-size="11" fill="#1a3a5c" font-weight="700" letter-spacing="1px">SUPABASE (RLS 적용)</text>
+        </svg>
+        <div class="arch-box" style="top: 80px; left: 30px; width: 130px;">
+          <div class="arch-label">USER</div>
+          <div class="arch-name">학생</div>
+          <div class="arch-tech">browser / mobile</div>
+        </div>
+        <div class="arch-box" style="top: 80px; left: 280px; width: 220px;">
+          <div class="arch-label">FRONTEND</div>
+          <div class="arch-name">웹 클라이언트</div>
+          <div class="arch-tech">Next.js + React 19<br/>Vercel 배포</div>
+        </div>
+        <div class="arch-box" style="top: 100px; left: 620px; width: 180px;">
+          <div class="arch-label">AUTH</div>
+          <div class="arch-name">인증</div>
+          <div class="arch-tech">Supabase Auth + RLS</div>
+        </div>
+        <div class="arch-box" style="top: 100px; left: 830px; width: 180px;">
+          <div class="arch-label">DATABASE</div>
+          <div class="arch-name">PostgreSQL</div>
+          <div class="arch-tech">5 tables + RLS</div>
+        </div>
+        <div class="arch-box" style="top: 200px; left: 620px; width: 180px;">
+          <div class="arch-label">STORAGE</div>
+          <div class="arch-name">이미지 저장소</div>
+          <div class="arch-tech">artworks/*</div>
+        </div>
+        <div class="arch-box" style="top: 200px; left: 830px; width: 180px;">
+          <div class="arch-label">EDGE FUNCTION</div>
+          <div class="arch-name">서버리스 함수</div>
+          <div class="arch-tech">AI 호출 중계</div>
+        </div>
+        <div class="arch-box" style="top: 380px; left: 800px; width: 240px; border-left: 4px solid #e85d3a;">
+          <div class="arch-label">EXTERNAL AI (BASELINE)</div>
+          <div class="arch-name">Google Gemini 2.0 Flash</div>
+          <div class="arch-tech">멀티모달 추론</div>
+        </div>
+        <div class="arch-box onprem" style="top: 380px; left: 30px; width: 280px;">
+          <div class="arch-label">★ 보유 학습 노드 (ARTPREP)</div>
+          <div class="arch-name">데스크탑 GPU · 500만원 사양</div>
+          <div class="arch-tech">자체 VLM 파인튜닝<br/>BOAZ 모델 실험·학습 자유 사용</div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      RLS (Row-Level Security) — 사용자별 행 단위 접근 제어. 4/11에 함께 짚힌 "보안 관리"의 기본기. 학습 노드는 ArtPrep 자산으로, BOAZ가 외부 클라우드 비용 없이 모델 학습에 활용 가능.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 13: BOAZ MATRIX with priority ============== -->
+  <section class="slide" data-idx="13">
+    <div class="slide-header">
+      <span class="slide-eyebrow">BOAZ 협업 영역 (우선순위 명시)</span>
+      <span class="slide-num">13 / 15</span>
+    </div>
+    <h2 class="slide-title">4/11에 함께 정한 두 가지를 1·2번에 못박았습니다 <span class="reply-badge">4/11 ⑤ 추천 + VLM</span></h2>
+    <p class="slide-subtitle">"step2(VLM) 구현 + 추천시스템까지" — 그 두 줄기를 1·2 우선순위로. 3·4번은 여유가 생기면 또는 병렬로.</p>
+    <div class="slide-body">
+      <div class="matrix-grid">
+        <div class="matrix-card priority">
+          <span class="priority-tag">★ 4/11 우선순위 1</span>
+          <h4><span class="matrix-num">1</span>추천 / 큐레이션 모델</h4>
+          <div class="matrix-tables">
+            <span class="matrix-table">saved_items</span>
+            <span class="matrix-table">curation_sessions</span>
+            <span class="matrix-table">profiles</span>
+          </div>
+          <div class="matrix-desc">
+            저장 행동과 탐색 세션 로그로 협업 필터링 또는 콘텐츠 기반 추천 모델 학습. 데이터 1차 수집(W5~) 후 본격 학습.
+          </div>
+        </div>
+        <div class="matrix-card priority">
+          <span class="priority-tag">★ 4/11 우선순위 2</span>
+          <h4><span class="matrix-num">2</span>이미지 분석 / step2 VLM</h4>
+          <div class="matrix-tables">
+            <span class="matrix-table">artworks (image_url, tags)</span>
+            <span class="matrix-table">analysis_reports</span>
+          </div>
+          <div class="matrix-desc">
+            합격작 이미지에서 자동으로 조형 요소·스타일을 추출. Phase 2 5단계 분석 리포트의 정확도 개선에 직접 기여. ArtPrep 보유 학습 노드에서 파인튜닝 가능.
+          </div>
+        </div>
+        <div class="matrix-card">
+          <h4><span class="matrix-num">3</span>사용자 / 시장 데이터 분석</h4>
+          <div class="matrix-tables">
+            <span class="matrix-table">profiles</span>
+            <span class="matrix-table">curation_sessions</span>
+            <span class="matrix-table">artworks</span>
+          </div>
+          <div class="matrix-desc">
+            현역 vs 재수, 지역별·전형별 탐색 패턴 분석. 데이터 100명 베타 이후 의미있게 가능 (W9 이후).
+          </div>
+        </div>
+        <div class="matrix-card">
+          <h4><span class="matrix-num">4</span>전환율 / GTM 분석</h4>
+          <div class="matrix-tables">
+            <span class="matrix-table">profiles</span>
+            <span class="matrix-table">sessions</span>
+            <span class="matrix-table">saved_items</span>
+          </div>
+          <div class="matrix-desc">
+            가입 → 탐색 → 저장 단계별 전환율 분해. 베타 100명 기준선 확보 후 의미있는 분석 가능.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      GTM (Go-To-Market) — 시장 진입 전략. VLM (Vision Language Model) — 이미지+텍스트 멀티모달 AI.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 14 [NEW]: ROADMAP ============== -->
+  <section class="slide" data-idx="14">
+    <div class="slide-header">
+      <span class="slide-eyebrow">10주 스프린트 로드맵</span>
+      <span class="slide-num">14 / 15</span>
+    </div>
+    <h2 class="slide-title">하반기 정식 배포 — 마일스톤을 못박았습니다 <span class="reply-badge">4/11 ② 마일스톤</span></h2>
+    <p class="slide-subtitle">10주 스프린트 (4/22 → 6/27) · 100명 베타 목표 · 1차 점검 5/21 · 최종 점검 6/20.</p>
+    <div class="slide-body">
+      <div class="roadmap-canvas">
+        <div class="roadmap-week-row">
+          <div class="roadmap-week"><div class="roadmap-week-num">W1</div><div class="roadmap-week-date">4/22~26</div></div>
+          <div class="roadmap-week now"><div class="roadmap-week-num">W2 ⬤</div><div class="roadmap-week-date">4/27~5/3</div></div>
+          <div class="roadmap-week"><div class="roadmap-week-num">W3</div><div class="roadmap-week-date">5/4~10</div></div>
+          <div class="roadmap-week"><div class="roadmap-week-num">W4</div><div class="roadmap-week-date">5/11~17</div></div>
+          <div class="roadmap-week gate"><div class="roadmap-week-num">W5 🏁</div><div class="roadmap-week-date">5/18~24</div></div>
+          <div class="roadmap-week"><div class="roadmap-week-num">W6</div><div class="roadmap-week-date">5/25~31</div></div>
+          <div class="roadmap-week"><div class="roadmap-week-num">W7</div><div class="roadmap-week-date">6/1~7</div></div>
+          <div class="roadmap-week"><div class="roadmap-week-num">W8</div><div class="roadmap-week-date">6/8~14</div></div>
+          <div class="roadmap-week gate"><div class="roadmap-week-num">W9 🏁</div><div class="roadmap-week-date">6/15~21</div></div>
+          <div class="roadmap-week"><div class="roadmap-week-num">W10</div><div class="roadmap-week-date">6/22~27</div></div>
+        </div>
+      </div>
+      <div class="milestone-list">
+        <div class="milestone-card">
+          <div class="milestone-when">W2 · 5/3 (오늘)</div>
+          <div class="milestone-what">BOAZ 후속 미팅</div>
+          <div class="milestone-detail">작업 범위·우선순위 합의, 데이터 접근 권한 발급, 협업 채널 개설</div>
+        </div>
+        <div class="milestone-card">
+          <div class="milestone-when">W5 · 5/21 1차 점검</div>
+          <div class="milestone-what">1차 데이터 수집 완료 (~1,000건) + BOAZ 1차 산출물 리뷰</div>
+          <div class="milestone-detail">추천 모델 베이스라인, VLM 5단계 분석 프로토타입</div>
+        </div>
+        <div class="milestone-card">
+          <div class="milestone-when">W8 · 6/16 내부 마감</div>
+          <div class="milestone-what">정식 배포 프리징 (코드)</div>
+          <div class="milestone-detail">버그 수정만, 신규 피처 동결</div>
+        </div>
+        <div class="milestone-card">
+          <div class="milestone-when">W9 · 6/20 최종 점검</div>
+          <div class="milestone-what">100명 베타 시작 + 데이터 5,000건 적재</div>
+          <div class="milestone-detail">한예종·과기대 비실기 영역 포함. 하반기 정식 배포 준비</div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      ⬤ 현재 주차. 🏁 점검 시점(데드라인). 캘린더 동기화는 ArtPrep 대시보드(/art-prep/roadmap)에서 자동 관리.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 15: NEXT STEPS ============== -->
+  <section class="slide" data-idx="15">
+    <div class="slide-header">
+      <span class="slide-eyebrow">다음 단계 + Q&A</span>
+      <span class="slide-num">15 / 15</span>
+    </div>
+    <h2 class="slide-title">4/11 합의는 처리, 5/3 결정 사항은 함께 정합시다</h2>
+    <p class="slide-subtitle">왼쪽은 4/11에 합의한 사항의 현재 상태. 오른쪽은 오늘 5/3 미팅에서 결정해야 할 사항.</p>
+    <div class="slide-body">
+      <div class="closing-grid">
+        <div class="closing-side done">
+          <h3>4/11 합의 — 진행 상황</h3>
+          <div class="closing-item">
+            <div class="closing-box checked"></div>
+            <div class="closing-text">
+              <strong>도메인 결정 — ArtPrep 확정</strong>
+              4월 말 결정 완료. plan B(AI 비영리 단체) 미선택, 미술 입시 도메인 그대로 진행.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box checked"></div>
+            <div class="closing-text">
+              <strong>마일스톤 수립 완료</strong>
+              10주 스프린트 + 1·2차 점검 + 100명 베타 목표 (앞 슬라이드 참조).
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box checked"></div>
+            <div class="closing-text">
+              <strong>MVP 명확화</strong>
+              핀터레스트형 큐레이션(Phase 1) → step2 VLM(Phase 2) → 추천 시스템 → B2B 대시보드(Phase 3).
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box checked"></div>
+            <div class="closing-text">
+              <strong>데이터팀 정식 합류</strong>
+              ArtPrep 대시보드의 owner 4명 중 한 자리가 "데이터팀"으로 등록 완료.
+            </div>
+          </div>
+        </div>
+        <div class="closing-side">
+          <h3>오늘 5/3 결정 사항</h3>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>작업 범위 1·2 우선순위 확정</strong>
+              추천 모델과 step2 VLM 중 어느 것을 누가 먼저, 단일 또는 병렬로 진행할지.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>데이터 접근 권한 발급</strong>
+              Supabase 읽기 전용 계정 — 자리에서 진행 가능 (5분).
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>협업 채널 + 정기 싱크</strong>
+              Slack 또는 디스코드 개설, 주 1회 싱크 요일·시간 결정.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>5/21 1차 점검 산출물</strong>
+              BOAZ 측 1차 산출물 형태 합의 — 노트북 / 모델 가중치 / 분석 보고서 중.
+            </div>
+          </div>
+          <div class="closing-item">
+            <div class="closing-box"></div>
+            <div class="closing-text">
+              <strong>학습 노드 활용 여부</strong>
+              ArtPrep 보유 GPU 데스크탑(500만원 사양)을 BOAZ가 학습·실험에 사용할지, SSH/원격 접근 방식 결정.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button id="prev">‹</button>
+  <span class="nav-counter" id="counter">1 / 15</span>
+  <button id="next">›</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const counter = document.getElementById('counter');
+  const total = slides.length;
+  let idx = 0;
+
+  function show(i) {
+    if (i < 0 || i >= total) return;
+    slides[idx].classList.remove('active');
+    idx = i;
+    slides[idx].classList.add('active');
+    counter.textContent = `${idx + 1} / ${total}`;
+  }
+
+  document.getElementById('prev').onclick = () => show(idx - 1);
+  document.getElementById('next').onclick = () => show(idx + 1);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { show(idx + 1); e.preventDefault(); }
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(total - 1);
+    if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    }
+  });
+</script>
+</body>
+</html>
