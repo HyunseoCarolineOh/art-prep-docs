@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ArtPrep × BOAZ — 4/11 후속 미팅 (풀버전)</title>
+<title>ArtPrep × BOAZ — 킥오프(풀버전)</title>
 <style>
   :root {
     --navy: #1a3a5c;
@@ -306,10 +306,26 @@
   }
   .timeline-step:last-child { border-bottom: none; }
   .timeline-when {
-    font-size: 11px;
-    color: var(--coral);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .timeline-week-badge {
+    display: inline-block;
+    background: var(--coral);
+    color: #fff;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 100px;
+  }
+  .timeline-date {
+    font-size: 11px;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
   }
   .timeline-what {
     font-size: 13px;
@@ -340,18 +356,6 @@
   .row-meta { font-size: 12px; line-height: 1.7; color: var(--ink-soft); }
   .row-meta strong { color: var(--navy); }
   .row-meta .tag { display: inline-block; background: var(--beige); padding: 2px 8px; border-radius: 100px; font-size: 10px; margin-right: 4px; margin-top: 4px; color: var(--navy); }
-
-  /* Behavior */
-  .behavior-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
-  .behavior-card { background: var(--paper); padding: 24px; border-radius: 8px; border-top: 3px solid var(--coral); }
-  .behavior-card h4 { font-size: 16px; color: var(--navy); margin-bottom: 6px; font-family: 'Consolas', monospace; }
-  .behavior-card .sub { font-size: 12px; color: var(--ink-muted); margin-bottom: 14px; }
-  .seq-step { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 12px; color: var(--ink-soft); border-bottom: 1px dotted var(--line); }
-  .seq-step:last-child { border-bottom: none; }
-  .seq-icon { width: 22px; height: 22px; border-radius: 50%; background: var(--navy); color: white; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-  .seq-step code { background: var(--beige); padding: 1px 6px; border-radius: 3px; font-size: 11px; color: var(--coral); }
-  .behavior-use { margin-top: 12px; padding: 12px 14px; background: rgba(232, 93, 58, 0.08); border-radius: 4px; font-size: 12px; color: var(--navy-deep); line-height: 1.5; }
-  .behavior-use strong { color: var(--coral); }
 
   /* AI Pipeline */
   .pipe-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 16px; }
@@ -414,13 +418,7 @@
   .bm-rev { font-size: 11px; color: var(--ink-soft); text-align: right; line-height: 1.4; font-family: 'Consolas', monospace; }
 
   /* Architecture */
-  .arch-canvas { position: relative; width: 100%; height: 480px; margin-top: 8px; }
-  .arch-box { position: absolute; background: var(--paper); border-radius: 8px; padding: 14px 18px; border: 1px solid var(--line); text-align: center; }
-  .arch-box .arch-label { font-size: 10px; color: var(--ink-muted); letter-spacing: 1px; margin-bottom: 4px; }
-  .arch-box .arch-name { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-  .arch-box .arch-tech { font-size: 11px; color: var(--coral); font-family: 'Consolas', monospace; }
-  .arch-box.onprem { background: linear-gradient(135deg, #fff 0%, #f4f8f0 100%); border-left: 4px solid var(--green); }
-  .arch-box.onprem .arch-label { color: var(--green); font-weight: 700; }
+  .arch-image { display: block; width: 100%; max-width: 1120px; max-height: 460px; height: auto; object-fit: contain; margin: 0 auto; }
 
   /* BOAZ matrix */
   .matrix-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
@@ -438,6 +436,13 @@
   .matrix-tables { margin: 6px 0; display: flex; flex-wrap: wrap; gap: 5px; }
   .matrix-table { background: var(--beige); padding: 3px 8px; border-radius: 100px; font-size: 10px; color: var(--navy); font-family: 'Consolas', monospace; border: 1px solid var(--line); }
   .matrix-desc { margin-top: auto; font-size: 12px; color: var(--ink-soft); line-height: 1.5; padding-top: 10px; border-top: 1px dotted var(--line); }
+  .matrix-card.full-width { grid-column: 1 / -1; height: auto; min-height: 160px; }
+  .personal-tag {
+    position: absolute; top: 14px; right: 16px;
+    background: var(--green); color: white;
+    font-size: 9px; letter-spacing: 1px; font-weight: 700;
+    padding: 3px 8px; border-radius: 100px;
+  }
 
   /* === [NEW] Roadmap === */
   .roadmap-canvas {
@@ -528,7 +533,7 @@
   <!-- ============== SLIDE 1: COVER ============== -->
   <section class="slide cover active" data-idx="1">
     <div class="accent-line"></div>
-    <div class="cover-eyebrow">ARTPREP × BOAZ — 4/11 후속 미팅</div>
+    <div class="cover-eyebrow">ARTPREP × BOAZ — 킥오프</div>
     <div class="meeting-goals">
       <div class="meeting-goals-label">오늘 미팅의 목표</div>
       <div class="meeting-goals-grid">
@@ -540,7 +545,7 @@
         <div class="goal-card">
           <div class="goal-card-num">02</div>
           <div class="goal-card-head">우선순위 확정</div>
-          <div class="goal-card-detail">추천 / step2 VLM<br/>1·2번 작업 분담</div>
+          <div class="goal-card-detail">데이터 파이프라인 + 대시보드<br/>1·2번 우선 작업 분담</div>
         </div>
         <div class="goal-card">
           <div class="goal-card-num">03</div>
@@ -564,9 +569,9 @@
   <section class="slide" data-idx="2">
     <div class="slide-header">
       <span class="slide-eyebrow">우리가 푸는 문제</span>
-      <span class="slide-num">02 / 15</span>
+      <span class="slide-num">02 / 14</span>
     </div>
-    <h2 class="slide-title">수험생은 어디서 무엇을 보고 그릴지 모른다 <span class="reply-badge">4/11 ① 목적 명확화</span></h2>
+    <h2 class="slide-title">수험생은 어디서 무엇을 보고 그릴지 모른다</span></h2>
     <p class="slide-subtitle">미대 입시 시장의 정보 격차 — 학원에 다니지 않으면 합격작에 접근할 길이 없다.</p>
     <div class="slide-body">
       <div class="stats-row">
@@ -596,7 +601,7 @@
   <section class="slide" data-idx="3">
     <div class="slide-header">
       <span class="slide-eyebrow">우리의 솔루션</span>
-      <span class="slide-num">03 / 15</span>
+      <span class="slide-num">03 / 14</span>
     </div>
     <h2 class="slide-title">합격 작품 DB를 AI가 큐레이션한다</h2>
     <p class="slide-subtitle">학생의 목표 대학·전형·취향을 학습해, 합격 가능성이 높은 작품을 골라준다.</p>
@@ -635,7 +640,7 @@
   <section class="slide" data-idx="4">
     <div class="slide-header">
       <span class="slide-eyebrow">사용자</span>
-      <span class="slide-num">04 / 15</span>
+      <span class="slide-num">04 / 14</span>
     </div>
     <h2 class="slide-title">누가 이 서비스를 쓰는가</h2>
     <p class="slide-subtitle">10대 후반~20대 초반 미대 입시 수험생. 정보 접근에 따라 세 부류로 나뉜다.</p>
@@ -679,7 +684,7 @@
   <section class="slide" data-idx="5">
     <div class="slide-header">
       <span class="slide-eyebrow">사용자 플로우</span>
-      <span class="slide-num">05 / 15</span>
+      <span class="slide-num">05 / 14</span>
     </div>
     <h2 class="slide-title">학생이 서비스를 쓰는 흐름과 쌓이는 데이터</h2>
     <p class="slide-subtitle">각 단계마다 어떤 데이터가 어느 테이블에 쌓이는지 — BOAZ 팀이 데이터에 접근할 때의 출처가 된다.</p>
@@ -701,7 +706,7 @@
           <div class="flow-num">3</div>
           <div class="flow-title">큐레이션 탐색</div>
           <div class="flow-desc">AI 추천 + 필터 칩으로 작품 그리드 탐색</div>
-          <div class="flow-data">→ curation_<br/>sessions</div>
+          <div class="flow-data">→ curation_<br/>sessions<br/><span style="color:#8a8a8a; font-weight:400; font-size:9px;">(계획)</span></div>
         </div>
         <div class="flow-step">
           <div class="flow-num">4</div>
@@ -713,13 +718,13 @@
           <div class="flow-num">5</div>
           <div class="flow-title">AI 분석 리포트</div>
           <div class="flow-desc">5단계 AI 분석으로 합격 가능성 점검</div>
-          <div class="flow-data">→ analysis_<br/>reports</div>
+          <div class="flow-data">→ analysis_<br/>reports<br/><span style="color:#8a8a8a; font-weight:400; font-size:9px;">(계획)</span></div>
           <div class="phase-tag">PHASE 2</div>
         </div>
       </div>
     </div>
     <div class="footnote">
-      Phase 2 — 현재 MVP는 1~4단계까지 구현. 5단계 AI 분석 리포트는 4/11에 함께 다룬 step2 VLM에 해당.
+      Phase 2 — 현재 MVP는 1~4단계까지 구현. 5단계 AI 분석 리포트는 4/11에 함께 다룬 AI 분석 영역.
     </div>
   </section>
 
@@ -727,7 +732,7 @@
   <section class="slide" data-idx="6">
     <div class="slide-header">
       <span class="slide-eyebrow">데이터 모델</span>
-      <span class="slide-num">06 / 15</span>
+      <span class="slide-num">06 / 14</span>
     </div>
     <h2 class="slide-title">데이터베이스 구조 한눈에 보기</h2>
     <p class="slide-subtitle">5/3 기준 실제 Supabase 스키마. LIVE 4개(profiles · artworks · saved_items · filter_options) + Phase 2 예정 2개(점선).</p>
@@ -745,10 +750,10 @@
   <section class="slide" data-idx="7">
     <div class="slide-header">
       <span class="slide-eyebrow">데이터 현황 + 수집 계획</span>
-      <span class="slide-num">07 / 15</span>
+      <span class="slide-num">07 / 14</span>
     </div>
-    <h2 class="slide-title">현재 데이터는 거의 0이다 — 그 위에 수집 계획을 정리했다 <span class="reply-badge">4/11 ③ 데이터 부족</span></h2>
-    <p class="slide-subtitle">4/11에 함께 짚었던 "데이터 양 적음" 그대로다. 현황을 솔직히 보여드리고, 5월 안에 어디까지 채울지를 약속한다.</p>
+    <h2 class="slide-title">현황과 수집 계획</span></h2>
+    <p class="slide-subtitle"> </p>
     <div class="slide-body">
       <div class="data-status-grid">
         <div class="data-side" style="display:flex; flex-direction:column;">
@@ -797,27 +802,27 @@
           <h3>5~6월 데이터 수집 계획</h3>
           <div class="timeline">
             <div class="timeline-step">
-              <div class="timeline-when">W2 · 5/3</div>
+              <div class="timeline-when"><span class="timeline-week-badge">W2</span><span class="timeline-date">5/3</span></div>
               <div class="timeline-what"><strong>BOAZ 미팅 (오늘)</strong>수집 전략 합의, 작업 분담</div>
               <div class="timeline-num">+ 계획</div>
             </div>
             <div class="timeline-step">
-              <div class="timeline-when">W4 · 5/11~17</div>
+              <div class="timeline-when"><span class="timeline-week-badge">W4</span><span class="timeline-date">5/11~17</span></div>
               <div class="timeline-what"><strong>1차 수집 — 핀터레스트형</strong>인터넷 공개 합격작 크롤링</div>
               <div class="timeline-num">~500</div>
             </div>
             <div class="timeline-step">
-              <div class="timeline-when">W5 · 5/21</div>
+              <div class="timeline-when"><span class="timeline-week-badge">W5</span><span class="timeline-date">5/21</span></div>
               <div class="timeline-what"><strong>1차 점검</strong>학원 협조 1차 컨택, 라벨링 시작</div>
               <div class="timeline-num">~1,000</div>
             </div>
             <div class="timeline-step">
-              <div class="timeline-when">W7~8 · 6월 초</div>
+              <div class="timeline-when"><span class="timeline-week-badge">W7~8</span><span class="timeline-date">6월 초</span></div>
               <div class="timeline-what"><strong>학원 직접 수령</strong>저작권 클리어 데이터 추가</div>
               <div class="timeline-num">~3,000</div>
             </div>
             <div class="timeline-step">
-              <div class="timeline-when">W9 · 6/20</div>
+              <div class="timeline-when"><span class="timeline-week-badge">W9</span><span class="timeline-date">6/20</span></div>
               <div class="timeline-what"><strong>최종 점검 / 100명 베타</strong>학교 8개 + 한예종·과기대 비실기 확장</div>
               <div class="timeline-num">~5,000</div>
             </div>
@@ -826,7 +831,7 @@
       </div>
     </div>
     <div class="footnote">
-      4/11에 함께 논의된 "선택지 늘리기 → 한예종·과기대 비실기까지" 방향을 W9 단계에 반영.
+      "선택지 늘리기 → 한예종·과기대 비실기까지" 방향을 W9 단계에 반영.
     </div>
   </section>
 
@@ -834,7 +839,7 @@
   <section class="slide" data-idx="8">
     <div class="slide-header">
       <span class="slide-eyebrow">핵심 테이블</span>
-      <span class="slide-num">08 / 15</span>
+      <span class="slide-num">08 / 14</span>
     </div>
     <h2 class="slide-title">artworks — 합격 작품 데이터</h2>
     <p class="slide-subtitle">서비스의 모든 추천과 분석은 이 테이블에서 출발한다. 이미지·태그·합격 정보가 함께 저장된다.</p>
@@ -858,16 +863,26 @@
           <div class="col-row"><span class="col-name">updated_at</span><span class="col-type">timestamptz</span><span class="col-desc">수정 시각</span></div>
         </div>
         <div class="row-example">
-          <h4>예시 row 1개 (수집 후 형태)</h4>
-          <div class="row-image">[ artwork image preview ]</div>
-          <div class="row-meta">
-            <strong>university</strong> 홍익대 미술계열<br/>
-            <strong>art_type</strong> 기초디자인<br/>
-            <strong>academy_type</strong> 입시미술<br/>
-            <strong>region</strong> 서울 · <strong>year</strong> 2025<br/>
-            <strong>passed</strong> true · <strong>like_count</strong> 0<br/>
-            <strong>tags</strong>
-            <span class="tag">정물</span><span class="tag">고채도</span><span class="tag">사선구도</span><span class="tag">하이라이트</span>
+          <h4>예시 row 1건 (수집 후 형태)</h4>
+          <div class="row-meta" style="font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.9;">
+            <strong style="font-family: inherit;">row #1</strong><br/>
+            id: 1<br/>
+            user_id: 7a750339-...-aa1097ef3184<br/>
+            title: 무제<br/>
+            image_url: storage://artworks/2025/0001.jpg<br/>
+            university: 홍익대 미술계열<br/>
+            art_type: 기초디자인<br/>
+            academy_type: 현역<br/>
+            region: 서울<br/>
+            year: 2025<br/>
+            passed: true<br/>
+            like_count: 0<br/>
+            tags: {정물, 고채도, 사선구도, 하이라이트}<br/>
+            created_at: 2026-05-03 14:20:11<br/>
+            updated_at: 2026-05-03 14:20:11
+          </div>
+          <div class="row-meta" style="margin-top: 12px;">
+            <strong>해석</strong> 한 row가 곧 합격작 1점. <code>image_url</code>은 Supabase Storage 경로, <code>tags</code>는 AI 모델이 분석 시 활용하는 스타일 라벨. 예시는 mock.
           </div>
         </div>
       </div>
@@ -877,69 +892,153 @@
     </div>
   </section>
 
-  <!-- ============== SLIDE 9: BEHAVIOR DATA ============== -->
-  <section class="slide" data-idx="9">
+  <!-- ============== SLIDE 8-1: profiles detail ============== -->
+  <section class="slide" data-idx="8-1">
     <div class="slide-header">
-      <span class="slide-eyebrow">사용자 행동 데이터</span>
-      <span class="slide-num">09 / 15</span>
+      <span class="slide-eyebrow">핵심 테이블</span>
+      <span class="slide-num">08-1 / 14</span>
     </div>
-    <h2 class="slide-title">추천 모델을 학습시킬 두 개의 행동 데이터</h2>
-    <p class="slide-subtitle">사용자가 "좋아한 작품"과 "탐색한 흐름"이 모두 기록된다. 이 두 데이터로 개인화 모델을 만들 수 있다.</p>
+    <h2 class="slide-title">profiles — 사용자 프로필</h2>
+    <p class="slide-subtitle">학생/교사/학원이 가입할 때 만들어지는 사용자 정보 테이블. 추천 개인화의 출발점이 되는 목표 학교·전형 정보를 담는다.</p>
     <div class="slide-body">
-      <div class="behavior-grid">
-        <div class="behavior-card">
-          <h4>saved_items</h4>
-          <div class="sub">사용자가 작품을 저장(♡)할 때마다 한 행이 쌓인다</div>
-          <div class="seq-step">
-            <div class="seq-icon">1</div>
-            <div>학생 A가 작품 카드의 ♡ 클릭</div>
-          </div>
-          <div class="seq-step">
-            <div class="seq-icon">2</div>
-            <div><code>{ user_id, artwork_id, created_at }</code> 한 행이 INSERT</div>
-          </div>
-          <div class="seq-step">
-            <div class="seq-icon">3</div>
-            <div>UNIQUE 제약으로 중복 저장 불가 — 항상 1:1 매핑</div>
-          </div>
-          <div class="behavior-use">
-            <strong>활용 ▸</strong> 사용자별 선호 학교·태그·구도 분포 추출 → 협업 필터링 / 콘텐츠 기반 추천 학습
-          </div>
+      <div class="table-grid">
+        <div class="col-list">
+          <h4>profiles 컬럼 구조 (전체 16개)</h4>
+          <div class="col-row"><span class="col-name">id</span><span class="col-type">uuid</span><span class="col-desc">기본 키 (→ auth.users)</span></div>
+          <div class="col-row"><span class="col-name">user_type</span><span class="col-type">text</span><span class="col-desc">student / teacher / academy</span></div>
+          <div class="col-row"><span class="col-name">name</span><span class="col-type">text</span><span class="col-desc">실명</span></div>
+          <div class="col-row"><span class="col-name">nickname</span><span class="col-type">text</span><span class="col-desc">화면 표시명</span></div>
+          <div class="col-row"><span class="col-name">phone</span><span class="col-type">text</span><span class="col-desc">연락처</span></div>
+          <div class="col-row"><span class="col-name">target_university</span><span class="col-type">text</span><span class="col-desc">목표 대학</span></div>
+          <div class="col-row"><span class="col-name">target_major</span><span class="col-type">text</span><span class="col-desc">목표 전공</span></div>
+          <div class="col-row"><span class="col-name">target_year</span><span class="col-type">int4</span><span class="col-desc">목표 입시 연도</span></div>
+          <div class="col-row"><span class="col-name">current_status</span><span class="col-type">text</span><span class="col-desc">현재 상태 (현역·N수 등)</span></div>
+          <div class="col-row"><span class="col-name">academy_name</span><span class="col-type">text</span><span class="col-desc">소속 학원</span></div>
+          <div class="col-row"><span class="col-name">exam_types</span><span class="col-type">text[]</span><span class="col-desc">준비 중인 실기 유형</span></div>
+          <div class="col-row"><span class="col-name">agree_terms</span><span class="col-type">bool</span><span class="col-desc">약관 동의</span></div>
+          <div class="col-row"><span class="col-name">agree_privacy</span><span class="col-type">bool</span><span class="col-desc">개인정보 동의</span></div>
+          <div class="col-row"><span class="col-name">agree_marketing</span><span class="col-type">bool</span><span class="col-desc">마케팅 수신 동의</span></div>
+          <div class="col-row"><span class="col-name">created_at</span><span class="col-type">timestamptz</span><span class="col-desc">가입 시각</span></div>
+          <div class="col-row"><span class="col-name">updated_at</span><span class="col-type">timestamptz</span><span class="col-desc">수정 시각</span></div>
         </div>
-        <div class="behavior-card">
-          <h4>curation_sessions</h4>
-          <div class="sub">사용자가 큐레이션 화면을 열 때마다 한 행이 쌓인다</div>
-          <div class="seq-step">
-            <div class="seq-icon">1</div>
-            <div>학생이 필터 칩(학교·전형·태그) 선택</div>
+        <div class="row-example">
+          <h4>예시 row 1건 (가입 직후 형태)</h4>
+          <div class="row-meta" style="font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.7;">
+            <strong style="font-family: inherit;">row #1</strong><br/>
+            id: 7a750339-...-aa1097ef3184<br/>
+            user_type: student · current_status: 현역<br/>
+            name: 김○○ · nickname: 입시생A<br/>
+            phone: 010-****-****<br/>
+            target_university: 홍익대 미술계열<br/>
+            target_major: 시각디자인 · target_year: 2027<br/>
+            academy_name: ○○미술학원<br/>
+            exam_types: {기초디자인, 사고의전환}<br/>
+            agree_terms: true · agree_privacy: true · agree_marketing: false<br/>
+            created_at / updated_at: 2026-05-03 14:20:11
           </div>
-          <div class="seq-step">
-            <div class="seq-icon">2</div>
-            <div><code>filter_params</code> JSONB로 어떤 조건을 걸었는지 저장</div>
-          </div>
-          <div class="seq-step">
-            <div class="seq-icon">3</div>
-            <div><code>result_ids</code>에 보여준 작품 ID 배열 저장</div>
-          </div>
-          <div class="behavior-use">
-            <strong>활용 ▸</strong> 노출 vs 저장 전환율 측정, 검색 의도 클러스터링, 추천 결과 품질 검증
+          <div class="row-meta" style="margin-top: 12px;">
+            <strong>해석</strong> <code>id</code>는 <code>auth.users.id</code>와 동일한 uuid (1:1 매핑). <code>target_*</code> 컬럼이 추천 개인화의 핵심 입력. 예시는 mock.
           </div>
         </div>
       </div>
     </div>
     <div class="footnote">
-      두 테이블 모두 RLS(사용자별 행 단위 접근 제어) 적용 — 사용자는 본인 데이터만 조회 가능. BOAZ 팀에는 별도 읽기 전용 계정 발급 예정.
+      현재 보유 0건 (서비스 미오픈). RLS 적용 — 본인 row만 조회/수정 가능. <code>id</code>는 <code>auth.users.id</code>와 동일 (1:1 매핑). 예시는 mock.
     </div>
   </section>
 
-  <!-- ============== SLIDE 10: AI 5-step Pipeline = step2 VLM ============== -->
-  <section class="slide" data-idx="10">
+  <!-- ============== SLIDE 8-2: saved_items detail ============== -->
+  <section class="slide" data-idx="8-2">
+    <div class="slide-header">
+      <span class="slide-eyebrow">핵심 테이블</span>
+      <span class="slide-num">08-2 / 14</span>
+    </div>
+    <h2 class="slide-title">saved_items — 저장(♡) 기록</h2>
+    <p class="slide-subtitle">"누가 어떤 작품을 좋아했는가"를 수집하는 테이블. user × artwork 관계만 남긴 4컬럼 join 테이블이다.</p>
+    <div class="slide-body">
+      <div class="table-grid">
+        <div class="col-list">
+          <h4>saved_items 컬럼 구조 (전체 4개)</h4>
+          <div class="col-row"><span class="col-name">id</span><span class="col-type">bigint</span><span class="col-desc">기본 키 (identity always)</span></div>
+          <div class="col-row"><span class="col-name">user_id</span><span class="col-type">uuid</span><span class="col-desc">저장한 사람 (→ auth.users)</span></div>
+          <div class="col-row"><span class="col-name">artwork_id</span><span class="col-type">bigint</span><span class="col-desc">저장된 작품 (→ artworks.id)</span></div>
+          <div class="col-row"><span class="col-name">created_at</span><span class="col-type">timestamptz</span><span class="col-desc">저장 시각</span></div>
+        </div>
+        <div class="row-example">
+          <h4>실제 row 2건 (현재 DB 그대로)</h4>
+          <div class="row-meta" style="font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.9;">
+            <strong style="font-family: inherit;">row #2</strong><br/>
+            id: 2<br/>
+            user_id: 7a750339-...-aa1097ef3184<br/>
+            artwork_id: 56<br/>
+            created_at: 2026-04-29 07:36:56<br/>
+            <br/>
+            <strong style="font-family: inherit;">row #5</strong><br/>
+            id: 5<br/>
+            user_id: 7a750339-...-aa1097ef3184<br/>
+            artwork_id: 51<br/>
+            created_at: 2026-04-29 13:50:10
+          </div>
+          <div class="row-meta" style="margin-top: 12px;">
+            <strong>해석</strong> 같은 사용자가 4/29에 작품 #56과 #51을 차례로 저장.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      현재 보유 2건 (내부 테스트). UNIQUE(user_id, artwork_id) 제약으로 중복 저장 차단. 협업 영역 3(모델 학습)의 핵심 입력 데이터.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 8-3: filter_options detail ============== -->
+  <section class="slide" data-idx="8-3">
+    <div class="slide-header">
+      <span class="slide-eyebrow">핵심 테이블</span>
+      <span class="slide-num">08-3 / 14</span>
+    </div>
+    <h2 class="slide-title">filter_options — 필터 칩 마스터</h2>
+    <p class="slide-subtitle">큐레이션 화면 상단의 필터 칩(학교·전형·학원 분류)이 이 테이블에서 렌더링된다. 운영자가 행을 추가/비활성화해 UI를 제어한다.</p>
+    <div class="slide-body">
+      <div class="table-grid">
+        <div class="col-list">
+          <h4>filter_options 컬럼 구조 (전체 6개)</h4>
+          <div class="col-row"><span class="col-name">id</span><span class="col-type">bigint</span><span class="col-desc">기본 키 (sequence)</span></div>
+          <div class="col-row"><span class="col-name">category</span><span class="col-type">text</span><span class="col-desc">university / art_type / academy_type</span></div>
+          <div class="col-row"><span class="col-name">value</span><span class="col-type">text</span><span class="col-desc">칩에 표시되는 텍스트</span></div>
+          <div class="col-row"><span class="col-name">display_order</span><span class="col-type">int4</span><span class="col-desc">정렬 순서</span></div>
+          <div class="col-row"><span class="col-name">is_active</span><span class="col-type">bool</span><span class="col-desc">UI 노출 여부</span></div>
+          <div class="col-row"><span class="col-name">created_at</span><span class="col-type">timestamptz</span><span class="col-desc">등록 시각</span></div>
+        </div>
+        <div class="row-example">
+          <h4>실제 row 15건 중 6건 발췌 (현재 DB 그대로)</h4>
+          <div class="row-meta" style="font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.9;">
+            <strong style="font-family: inherit;">row #1</strong> · category: academy_type · value: N수 · display_order: 10 · is_active: true<br/>
+            <strong style="font-family: inherit;">row #3</strong> · category: academy_type · value: 현역 · display_order: 30 · is_active: true<br/>
+            <strong style="font-family: inherit;">row #4</strong> · category: art_type · value: 기초디자인 · display_order: 10 · is_active: true<br/>
+            <strong style="font-family: inherit;">row #6</strong> · category: art_type · value: 사고의전환 · display_order: 30 · is_active: true<br/>
+            <strong style="font-family: inherit;">row #14</strong> · category: university · value: 홍익대학교 · display_order: 70 · is_active: true<br/>
+            <strong style="font-family: inherit;">row #15</strong> · category: university · value: 미지정 · display_order: 80 · is_active: true<br/>
+            <span style="color: var(--ink-muted);">... + 9 rows (academy_type 1, art_type 2, university 6)</span>
+          </div>
+          <div class="row-meta" style="margin-top: 12px;">
+            <strong>해석</strong> 8개 학교는 1차 타겟 범위. <code>display_order</code>로 정렬되어 칩이 순서대로 노출된다. 한예종·과기대 비실기 추가는 university 카테고리에 row 2건 INSERT로 구현.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footnote">
+      현재 보유 15건. 한예종·과기대 비실기 추가 시 university 카테고리에 row 2건 INSERT만 하면 칩이 자동 노출된다 — 코드 수정 불필요.
+    </div>
+  </section>
+
+  <!-- ============== SLIDE 9: AI 5-step Pipeline ============== -->
+  <section class="slide" data-idx="9">
     <div class="slide-header">
       <span class="slide-eyebrow">Phase 2 — AI 분석 리포트</span>
-      <span class="slide-num">10 / 15</span>
+      <span class="slide-num">09 / 14</span>
     </div>
-    <h2 class="slide-title">5단계 AI 분석 = 4/11에 다룬 step2 VLM* <span class="reply-badge">4/11 ⑤ step2 VLM</span></h2>
-    <p class="slide-subtitle">학생이 자신의 작품 또는 합격작을 업로드하면, VLM(Vision Language Model)이 5단계 리포트를 생성한다. 4/11에 함께 논의했던 그 기능이다.</p>
+    <h2 class="slide-title">5단계 AI 분석</span></h2>
+    <p class="slide-subtitle">학생이 자신의 작품 또는 합격작을 업로드하면, AI가 5단계 리포트를 생성한다.</p>
     <div class="slide-body">
       <div class="pipe-row">
         <div class="pipe-step">
@@ -974,22 +1073,18 @@
         </div>
       </div>
       <div class="lead-msg" style="margin-top: 18px;">
-        결과는 analysis_reports 테이블의 step1~5 JSONB 컬럼에 저장 — 단계별 분석 데이터를 모두 보존해 BOAZ가 후속 분석에 활용 가능.
+        결과는 analysis_reports 테이블 <span style="color:#8a8a8a;">(계획 — 미구현)</span>의 step1~5 JSONB 컬럼에 저장 예정 — 단계별 분석 데이터를 모두 보존해 후속 분석에 활용 가능.
       </div>
-    </div>
-    <div class="footnote">
-      * VLM (Vision Language Model) — 이미지와 텍스트를 함께 이해하는 AI 모델. 베이스라인은 Gemini 2.0 Flash, 자체 모델 파인튜닝은 ArtPrep이 보유한 학습 노드(다음 슬라이드)에서 가능.
     </div>
   </section>
 
-  <!-- ============== SLIDE 11 [NEW]: STRATEGY + BM ============== -->
-  <section class="slide" data-idx="11">
+  <!-- ============== SLIDE 10 [NEW]: STRATEGY + BM ============== -->
+  <section class="slide" data-idx="10">
     <div class="slide-header">
       <span class="slide-eyebrow">데이터 수집 전략 + 비즈니스 모델</span>
-      <span class="slide-num">11 / 15</span>
+      <span class="slide-num">10 / 14</span>
     </div>
-    <h2 class="slide-title">저작권 이슈를 안전하게 — 4/11 합의대로 <span class="reply-badge">4/11 ④ 폐쇄적 도메인</span></h2>
-    <p class="slide-subtitle">4/11에 함께 정한 "학원 협조 + 핀터레스트형 + B2B 먼저" 방향을 그대로 작동 가능한 단계로 풀었다.</p>
+    <h2 class="slide-title">저작권 이슈를 안전하게</span></h2>
     <div class="slide-body">
       <div class="strategy-grid">
         <div class="strategy-card">
@@ -1004,7 +1099,7 @@
           <div class="strategy-step">
             <div class="strategy-num">2</div>
             <div class="strategy-text">
-              <strong>학원 협조 수령 (W5~)</strong>
+              <strong>학원 협조(W5~)</strong>
               아는 학원에서 이미지 파일을 직접 받아 업로드. 후원·홍보 베네핏을 학원에 제공해 협조 유도 (저작권 클리어)
             </div>
           </div>
@@ -1025,12 +1120,12 @@
           </div>
           <div class="bm-stage">
             <div class="bm-when">W9 ~</div>
-            <div class="bm-what"><strong>B2C 베타 (100명)</strong>학생 무료 사용, 행동 데이터 축적</div>
+            <div class="bm-what"><strong>B2C 베타 (100명)</strong>학생 무료 사용, 사용 데이터 축적</div>
             <div class="bm-rev">무료</div>
           </div>
           <div class="bm-stage">
             <div class="bm-when">하반기</div>
-            <div class="bm-what"><strong>B2C 구독 정식</strong>월 29,900원 — 학원비 200만원의 약 1.5%</div>
+            <div class="bm-what"><strong>B2C 구독 정식 런칭</strong>월 29,900원 — 학원비 200만원의 약 1.5%</div>
             <div class="bm-rev">29,900원/월</div>
           </div>
           <div class="bm-stage">
@@ -1042,159 +1137,69 @@
       </div>
     </div>
     <div class="footnote">
-      4/11에 합의된 "B2B 먼저, B2C 후" 순서를 그대로 따른다. 저작권 마찰 없는 핀터레스트 모델로 시작해 학원 협조로 단계적 확장.
+      B2B 먼저, B2C 후 - 저작권 마찰 없는 핀터레스트 모델로 시작해 학원 협조로 단계적 확장.
     </div>
   </section>
 
-  <!-- ============== SLIDE 12: ARCHITECTURE ============== -->
-  <section class="slide" data-idx="12">
+  <!-- ============== SLIDE 11: ARCHITECTURE ============== -->
+  <section class="slide" data-idx="11">
     <div class="slide-header">
       <span class="slide-eyebrow">기술 스택 + 인프라</span>
-      <span class="slide-num">12 / 15</span>
+      <span class="slide-num">11 / 14</span>
     </div>
-    <h2 class="slide-title">서비스 아키텍처 + 보유 학습 노드 <span class="reply-badge">4/11 ⑥ 인프라 + 보안</span></h2>
-    <p class="slide-subtitle">프론트는 Vercel, 백엔드·DB는 Supabase(RLS 적용). 자체 GPU 학습 노드(500만원짜리 데스크탑, ArtPrep 보유)를 BOAZ가 학습·실험에 자유롭게 사용할 수 있다.</p>
+    <h2 class="slide-title">서비스 아키텍처 + 보유 학습 노드</span></h2>
+    <p class="slide-subtitle">프론트는 Vercel, 백엔드·DB는 Supabase(RLS 적용). 자체 학습 노드(ArtPrep 보유 데스크탑)를 BOAZ가 학습·실험에 자유롭게 사용할 수 있다.</p>
     <div class="slide-body">
-      <div class="arch-canvas">
-        <svg width="100%" height="100%" viewBox="0 0 1120 480" style="position:absolute; top:0; left:0;">
-          <defs>
-            <marker id="arrow2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <polygon points="0 0, 8 4, 0 8" fill="#1a3a5c"/>
-            </marker>
-            <marker id="arrow3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <polygon points="0 0, 8 4, 0 8" fill="#e85d3a"/>
-            </marker>
-            <marker id="arrow4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-              <polygon points="0 0, 8 4, 0 8" fill="#2f8a52"/>
-            </marker>
-          </defs>
-          <line x1="170" y1="120" x2="280" y2="120" stroke="#1a3a5c" stroke-width="2" marker-end="url(#arrow2)"/>
-          <line x1="500" y1="120" x2="610" y2="120" stroke="#1a3a5c" stroke-width="2" marker-end="url(#arrow2)"/>
-          <line x1="830" y1="280" x2="830" y2="380" stroke="#e85d3a" stroke-width="2" marker-end="url(#arrow3)"/>
-          <line x1="850" y1="380" x2="850" y2="280" stroke="#e85d3a" stroke-width="2" marker-end="url(#arrow3)"/>
-          <line x1="500" y1="280" x2="200" y2="380" stroke="#2f8a52" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow4)"/>
-          <line x1="200" y1="370" x2="500" y2="270" stroke="#2f8a52" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow4)"/>
-          <text x="280" y="345" font-size="10" fill="#2f8a52" font-weight="700">학습 / 추론 (BOAZ 사용)</text>
-          <rect x="600" y="80" width="430" height="220" rx="12" fill="none" stroke="#1a3a5c" stroke-width="2" stroke-dasharray="6,4"/>
-          <text x="615" y="98" font-size="11" fill="#1a3a5c" font-weight="700" letter-spacing="1px">SUPABASE (RLS 적용)</text>
-        </svg>
-        <div class="arch-box" style="top: 80px; left: 30px; width: 130px;">
-          <div class="arch-label">USER</div>
-          <div class="arch-name">학생</div>
-          <div class="arch-tech">browser / mobile</div>
-        </div>
-        <div class="arch-box" style="top: 80px; left: 280px; width: 220px;">
-          <div class="arch-label">FRONTEND</div>
-          <div class="arch-name">웹 클라이언트</div>
-          <div class="arch-tech">Next.js + React 19<br/>Vercel 배포</div>
-        </div>
-        <div class="arch-box" style="top: 100px; left: 620px; width: 180px;">
-          <div class="arch-label">AUTH</div>
-          <div class="arch-name">인증</div>
-          <div class="arch-tech">Supabase Auth + RLS</div>
-        </div>
-        <div class="arch-box" style="top: 100px; left: 830px; width: 180px;">
-          <div class="arch-label">DATABASE</div>
-          <div class="arch-name">PostgreSQL</div>
-          <div class="arch-tech">5 tables + RLS</div>
-        </div>
-        <div class="arch-box" style="top: 200px; left: 620px; width: 180px;">
-          <div class="arch-label">STORAGE</div>
-          <div class="arch-name">이미지 저장소</div>
-          <div class="arch-tech">artworks/*</div>
-        </div>
-        <div class="arch-box" style="top: 200px; left: 830px; width: 180px;">
-          <div class="arch-label">EDGE FUNCTION</div>
-          <div class="arch-name">서버리스 함수</div>
-          <div class="arch-tech">AI 호출 중계</div>
-        </div>
-        <div class="arch-box" style="top: 380px; left: 800px; width: 240px; border-left: 4px solid #e85d3a;">
-          <div class="arch-label">EXTERNAL AI (BASELINE)</div>
-          <div class="arch-name">Google Gemini 2.0 Flash</div>
-          <div class="arch-tech">멀티모달 추론</div>
-        </div>
-        <div class="arch-box onprem" style="top: 380px; left: 30px; width: 280px;">
-          <div class="arch-label">★ 보유 학습 노드 (ARTPREP)</div>
-          <div class="arch-name">데스크탑 GPU · 500만원 사양</div>
-          <div class="arch-tech">자체 VLM 파인튜닝<br/>BOAZ 모델 실험·학습 자유 사용</div>
-        </div>
-      </div>
+      <img src="images/architecture.svg" alt="ArtPrep 서비스 아키텍처 — 학생 → 웹 클라이언트 → Supabase(Auth/DB/Storage/Edge Function) ↔ AI 모델, 학습 노드 ↔ Supabase" class="arch-image"/>
     </div>
     <div class="footnote">
-      RLS (Row-Level Security) — 사용자별 행 단위 접근 제어. 4/11에 함께 짚힌 "보안 관리"의 기본기. 학습 노드는 ArtPrep 자산으로, BOAZ가 외부 클라우드 비용 없이 모델 학습에 활용 가능.
+      RLS (Row-Level Security) — 사용자별 행 단위 접근 제어. 학습 노드는 ArtPrep 자산으로, BOAZ가 외부 클라우드 비용 없이 모델 학습에 활용 가능.
     </div>
   </section>
 
-  <!-- ============== SLIDE 13: BOAZ MATRIX with priority ============== -->
-  <section class="slide" data-idx="13">
+  <!-- ============== SLIDE 12: BOAZ MATRIX with priority ============== -->
+  <section class="slide" data-idx="12">
     <div class="slide-header">
-      <span class="slide-eyebrow">BOAZ 협업 영역 (우선순위 명시)</span>
-      <span class="slide-num">13 / 15</span>
+      <span class="slide-eyebrow">BOAZ 협업 영역</span>
+      <span class="slide-num">12 / 14</span>
     </div>
-    <h2 class="slide-title">4/11에 함께 정한 두 가지를 1·2번에 못박았습니다 <span class="reply-badge">4/11 ⑤ 추천 + VLM</span></h2>
-    <p class="slide-subtitle">"step2(VLM) 구현 + 추천시스템까지" — 그 두 줄기를 1·2 우선순위로. 3·4번은 여유가 생기면 또는 병렬로.</p>
+    <h2 class="slide-title">BOAZ X ArtPrep협업 영역</h2>
+    <p class="slide-subtitle">데이터 파이프라인 → 대시보드 → 모델 학습 순서. 1·2번이 본 협업의 메인, 3번은 여유가 되거나 데이터가 충분히 쌓인 뒤 함께.</p>
     <div class="slide-body">
       <div class="matrix-grid">
         <div class="matrix-card priority">
-          <span class="priority-tag">★ 4/11 우선순위 1</span>
-          <h4><span class="matrix-num">1</span>추천 / 큐레이션 모델</h4>
-          <div class="matrix-tables">
-            <span class="matrix-table">saved_items</span>
-            <span class="matrix-table">curation_sessions</span>
-            <span class="matrix-table">profiles</span>
-          </div>
+          <h4><span class="matrix-num">1</span>데이터 파이프라인 구축</h4>
           <div class="matrix-desc">
-            저장 행동과 탐색 세션 로그로 협업 필터링 또는 콘텐츠 기반 추천 모델 학습. 데이터 1차 수집(W5~) 후 본격 학습.
+            합격작 데이터의 수집·정제·관리 영역. ArtPrep이 모은 원천 데이터를 모델·서비스가 쓸 수 있는 형태로 흐르게 하는 인프라 레이어. 즉시 시작 가능.
           </div>
         </div>
         <div class="matrix-card priority">
-          <span class="priority-tag">★ 4/11 우선순위 2</span>
-          <h4><span class="matrix-num">2</span>이미지 분석 / step2 VLM</h4>
-          <div class="matrix-tables">
-            <span class="matrix-table">artworks (image_url, tags)</span>
-            <span class="matrix-table">analysis_reports</span>
-          </div>
+          <h4><span class="matrix-num">2</span>대시보드 구축</h4>
           <div class="matrix-desc">
-            합격작 이미지에서 자동으로 조형 요소·스타일을 추출. Phase 2 5단계 분석 리포트의 정확도 개선에 직접 기여. ArtPrep 보유 학습 노드에서 파인튜닝 가능.
+            운영·분석을 위한 시각화 인터페이스 영역. 학원/운영자가 데이터와 추천 결과를 직접 확인·점검할 수 있는 뷰 레이어. 데이터 누적 후 가능.
           </div>
         </div>
-        <div class="matrix-card">
-          <h4><span class="matrix-num">3</span>사용자 / 시장 데이터 분석</h4>
-          <div class="matrix-tables">
-            <span class="matrix-table">profiles</span>
-            <span class="matrix-table">curation_sessions</span>
-            <span class="matrix-table">artworks</span>
-          </div>
+        <div class="matrix-card full-width">
+          <h4><span class="matrix-num">3</span>모델 학습</h4>
           <div class="matrix-desc">
-            현역 vs 재수, 지역별·전형별 탐색 패턴 분석. 데이터 100명 베타 이후 의미있게 가능 (W9 이후).
-          </div>
-        </div>
-        <div class="matrix-card">
-          <h4><span class="matrix-num">4</span>전환율 / GTM 분석</h4>
-          <div class="matrix-tables">
-            <span class="matrix-table">profiles</span>
-            <span class="matrix-table">sessions</span>
-            <span class="matrix-table">saved_items</span>
-          </div>
-          <div class="matrix-desc">
-            가입 → 탐색 → 저장 단계별 전환율 분해. 베타 100명 기준선 확보 후 의미있는 분석 가능.
+            AI 모델 학습 영역. 데이터가 충분히 쌓인 뒤(W9~) 본격 가능. <strong style="color: var(--green);">개인적으로 가장 흥미를 가지는 영역이라 함께 한다면 즐겁게 할 자신은 있지만</strong>, 우선순위는 1·2 다음.
           </div>
         </div>
       </div>
     </div>
     <div class="footnote">
-      GTM (Go-To-Market) — 시장 진입 전략. VLM (Vision Language Model) — 이미지+텍스트 멀티모달 AI.
+      구체적인 구현 방법(어떤 테이블·어떤 기법·어떤 도구)은 BOAZ 팀이 직접 결정. 본 슬라이드는 협업 영역과 우선순위만 제시한다. 1·2번은 학기 내 명확한 산출물이 가능, 3번은 데이터 누적 정도에 따라 진입 시점 조정.
     </div>
   </section>
 
-  <!-- ============== SLIDE 14 [NEW]: ROADMAP ============== -->
-  <section class="slide" data-idx="14">
+  <!-- ============== SLIDE 13 [NEW]: ROADMAP ============== -->
+  <section class="slide" data-idx="13">
     <div class="slide-header">
       <span class="slide-eyebrow">10주 스프린트 로드맵</span>
-      <span class="slide-num">14 / 15</span>
+      <span class="slide-num">13 / 14</span>
     </div>
-    <h2 class="slide-title">하반기 정식 배포 — 마일스톤을 못박았습니다 <span class="reply-badge">4/11 ② 마일스톤</span></h2>
-    <p class="slide-subtitle">10주 스프린트 (4/22 → 6/27) · 100명 베타 목표 · 1차 점검 5/21 · 최종 점검 6/20.</p>
+    <h2 class="slide-title">마일스톤</span></h2>
+    <p class="slide-subtitle">10주 스프린트 (4/22 → 6/27) · 100명 베타 목표</p>
     <div class="slide-body">
       <div class="roadmap-canvas">
         <div class="roadmap-week-row">
@@ -1213,13 +1218,13 @@
       <div class="milestone-list">
         <div class="milestone-card">
           <div class="milestone-when">W2 · 5/3 (오늘)</div>
-          <div class="milestone-what">BOAZ 후속 미팅</div>
-          <div class="milestone-detail">작업 범위·우선순위 합의, 데이터 접근 권한 발급, 협업 채널 개설</div>
+          <div class="milestone-what">킥오프 미팅</div>
+          <div class="milestone-detail">협업 영역 3가지 합의 (1·2번 본격, 3번 여유 시), 데이터 접근 권한 발급, 협업 채널 개설</div>
         </div>
         <div class="milestone-card">
           <div class="milestone-when">W5 · 5/21 1차 점검</div>
-          <div class="milestone-what">1차 데이터 수집 완료 (~1,000건) + BOAZ 1차 산출물 리뷰</div>
-          <div class="milestone-detail">추천 모델 베이스라인, VLM 5단계 분석 프로토타입</div>
+          <div class="milestone-what">1차 데이터 수집 완료 (~1,000건) + 협업 1차 산출물 리뷰</div>
+          <div class="milestone-detail">영역 1 데이터 파이프라인 1차 가동, 영역 2 대시보드 설계 착수</div>
         </div>
         <div class="milestone-card">
           <div class="milestone-when">W8 · 6/16 내부 마감</div>
@@ -1229,7 +1234,7 @@
         <div class="milestone-card">
           <div class="milestone-when">W9 · 6/20 최종 점검</div>
           <div class="milestone-what">100명 베타 시작 + 데이터 5,000건 적재</div>
-          <div class="milestone-detail">한예종·과기대 비실기 영역 포함. 하반기 정식 배포 준비</div>
+          <div class="milestone-detail">영역 2 대시보드 정식 가동, 영역 3 모델 학습 진입 가능 시점. 하반기 정식 배포 준비</div>
         </div>
       </div>
     </div>
@@ -1238,14 +1243,13 @@
     </div>
   </section>
 
-  <!-- ============== SLIDE 15: NEXT STEPS ============== -->
-  <section class="slide" data-idx="15">
+  <!-- ============== SLIDE 14: NEXT STEPS ============== -->
+  <section class="slide" data-idx="14">
     <div class="slide-header">
       <span class="slide-eyebrow">다음 단계 + Q&A</span>
-      <span class="slide-num">15 / 15</span>
+      <span class="slide-num">14 / 14</span>
     </div>
-    <h2 class="slide-title">4/11 합의는 처리, 5/3 결정 사항은 함께 정합시다</h2>
-    <p class="slide-subtitle">왼쪽은 4/11에 합의한 사항의 현재 상태. 오른쪽은 오늘 5/3 미팅에서 결정해야 할 사항.</p>
+    <h2 class="slide-title">함께 정할 결정 사항</h2>
     <div class="slide-body">
       <div class="closing-grid">
         <div class="closing-side done">
@@ -1268,14 +1272,7 @@
             <div class="closing-box checked"></div>
             <div class="closing-text">
               <strong>MVP 명확화</strong>
-              핀터레스트형 큐레이션(Phase 1) → step2 VLM(Phase 2) → 추천 시스템 → B2B 대시보드(Phase 3).
-            </div>
-          </div>
-          <div class="closing-item">
-            <div class="closing-box checked"></div>
-            <div class="closing-text">
-              <strong>데이터팀 정식 합류</strong>
-              ArtPrep 대시보드의 owner 4명 중 한 자리가 "데이터팀"으로 등록 완료.
+              핀터레스트형 큐레이션(Phase 1) → AI 분석 리포트(Phase 2) → B2B 대시보드(Phase 3).
             </div>
           </div>
         </div>
@@ -1285,35 +1282,35 @@
             <div class="closing-box"></div>
             <div class="closing-text">
               <strong>작업 범위 1·2 우선순위 확정</strong>
-              추천 모델과 step2 VLM 중 어느 것을 누가 먼저, 단일 또는 병렬로 진행할지.
+              협업 영역 1(데이터 파이프라인)·2(대시보드)에 인원을 어떻게 배치할지, 단일 또는 병렬 진행 여부.
             </div>
           </div>
           <div class="closing-item">
             <div class="closing-box"></div>
             <div class="closing-text">
               <strong>데이터 접근 권한 발급</strong>
-              Supabase 읽기 전용 계정 — 자리에서 진행 가능 (5분).
+              Supabase 읽기 전용 계정 — 자리에서 진행
             </div>
           </div>
           <div class="closing-item">
             <div class="closing-box"></div>
             <div class="closing-text">
               <strong>협업 채널 + 정기 싱크</strong>
-              Slack 또는 디스코드 개설, 주 1회 싱크 요일·시간 결정.
+              Slack 초대, 대시보드 초대, 주 1회 싱크 요일·시간 결정.
             </div>
           </div>
           <div class="closing-item">
             <div class="closing-box"></div>
             <div class="closing-text">
               <strong>5/21 1차 점검 산출물</strong>
-              BOAZ 측 1차 산출물 형태 합의 — 노트북 / 모델 가중치 / 분석 보고서 중.
+              협업 1차 산출물 형태 합의 — 예: 데이터 파이프라인 로그 + 대시보드 와이어프레임 등.
             </div>
           </div>
           <div class="closing-item">
             <div class="closing-box"></div>
             <div class="closing-text">
               <strong>학습 노드 활용 여부</strong>
-              ArtPrep 보유 GPU 데스크탑(500만원 사양)을 BOAZ가 학습·실험에 사용할지, SSH/원격 접근 방식 결정.
+              ArtPrep 보유 데스크탑을 BOAZ가 학습·실험에 사용할지, 접근 방식 결정.
             </div>
           </div>
         </div>
@@ -1325,7 +1322,7 @@
 
 <div class="nav">
   <button id="prev">‹</button>
-  <span class="nav-counter" id="counter">1 / 15</span>
+  <span class="nav-counter" id="counter">1 / 14</span>
   <button id="next">›</button>
 </div>
 
