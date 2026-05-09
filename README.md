@@ -22,7 +22,7 @@
 | **스타일링** | Tailwind CSS | UI 스타일 |
 | **UI 컴포넌트** | shadcn/ui | 공통 컴포넌트 |
 | **백엔드 / DB** | Supabase | 인증 + PostgreSQL + 이미지 저장 |
-| **AI 분석** | Gemini | Supabase Edge Functions에서 호출 |
+| **AI 분석** | 비전 AI | Supabase Edge Functions에서 호출 |
 
 ```
 사용자 (웹 브라우저)
@@ -33,7 +33,7 @@ Supabase
     ├── Auth (회원가입·로그인)
     ├── DB (PostgreSQL)
     ├── Storage (이미지)
-    └── Edge Functions → Gemini
+    └── Edge Functions -> 비전 AI
 ```
 
 ---
@@ -59,7 +59,7 @@ npm install
 ```bash
 cp .env.local.example .env.local
 # .env.local 파일을 열어 Supabase URL, anon key 입력
-# Edge Function Secrets에 GEMINI_API_KEY 설정 (Supabase 대시보드)
+# Edge Function Secrets에 비전 AI_API_KEY 설정 (Supabase 대시보드)
 ```
 
 ### 5. 개발 서버 실행
@@ -199,7 +199,7 @@ art-prep/
 │   └── useSaved.ts
 ├── docs/
 │   ├── technical-spec.md             ← DB 스키마, API 상세
-│   ├── ai-prompt-guide.md            ← Gemini 5단계 분석 프롬프트
+│   ├── ai-prompt-guide.md            ← 비전 AI 5단계 분석 프롬프트
 │   ├── data-tagging-guide.md         ← 작품 메타데이터 입력 기준
 │   └── ux-screen-flow.md             ← 화면별 동작 명세
 └── supabase/
@@ -207,7 +207,7 @@ art-prep/
     │   └── 001_initial_schema.sql
     └── functions/
         └── analyze-artwork/
-            └── index.ts              ← Edge Function (Gemini 호출)
+            └── index.ts              ← Edge Function (비전 AI 호출)
 ```
 
 ---
@@ -217,7 +217,7 @@ art-prep/
 | 문서 | 경로 | 용도 |
 |------|------|------|
 | DB 스키마 | `docs/technical-spec.md` | 테이블 구조, API 엔드포인트 |
-| AI 프롬프트 | `docs/ai-prompt-guide.md` | Gemini 5단계 분석 프롬프트 가이드 |
+| AI 프롬프트 | `docs/ai-prompt-guide.md` | 비전 AI 5단계 분석 프롬프트 가이드 |
 | 데이터 입력 기준 | `docs/data-tagging-guide.md` | 작품 메타데이터 태깅 기준 |
 | UX 명세 | `docs/ux-screen-flow.md` | 화면별 동작 및 플로우 명세 |
 

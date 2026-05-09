@@ -14,7 +14,7 @@
 | UI 컴포넌트 | **shadcn/ui** | 고품질 접근성 컴포넌트, Tailwind 기반 |
 | 스타일링 | **Tailwind CSS** | 빠른 반응형 UI, shadcn/ui 기본 시스템 |
 | DB/백엔드 | **Supabase** (PostgreSQL + Storage + Auth) | 서버리스, RLS, Realtime, 무료 시작 |
-| AI | **Gemini 2.0 Flash API** | 이미지 Vision + 비용 효율 (종량제) |
+| AI | **비전 AI API (모델 선정 검토 중)** | 이미지 Vision + 비용 효율 (종량제) |
 | 배포 | **Vercel** | Next.js 공식 지원, 자동 CI/CD |
 
 ---
@@ -30,13 +30,13 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=   # 서버사이드(API Route)에서만 사용
 
 # AI
-GEMINI_API_KEY=
+VISION_AI_API_KEY=
 ```
 
 **규칙**
 - `NEXT_PUBLIC_` 접두사: 클라이언트 사이드에서 사용 가능
 - `SUPABASE_SERVICE_ROLE_KEY`: 절대 클라이언트에 노출 금지 (서버 전용)
-- `GEMINI_API_KEY`: 서버사이드 API Route에서만 호출
+- `VISION_AI_API_KEY`: 서버사이드 API Route에서만 호출
 
 ---
 
@@ -53,14 +53,14 @@ art-prep/
 │   │   ├── curate/         # AI 큐레이션
 │   │   └── saved/          # 저장 보드
 │   ├── api/                # API Routes (서버사이드)
-│   │   └── curate/         # Gemini API 호출
+│   │   └── curate/         # 비전 AI API 호출
 │   └── layout.js
 ├── components/             # 재사용 컴포넌트
 │   ├── ui/                 # shadcn/ui 컴포넌트
 │   └── artwork/            # 작품 관련 컴포넌트
 ├── lib/
 │   ├── supabase/           # Supabase 클라이언트
-│   └── gemini/             # Gemini API 래퍼
+│   └── vision-ai/             # 비전 AI API 래퍼
 ├── .env.local              # 환경변수 (gitignore)
 └── docs/PRD/               # 이 문서들
 ```
@@ -116,7 +116,7 @@ art-prep/
    - 길어지면 기능별로 분리.
 
 7. **데이터 패칭은 서버 컴포넌트 또는 API Route에서 하라**
-   - Gemini API 호출은 반드시 `/app/api/` 라우트 통해서.
+   - 비전 AI API 호출은 반드시 `/app/api/` 라우트 통해서.
 
 ---
 
@@ -153,15 +153,15 @@ export async function createClient() {
 
 ---
 
-## 7. Gemini API 사용 패턴
+## 7. 비전 AI API 사용 패턴
 
 ```js
 // app/api/curate/route.js
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { VisionAIClient } from '@vendor/vision-ai-sdk'
 
 export async function POST(request) {
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
-  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+  const genAI = new VisionAIClient(process.env.VISION_AI_API_KEY)
+  const model = genAI.getGenerativeModel({ model: 'TBD-vision-model' })
 
   const { userProfile, artworks } = await request.json()
 
@@ -171,7 +171,7 @@ export async function POST(request) {
 }
 ```
 
-**주의**: `GEMINI_API_KEY`는 이 API Route에서만 사용. 클라이언트 컴포넌트에서 직접 호출 금지.
+**주의**: `VISION_AI_API_KEY`는 이 API Route에서만 사용. 클라이언트 컴포넌트에서 직접 호출 금지.
 
 ---
 

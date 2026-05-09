@@ -24,7 +24,7 @@
 - **프레임워크**: Next.js 15 (App Router) + JavaScript
 - **UI**: shadcn/ui + Tailwind CSS
 - **백엔드**: Supabase (PostgreSQL + Storage + Auth)
-- **AI**: Gemini 2.0 Flash API
+- **AI**: 비전 AI API
 - **배포**: Vercel
 
 ### Phase 1 MVP 기능 3가지

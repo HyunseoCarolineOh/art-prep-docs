@@ -194,7 +194,7 @@ CREATE TABLE analysis_reports (
   user_id     UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   image_url   TEXT NOT NULL,   -- 사용자가 업로드한 본인 작품
 
-  -- 5단계 분석 결과 (Gemini Vision)
+  -- 5단계 분석 결과 (비전 AI)
   step1       JSONB,   -- 구도 분석
   step2       JSONB,   -- 명암 분석
   step3       JSONB,   -- 선 품질 분석
