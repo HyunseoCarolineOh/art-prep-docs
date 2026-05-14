@@ -387,7 +387,7 @@
 
 ### 발주 시 첨부 자료
 - 이 브리핑 문서 (전체)
-- 지원서 원문 (`modoo-startup-2026-application.md`)
+- 지원서 원문 (`application.md`)
 - 레퍼런스 이미지 (Notion, Linear 스타일)
 
 ---

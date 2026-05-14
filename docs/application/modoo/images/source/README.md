@@ -1,4 +1,4 @@
-# modoo-images/source
+# modoo/images/source
 
 modoo-startup 2026 슬라이드 PNG의 원본 소스.
 
@@ -11,8 +11,8 @@ modoo-startup 2026 슬라이드 PNG의 원본 소스.
 ## 사용법
 
 1. HTML을 브라우저에서 열거나 `python _spa_server.py`로 서빙
-2. 스크린샷/캡처 → 상위 폴더 `modoo-images/`에 PNG로 저장
-3. 결과 PNG는 `docs/application/modoo-startup-2026-application.md`에서 참조
+2. 스크린샷/캡처 → 상위 폴더 `images/`에 PNG로 저장
+3. 결과 PNG는 `docs/application/modoo/application.md`에서 참조
 
 ## 비고
 
