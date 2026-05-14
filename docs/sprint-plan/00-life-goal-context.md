@@ -143,6 +143,6 @@
 
 ## 참고
 
-- 주차별 실행 문서: `README.md` → `w01` ~ `w09`
+- 주차별 실행 문서: `README.md` → `w04` ~ `w10` (완료된 `w01`~`w03`은 `archive/`)
 - 팀·역할·원칙: `README.md`
 - 내부 플랜 파일: `C:\Users\ohsca\.claude\plans\6-20-floofy-crown.md` (본인만 접근)

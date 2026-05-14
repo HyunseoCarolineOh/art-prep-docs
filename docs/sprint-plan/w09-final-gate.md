@@ -10,6 +10,7 @@
 
 1. **최종 게이트 판정** — continue / pivot / kill
 2. **포트폴리오 자산 전부 마감** — 블로그 2편, LinkedIn 1편, 영어 case study 1편
+3. **서울시 PRJ006960 제출 준비** (~7/27 마감, W10로 연결)
 
 ## 최종 게이트 기준 (6/20 종료 시점)
 
@@ -19,14 +20,19 @@
 | **pivot** | 숫자 애매, 특정 세그먼트 강한 반응 | 도메인 유지, 타겟·형태 재설계 |
 | **kill** | 100명 미달 + 재방문율 <10% | art-prep 종료, 미국 트랙 올인 |
 
-## 본인 산출물 (오현서)
+## 본인 산출물 (오현서, w9-hs)
 
-> Source: [/calendar](https://hyunseo-oh.vercel.app/calendar) — emoji 매핑 = 🎁 product · 🌈 fundraising · 🙋‍♀️ research
+> Source: [/calendar](https://hyunseo-oh.vercel.app/calendar) — 이모지 매핑 = 💻 product · 🌈 fundraising · 🙋‍♀️ research
 
-- [ ] 🌈 D2SF 일반 투자검토 신청
-- [ ] 🙋‍♀️ 아트프렙 자동화 운영 체계 확립
-- [ ] 🙋‍♀️ Phase 0 회고
-- [ ] 🙋‍♀️ Phase 1 플래닝
+- [ ] 🌈 [서울시 PRJ006960](https://www.startup-plus.kr/project/PRJ006960) 제출 (~7/27 마감)
+- [ ] 🌈 올해의 K-스타트업 지원서 착수 (8/31)
+- [ ] 💻 운영 자동화 계획
+
+## 마케팅 (한혜진, w9-hj)
+
+- 매번 새로 광고/홍보하지 않아도 유입이 계속 생기도록 마케팅 자동화 루틴 잡기
+- 🙋‍♀️ 저관여 캠페인 회고 및 CRM 기획
+- 🙋‍♀️ 고관여 캠페인 회고 및 CRM 기획
 
 ## 게이트/지표
 
@@ -40,4 +46,5 @@
 
 - 게이트 결과 무관하게 **회고 문서 1개** (ceo-staff `/retro`)
 - continue: Phase 2 / pivot: 재설계 / kill: 미국 트랙 전환
+- W10(post-sprint)로 연결: 자동화 운영·지원사업 처리·투자자 미팅
 - 메모리 업데이트
