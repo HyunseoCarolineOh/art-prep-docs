@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>ArtPrep — Traction</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; background: #fff; overflow: hidden; }
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', sans-serif;
+    color: #0a0e1a;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 1920px; height: 1080px;
+    padding: 56px 100px 100px;
+    display: flex; flex-direction: column;
+    position: relative;
+    background:
+      radial-gradient(900px 600px at -10% 110%, #ede6ff 0%, transparent 60%),
+      radial-gradient(700px 500px at 110% -10%, #e0f4ff 0%, transparent 60%),
+      #ffffff;
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 14px 28px; border-radius: 999px;
+    background: #863bff; color: #fff;
+    font-weight: 700; font-size: 22px; letter-spacing: 0.18em;
+  }
+  .chip::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #47bfff; }
+  .brand { display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: 28px; }
+  .brand .dot { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, #863bff, #47bfff); }
+
+  .headline {
+    font-weight: 800; font-size: 74px; line-height: 1.15;
+    margin-top: 32px;
+    letter-spacing: -0.02em;
+  }
+  .headline em { color: #863bff; font-style: normal; }
+
+  .hero-stats {
+    margin-top: 38px;
+    display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 28px;
+  }
+  .hs {
+    background: #fff;
+    border-radius: 28px;
+    border: 1px solid #ede6ff;
+    box-shadow: 0 20px 60px rgba(126, 20, 255, 0.08);
+    padding: 36px 44px;
+    position: relative;
+  }
+  .hs.featured {
+    background: linear-gradient(135deg, #7e14ff 0%, #47bfff 100%);
+    color: #fff;
+    border: none;
+  }
+  .hs .label {
+    font-size: 22px; font-weight: 800; letter-spacing: 0.1em;
+    color: #7e14ff;
+    margin-bottom: 14px;
+  }
+  .hs.featured .label { color: #ffe9b3; }
+  .hs .num {
+    font-size: 156px; font-weight: 800; line-height: 1; letter-spacing: -0.04em;
+    color: #0a0e1a;
+  }
+  .hs.featured .num { color: #fff; }
+  .hs .unit {
+    font-size: 50px; font-weight: 700; margin-left: 6px;
+  }
+  .hs .vs {
+    margin-top: 18px;
+    font-size: 22px; font-weight: 600; color: #475569; line-height: 1.45;
+  }
+  .hs.featured .vs { color: rgba(255,255,255,0.95); }
+  .hs.featured .vs strong { color: #ffe9b3; font-weight: 800; }
+
+  .timeline {
+    margin-top: 32px;
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #ede6ff;
+    padding: 28px 48px;
+    flex: 1;
+  }
+  .tl-title {
+    font-size: 22px; font-weight: 800; color: #7e14ff;
+    margin-bottom: 24px; letter-spacing: 0.1em;
+  }
+  .tl-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    align-items: start;
+    position: relative;
+  }
+  .tl-grid::before {
+    content: ''; position: absolute; top: 26px; left: 6%; right: 6%;
+    height: 3px; background: linear-gradient(90deg, #ede6ff, #863bff, #47bfff);
+    border-radius: 2px; z-index: 0;
+  }
+  .tl-item {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+  }
+  .tl-dot {
+    width: 54px; height: 54px; border-radius: 50%;
+    background: linear-gradient(135deg, #863bff, #47bfff);
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px; letter-spacing: 0.05em;
+    box-shadow: 0 8px 24px rgba(134,59,255,0.3);
+  }
+  .tl-year {
+    font-size: 22px; font-weight: 800; color: #0a0e1a;
+  }
+  .tl-desc {
+    font-size: 18px; font-weight: 600; color: #475569; line-height: 1.45;
+  }
+
+  .bottom {
+    margin-top: 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 22px; color: #64748b; font-weight: 500;
+  }
+  .pageno { font-weight: 700; color: #863bff; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top">
+    <div class="chip">TRACTION</div>
+    <div class="brand"><div class="dot"></div>ArtPrep</div>
+  </div>
+
+  <div class="headline">
+    MVP 출시 한 달 만에<br>
+    <em>광고 없이 사전신청 125명</em>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hs featured">
+      <div class="label">MVP 랜딩 전환율</div>
+      <div><span class="num">22</span><span class="unit">%</span></div>
+    </div>
+    <div class="hs">
+      <div class="label">사전신청자</div>
+      <div><span class="num" style="background: linear-gradient(135deg,#7e14ff,#47bfff); -webkit-background-clip: text; background-clip: text; color: transparent;">125</span><span class="unit">명</span></div>
+      <div class="vs">유료 광고 0원,<br>입소문으로 확보</div>
+    </div>
+    <div class="hs">
+      <div class="label">유료 결제 의향</div>
+      <div><span class="num" style="background: linear-gradient(135deg,#7e14ff,#47bfff); -webkit-background-clip: text; background-clip: text; color: transparent;">67</span><span class="unit">%</span></div>
+      <div class="vs">설문 150명 · 인터뷰 10명<br>가격 수용도 정량 확인</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-title">VALIDATION TIMELINE</div>
+    <div class="tl-grid">
+      <div class="tl-item">
+        <div class="tl-dot">2023</div>
+        <div class="tl-year">아이디어 검증</div>
+        <div class="tl-desc">홍익대 경영대학<br>경진대회 1위</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">2025</div>
+        <div class="tl-year">사용자 리서치</div>
+        <div class="tl-desc">설문 150명 + 인터뷰 10명<br>78% 핵심 페인포인트 발굴</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">26.01</div>
+        <div class="tl-year">MVP 출시</div>
+        <div class="tl-desc">랜딩페이지 전환율<br>22% 달성</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot">26.05</div>
+        <div class="tl-year">사전신청 확보</div>
+        <div class="tl-desc">125명 확보,<br>본격 개발 진입</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

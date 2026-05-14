@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>ArtPrep — Problem</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; background: #fff; overflow: hidden; }
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', sans-serif;
+    color: #0a0e1a;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 1920px; height: 1080px;
+    padding: 56px 100px 100px;
+    display: flex; flex-direction: column;
+    position: relative;
+    background:
+      radial-gradient(900px 600px at -10% 110%, #ede6ff 0%, transparent 60%),
+      radial-gradient(700px 500px at 110% -10%, #e0f4ff 0%, transparent 60%),
+      #ffffff;
+  }
+  .top {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .chip {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 14px 28px; border-radius: 999px;
+    background: #863bff; color: #fff;
+    font-weight: 700; font-size: 22px; letter-spacing: 0.18em;
+  }
+  .chip::before {
+    content: ''; width: 10px; height: 10px; border-radius: 50%; background: #47bfff;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 14px;
+    font-weight: 800; font-size: 28px; color: #0a0e1a;
+  }
+  .brand .dot {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: linear-gradient(135deg, #863bff, #47bfff);
+  }
+  .headline {
+    font-weight: 800; font-size: 84px; line-height: 1.15;
+    margin-top: 40px;
+    letter-spacing: -0.02em;
+  }
+  .headline em {
+    color: #863bff; font-style: normal;
+  }
+  .stats {
+    margin-top: 52px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    flex: 1; align-content: center;
+  }
+  .stat {
+    padding: 56px 64px;
+    border-radius: 32px;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(126, 20, 255, 0.08), 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid #ede6ff;
+    position: relative; overflow: hidden;
+  }
+  .stat::after {
+    content: ''; position: absolute; right: -60px; top: -60px;
+    width: 220px; height: 220px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(134,59,255,0.10), transparent 70%);
+  }
+  .stat .label {
+    font-size: 26px; font-weight: 700; color: #64748b;
+    margin-bottom: 24px; letter-spacing: 0.04em;
+  }
+  .stat .num {
+    font-size: 200px; font-weight: 800; line-height: 1;
+    background: linear-gradient(135deg, #7e14ff, #47bfff);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    letter-spacing: -0.03em;
+  }
+  .stat .unit {
+    font-size: 64px; font-weight: 700; color: #0a0e1a; margin-left: 12px;
+  }
+  .stat .desc {
+    margin-top: 28px;
+    font-size: 28px; font-weight: 600; color: #0a0e1a; line-height: 1.45;
+  }
+  .bottom {
+    margin-top: auto;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 22px; color: #64748b; font-weight: 500;
+  }
+  .pageno {
+    font-weight: 700; color: #863bff;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top">
+    <div class="chip">PROBLEM</div>
+    <div class="brand"><div class="dot"></div>ArtPrep</div>
+  </div>
+
+  <div class="headline">
+    연 5만 미대 수험생,<br>
+    매일 <em>2시간 12분</em>을 SNS 탐색에 허비합니다.
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="label">일평균 탐색 시간</div>
+      <div><span class="num">132</span><span class="unit">분</span></div>
+      <div class="desc">입시 특화 검색 도구 부재로<br>인스타그램·핀터레스트 무차별 스크롤</div>
+    </div>
+    <div class="stat">
+      <div class="label">자료 판단 오류율</div>
+      <div><span class="num">65</span><span class="unit">%</span></div>
+      <div class="desc">학생 85%가 평가 기준이 아닌<br>개인 취향으로 자료를 선택</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

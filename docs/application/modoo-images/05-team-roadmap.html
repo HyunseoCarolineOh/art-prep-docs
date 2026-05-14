@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>ArtPrep — Team & Roadmap</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; background: #fff; overflow: hidden; }
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', sans-serif;
+    color: #0a0e1a;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 1920px; height: 1080px;
+    padding: 40px 100px 140px;
+    display: flex; flex-direction: column;
+    position: relative;
+    background:
+      radial-gradient(900px 600px at -10% 110%, #ede6ff 0%, transparent 60%),
+      radial-gradient(700px 500px at 110% -10%, #e0f4ff 0%, transparent 60%),
+      #ffffff;
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 14px 28px; border-radius: 999px;
+    background: #863bff; color: #fff;
+    font-weight: 700; font-size: 22px; letter-spacing: 0.18em;
+  }
+  .chip::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #47bfff; }
+  .brand { display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: 28px; }
+  .brand .dot { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, #863bff, #47bfff); }
+
+  .headline {
+    font-weight: 800; font-size: 54px; line-height: 1.18;
+    margin-top: 14px;
+    letter-spacing: -0.02em;
+  }
+  .headline em { color: #863bff; font-style: normal; }
+
+  .section-title {
+    font-size: 22px; font-weight: 800; color: #7e14ff;
+    letter-spacing: 0.14em; margin: 26px 0 14px;
+  }
+
+  /* TEAM ROW */
+  .team-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  .member {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #ede6ff;
+    box-shadow: 0 16px 48px rgba(126, 20, 255, 0.08);
+    padding: 24px 30px;
+    display: flex; flex-direction: column;
+    position: relative;
+    min-height: 0;
+  }
+  .m-role {
+    font-size: 18px; font-weight: 800; color: #863bff;
+    letter-spacing: 0.1em;
+  }
+  .m-name {
+    font-size: 44px; font-weight: 800; margin-top: 10px; letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+  .m-years {
+    display: inline-block;
+    margin-top: 14px;
+    background: linear-gradient(135deg, #ede6ff, #fff);
+    border: 1px solid #d8c5ff;
+    color: #7e14ff;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 19px; font-weight: 800;
+    letter-spacing: 0.02em;
+    width: fit-content;
+  }
+  .m-bio {
+    font-size: 18px; font-weight: 500; color: #475569;
+    margin-top: 16px; line-height: 1.5;
+    flex: 1;
+  }
+
+  /* ROADMAP ROW */
+  .road-row {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  .phase {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #ede6ff;
+    box-shadow: 0 16px 48px rgba(126, 20, 255, 0.06);
+    padding: 22px 30px;
+    display: flex; flex-direction: column;
+    position: relative;
+    min-height: 0;
+  }
+  .phase::before {
+    content: ''; position: absolute; left: 0; top: 18%; bottom: 18%;
+    width: 6px; border-radius: 3px;
+  }
+  .phase.p1::before { background: linear-gradient(180deg, #47bfff, #863bff); }
+  .phase.p2::before { background: linear-gradient(180deg, #863bff, #7e14ff); }
+  .phase.p3::before { background: linear-gradient(180deg, #7e14ff, #ffd54d); }
+  .ph-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding-left: 14px;
+  }
+  .ph-n {
+    font-size: 60px; font-weight: 800; line-height: 1;
+    background: linear-gradient(135deg, #7e14ff, #47bfff);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .ph-when {
+    font-size: 18px; font-weight: 800; color: #7e14ff;
+    letter-spacing: 0.1em;
+  }
+  .ph-title {
+    margin-top: 14px; margin-left: 14px;
+    font-size: 26px; font-weight: 800; letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .ph-desc {
+    margin-top: 10px; margin-left: 14px;
+    font-size: 18px; font-weight: 500; color: #475569;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .ph-kpi {
+    margin-top: 16px; margin-left: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed #ede6ff;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .ph-kpi .lbl {
+    font-size: 16px; font-weight: 800; color: #863bff;
+    letter-spacing: 0.08em;
+  }
+  .ph-kpi .val {
+    font-size: 30px; font-weight: 800; color: #0a0e1a;
+    letter-spacing: -0.02em;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top">
+    <div class="chip">TEAM & ROADMAP</div>
+    <div class="brand"><div class="dot"></div>ArtPrep</div>
+  </div>
+
+  <div class="headline">
+    도메인 지식과 기술적 이해를 <br><em>둘 다 갖춘 팀</em>은 ArtPrep 뿐입니다.
+  </div>
+
+  <div class="section-title">TEAM</div>
+  <div class="team-row">
+    <div class="member">
+      <div class="m-role">CEO · PRODUCT · BD</div>
+      <div class="m-name">오현서</div>
+      <div class="m-years">미대 입시 컨설팅 2년</div>
+      <div class="m-bio">홍익대 시각디자인과 졸업예정 (5학기 장학)<br>AWS Demand Generation Representative 인턴 (2026)<br>서비스 기획 및 운영 경험 4년<br>공간대여 브랜드 Inspiroom 창업 후 매각 경험<br>홍익대 창업 페스티벌 3위 (2023)<br>홍익대 경영대학 아이디어 경진대회 1위 (2023)</div>
+    </div>
+    <div class="member">
+      <div class="m-role">CONSULTING · CURRICULUM</div>
+      <div class="m-name">우정민</div>
+      <div class="m-years">미대 입시 컨설팅 5년</div>
+      <div class="m-bio">홍익대 판화과 졸업<br>홍대·고려대·이대·경희대 다수 합격 지도<br>UX·UI 디자인 경력 3년</div>
+    </div>
+    <div class="member">
+      <div class="m-role">DESIGN · MARKETING</div>
+      <div class="m-name">한혜진</div>
+      <div class="m-years">미대 입시 컨설팅 5년</div>
+      <div class="m-bio">홍익대 금속조형디자인·산업디자인 졸업예정<br>그린섬 미술학원 실기·비실기 강사 및 입시 컨설턴트 (2021–2023)<br>플라이 미술학원 홍대본원 전임강사<br>학원장 네트워크 20곳 보유</div>
+    </div>
+  </div>
+
+  <div class="section-title">ROADMAP</div>
+  <div class="road-row">
+    <div class="phase p1">
+      <div class="ph-head">
+        <div class="ph-n">1</div>
+        <div class="ph-when">2026 상반기</div>
+      </div>
+      <div class="ph-title">MVP 정식 출시</div>
+      <div class="ph-desc">Next.js + Supabase로 모바일 웹앱 출시 (완료)<br>사전신청 125명 중 파일럿 100명 확보, 반복 사용률 40%+ 검증</div>
+      <div class="ph-kpi"><span class="lbl">파일럿</span><span class="val">100명</span></div>
+    </div>
+    <div class="phase p2">
+      <div class="ph-head">
+        <div class="ph-n">2</div>
+        <div class="ph-when">2026 하반기</div>
+      </div>
+      <div class="ph-title">데이터 확대 + B2B 진입</div>
+      <div class="ph-desc">합격 DB 5,000건 확대, B2B 제휴 5곳, 유료전환율 25% 달성</div>
+      <div class="ph-kpi"><span class="lbl">MAU</span><span class="val">1,000명</span></div>
+    </div>
+    <div class="phase p3">
+      <div class="ph-head">
+        <div class="ph-n">3</div>
+        <div class="ph-when">2027</div>
+      </div>
+      <div class="ph-title">합격 DB 1만 건 + 시드 유치</div>
+      <div class="ph-desc">B2B SaaS 학원용 인사이트 리포트 정식 출시, 시드 1억원 유치</div>
+      <div class="ph-kpi"><span class="lbl">시드</span><span class="val">1억원</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

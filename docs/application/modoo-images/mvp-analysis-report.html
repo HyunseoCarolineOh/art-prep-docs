@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>ArtPrep — 분석 리포트</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; min-height: 100vh; background: #f7f7fb; }
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', sans-serif;
+    color: #0a0e1a;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .nav {
+    background: #fff;
+    border-bottom: 1px solid #ede6ff;
+    padding: 18px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .nav-back {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 16px; font-weight: 600; color: #475569;
+    text-decoration: none;
+  }
+  .nav-back svg { width: 20px; height: 20px; }
+  .nav-brand {
+    font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
+    color: #2364fe; font-style: italic;
+  }
+  .nav-brand .ar { color: #0a0e1a; font-style: normal; }
+  .nav-actions {
+    display: flex; gap: 8px;
+  }
+  .nav-btn {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 14px; font-weight: 600; color: #475569;
+    cursor: pointer;
+  }
+  .nav-btn.primary {
+    background: linear-gradient(135deg, #7e14ff, #47bfff);
+    color: #fff; border: none;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 36px 40px 60px;
+  }
+
+  .crumb {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #ede6ff;
+    color: #7e14ff;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 14px; font-weight: 800;
+    letter-spacing: 0.08em;
+  }
+  .crumb::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: #863bff;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .title {
+    font-size: 38px; font-weight: 800; letter-spacing: -0.02em;
+    margin-top: 14px; line-height: 1.2;
+  }
+  .subtitle {
+    font-size: 16px; color: #64748b; margin-top: 6px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 32px;
+    margin-top: 28px;
+  }
+
+  /* LEFT: student artwork */
+  .artwork-card {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #ede6ff;
+    box-shadow: 0 16px 48px rgba(126,20,255,0.06);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .artwork-img {
+    width: 100%; height: 540px;
+    background:
+      linear-gradient(135deg, rgba(134,59,255,0.05) 0%, rgba(71,191,255,0.05) 100%),
+      repeating-linear-gradient(135deg, #f7f7fb 0px, #f7f7fb 16px, #f1f5f9 16px, #f1f5f9 17px);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .artwork-svg {
+    width: 84%; height: 84%;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.08);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .artwork-svg svg { width: 90%; height: 90%; }
+  .artwork-meta {
+    padding: 22px 28px;
+    display: flex; gap: 24px; flex-wrap: wrap;
+    font-size: 14px; color: #475569;
+    border-top: 1px solid #f1f5f9;
+  }
+  .artwork-meta dt {
+    color: #94a3b8; font-weight: 600; margin-bottom: 4px;
+  }
+  .artwork-meta dd {
+    color: #0a0e1a; font-weight: 800; font-size: 15px;
+  }
+
+  /* RIGHT: report */
+  .report {
+    display: flex; flex-direction: column; gap: 18px;
+  }
+
+  /* Overall score */
+  .score-card {
+    background: linear-gradient(135deg, #7e14ff 0%, #47bfff 100%);
+    color: #fff;
+    border-radius: 24px;
+    padding: 28px 32px;
+    box-shadow: 0 20px 60px rgba(126,20,255,0.25);
+    display: flex; align-items: center; gap: 28px;
+  }
+  .score-num {
+    font-size: 96px; font-weight: 800; line-height: 1; letter-spacing: -0.04em;
+  }
+  .score-num small {
+    font-size: 28px; font-weight: 600; opacity: 0.7; margin-left: 4px;
+  }
+  .score-info {
+    flex: 1;
+  }
+  .score-label {
+    font-size: 14px; font-weight: 800; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.85);
+  }
+  .score-tag {
+    margin-top: 4px;
+    font-size: 26px; font-weight: 800; letter-spacing: -0.01em;
+  }
+  .score-comment {
+    margin-top: 8px;
+    font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.92);
+    line-height: 1.5;
+  }
+  .score-badge {
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 110px;
+  }
+  .score-badge .v {
+    font-size: 24px; font-weight: 800;
+  }
+  .score-badge .l {
+    font-size: 12px; opacity: 0.8; margin-top: 2px;
+  }
+
+  /* 5-axis bars */
+  .axes {
+    background: #fff;
+    border-radius: 24px;
+    border: 1px solid #ede6ff;
+    padding: 26px 28px;
+  }
+  .axes-title {
+    font-size: 16px; font-weight: 800; color: #7e14ff;
+    letter-spacing: 0.1em; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .axes-title .dot { width: 6px; height: 6px; border-radius: 50%; background: #47bfff; }
+  .axis {
+    display: grid;
+    grid-template-columns: 80px 1fr 60px;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px dashed #f1f5f9;
+  }
+  .axis:last-child { border-bottom: none; }
+  .axis-name {
+    font-size: 16px; font-weight: 800; color: #0a0e1a;
+  }
+  .axis-bar {
+    height: 10px; background: #f1f5f9;
+    border-radius: 999px; overflow: hidden;
+    position: relative;
+  }
+  .axis-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7e14ff, #47bfff);
+    border-radius: 999px;
+    position: relative;
+  }
+  .axis-fill::after {
+    content: ''; position: absolute; right: -6px; top: 50%;
+    transform: translateY(-50%);
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #fff;
+    border: 3px solid #863bff;
+    box-shadow: 0 4px 12px rgba(126,20,255,0.3);
+  }
+  .axis-score {
+    font-size: 22px; font-weight: 800;
+    color: #863bff;
+    text-align: right;
+    letter-spacing: -0.02em;
+  }
+  .axis-comment {
+    grid-column: 2 / 4;
+    font-size: 13px; color: #64748b; font-weight: 500;
+    margin-top: 4px;
+  }
+
+  /* AI comment */
+  .ai-comment {
+    background: #f6f3ff;
+    border: 1px solid #d8c5ff;
+    border-radius: 20px;
+    padding: 18px 22px;
+    font-size: 14px; color: #475569;
+    line-height: 1.55;
+    position: relative;
+  }
+  .ai-comment::before {
+    content: '🤖';
+    position: absolute; left: -8px; top: -8px;
+    font-size: 22px;
+    background: #fff;
+    border: 2px solid #863bff;
+    border-radius: 50%;
+    padding: 6px;
+    line-height: 1;
+  }
+  .ai-comment strong {
+    color: #7e14ff; font-weight: 800;
+  }
+
+  /* Bottom curation */
+  .curation {
+    margin-top: 32px;
+  }
+  .curation-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .curation-title {
+    font-size: 22px; font-weight: 800; letter-spacing: -0.01em;
+  }
+  .curation-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, #7e14ff, #47bfff);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    font-weight: 800;
+  }
+  .curation-sub {
+    font-size: 14px; color: #64748b;
+  }
+  .curation-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+  }
+  .ref-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #ede6ff;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .ref-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(126,20,255,0.08); }
+  .ref-img {
+    height: 180px;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ref-img svg { width: 70%; height: 70%; }
+  .ref-1 .ref-img { background: linear-gradient(135deg, #fdf3e7, #fff); }
+  .ref-2 .ref-img { background: linear-gradient(135deg, #e7f7ee, #fff); }
+  .ref-3 .ref-img { background: linear-gradient(135deg, #e7ecfd, #fff); }
+  .ref-4 .ref-img { background: linear-gradient(135deg, #fde7f3, #fff); }
+  .ref-5 .ref-img { background: linear-gradient(135deg, #e7f5fd, #fff); }
+  .ref-info {
+    padding: 12px 16px;
+  }
+  .ref-title {
+    font-size: 14px; font-weight: 700;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .ref-meta {
+    font-size: 12px; color: #64748b; margin-top: 4px;
+    display: flex; gap: 8px;
+  }
+  .ref-match {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #ede6ff; color: #7e14ff;
+    padding: 3px 8px; border-radius: 999px;
+    font-size: 11px; font-weight: 800; margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="nav-back" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      갤러리로 돌아가기
+    </a>
+    <div class="nav-brand"><span class="ar">Art</span>PREP</div>
+    <div class="nav-actions">
+      <button class="nav-btn">💾 저장</button>
+      <button class="nav-btn primary">📤 공유</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <span class="crumb">AI 분석 리포트</span>
+    <h1 class="title">발상과표현 — 전구 속 민들레와 새싹</h1>
+    <p class="subtitle">2026-05-15 분석 완료 · 분석 시간 9.4초 · GPT-4 Vision 기반</p>
+
+    <div class="grid">
+      <!-- LEFT: student artwork -->
+      <div class="artwork-card">
+        <div class="artwork-img">
+          <div class="artwork-svg">
+            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="bulb" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#a5d8ff"/>
+                  <stop offset="100%" stop-color="#7c9eff"/>
+                </linearGradient>
+                <linearGradient id="leaf" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#52c41a"/>
+                  <stop offset="100%" stop-color="#2d8c2b"/>
+                </linearGradient>
+              </defs>
+              <!-- 잎 -->
+              <path d="M30,170 Q40,100 70,90 Q60,160 30,170 Z" fill="url(#leaf)" opacity="0.85"/>
+              <path d="M170,160 Q160,100 140,90 Q150,150 170,160 Z" fill="url(#leaf)" opacity="0.85"/>
+              <!-- 전구 -->
+              <circle cx="100" cy="90" r="50" fill="url(#bulb)" opacity="0.4"/>
+              <circle cx="100" cy="90" r="50" fill="none" stroke="#5b7ce5" stroke-width="2"/>
+              <rect x="92" y="135" width="16" height="14" fill="#94a3b8"/>
+              <rect x="90" y="148" width="20" height="6" fill="#64748b"/>
+              <!-- 민들레 씨 -->
+              <circle cx="100" cy="90" r="14" fill="#fef3c7"/>
+              <g stroke="#fff" stroke-width="1.2">
+                <line x1="100" y1="90" x2="100" y2="65"/>
+                <line x1="100" y1="90" x2="125" y2="90"/>
+                <line x1="100" y1="90" x2="75" y2="90"/>
+                <line x1="100" y1="90" x2="118" y2="72"/>
+                <line x1="100" y1="90" x2="82" y2="72"/>
+                <line x1="100" y1="90" x2="118" y2="108"/>
+                <line x1="100" y1="90" x2="82" y2="108"/>
+              </g>
+              <g fill="#fff">
+                <circle cx="100" cy="63" r="3"/>
+                <circle cx="127" cy="90" r="3"/>
+                <circle cx="73" cy="90" r="3"/>
+                <circle cx="120" cy="70" r="2.5"/>
+                <circle cx="80" cy="70" r="2.5"/>
+                <circle cx="120" cy="110" r="2.5"/>
+                <circle cx="80" cy="110" r="2.5"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <dl class="artwork-meta">
+          <div><dt>유형</dt><dd>발상과 표현</dd></div>
+          <div><dt>제출일</dt><dd>2026.05.15</dd></div>
+          <div><dt>학년</dt><dd>고3</dd></div>
+          <div><dt>목표 학교</dt><dd>홍익대 · 국민대</dd></div>
+        </dl>
+      </div>
+
+      <!-- RIGHT: report -->
+      <div class="report">
+        <div class="score-card">
+          <div>
+            <div class="score-num">87<small>/100</small></div>
+          </div>
+          <div class="score-info">
+            <div class="score-label">OVERALL SCORE</div>
+            <div class="score-tag">상위 18% · 합격권 진입</div>
+            <div class="score-comment">홍익대 발상과 표현 합격작과 매우 유사한 표현력. 마무리 디테일만 보강하면 충분히 안정적입니다.</div>
+          </div>
+          <div class="score-badge">
+            <div class="v">B+</div>
+            <div class="l">합격 가능성</div>
+          </div>
+        </div>
+
+        <div class="axes">
+          <div class="axes-title"><span class="dot"></span>5단계 평가</div>
+
+          <div class="axis">
+            <div class="axis-name">구도</div>
+            <div class="axis-bar"><div class="axis-fill" style="width: 92%"></div></div>
+            <div class="axis-score">92</div>
+            <div class="axis-comment">전체 화면 활용 우수. 중심·여백 균형 잡힘.</div>
+          </div>
+          <div class="axis">
+            <div class="axis-name">비례</div>
+            <div class="axis-bar"><div class="axis-fill" style="width: 78%"></div></div>
+            <div class="axis-score">78</div>
+            <div class="axis-comment">전구 크기 대비 잎 위치가 좌우 비대칭. 원근감 살짝 약함.</div>
+          </div>
+          <div class="axis">
+            <div class="axis-name">명암</div>
+            <div class="axis-bar"><div class="axis-fill" style="width: 88%"></div></div>
+            <div class="axis-score">88</div>
+            <div class="axis-comment">전구 안 명암 대비 자연스러움. 잎 그림자 더 강조 가능.</div>
+          </div>
+          <div class="axis">
+            <div class="axis-name">표현</div>
+            <div class="axis-bar"><div class="axis-fill" style="width: 94%"></div></div>
+            <div class="axis-score">94</div>
+            <div class="axis-comment">민들레 씨 디테일 풍부. 발상의 신선도 매우 높음.</div>
+          </div>
+          <div class="axis">
+            <div class="axis-name">완성도</div>
+            <div class="axis-bar"><div class="axis-fill" style="width: 82%"></div></div>
+            <div class="axis-score">82</div>
+            <div class="axis-comment">전체 마무리 양호. 우측 하단 그라데이션 마감 보강 권장.</div>
+          </div>
+        </div>
+
+        <div class="ai-comment">
+          <strong>AI 코칭 코멘트.</strong> 이 작업은 <strong>2024년 홍익대 발상과 표현 합격작 67건</strong> 중 표현·구도 평가축이 유사한 작품과 91% 일치합니다. 다만 합격 평균보다 <strong>비례·완성도</strong> 점수가 각각 9점, 6점 낮습니다. 아래 추천 합격작 5점을 참고해 마감 단계를 한 번 더 검토하세요.
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM: curated references -->
+    <div class="curation">
+      <div class="curation-head">
+        <div>
+          <div class="curation-title">합격 DB에서 <em>평가축이 유사한 합격작 5점</em></div>
+        </div>
+        <div class="curation-sub">홍익대 · 국민대 발상과 표현 2024–2025</div>
+      </div>
+      <div class="curation-grid">
+        <div class="ref-card ref-1">
+          <div class="ref-img">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <rect x="20" y="20" width="60" height="60" rx="6" fill="#fde7e7" stroke="#d97706" stroke-width="1.5"/>
+              <circle cx="50" cy="45" r="14" fill="#fff8b3"/>
+              <path d="M30,75 Q50,60 70,75" stroke="#7c9eff" fill="none" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="ref-info">
+            <div class="ref-title">발상과 표현 — 시간의 흐름</div>
+            <div class="ref-meta">홍익대 · 2024</div>
+            <span class="ref-match">유사도 94%</span>
+          </div>
+        </div>
+        <div class="ref-card ref-2">
+          <div class="ref-img">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20,80 Q30,40 50,30 Q70,40 80,80 Z" fill="#a7f3d0" stroke="#059669" stroke-width="1.5"/>
+              <circle cx="50" cy="40" r="6" fill="#fef3c7"/>
+            </svg>
+          </div>
+          <div class="ref-info">
+            <div class="ref-title">발상과 표현 — 자라나는 도시</div>
+            <div class="ref-meta">홍익대 · 2025</div>
+            <span class="ref-match">유사도 91%</span>
+          </div>
+        </div>
+        <div class="ref-card ref-3">
+          <div class="ref-img">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <rect x="25" y="25" width="50" height="50" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+              <line x1="25" y1="50" x2="75" y2="50" stroke="#2563eb"/>
+              <line x1="50" y1="25" x2="50" y2="75" stroke="#2563eb"/>
+            </svg>
+          </div>
+          <div class="ref-info">
+            <div class="ref-title">발상과 표현 — 창문 속 풍경</div>
+            <div class="ref-meta">국민대 · 2025</div>
+            <span class="ref-match">유사도 88%</span>
+          </div>
+        </div>
+        <div class="ref-card ref-4">
+          <div class="ref-img">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="50" cy="55" r="22" fill="#fce7f3" stroke="#be185d" stroke-width="1.5"/>
+              <path d="M40,55 Q50,35 60,55" fill="#fff" stroke="#be185d"/>
+            </svg>
+          </div>
+          <div class="ref-info">
+            <div class="ref-title">발상과 표현 — 마음의 정원</div>
+            <div class="ref-meta">홍익대 · 2024</div>
+            <span class="ref-match">유사도 86%</span>
+          </div>
+        </div>
+        <div class="ref-card ref-5">
+          <div class="ref-img">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20,60 Q40,20 60,50 Q80,80 50,80 Z" fill="#cffafe" stroke="#0e7490" stroke-width="1.5"/>
+              <circle cx="50" cy="50" r="6" fill="#7e14ff"/>
+            </svg>
+          </div>
+          <div class="ref-info">
+            <div class="ref-title">발상과 표현 — 흐르는 빛</div>
+            <div class="ref-meta">국민대 · 2024</div>
+            <span class="ref-match">유사도 84%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>ArtPrep — How It Works</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1920px; height: 1080px; background: #fff; overflow: hidden; }
+  body {
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, 'Segoe UI', sans-serif;
+    color: #0a0e1a;
+    -webkit-font-smoothing: antialiased;
+  }
+  .slide {
+    width: 1920px; height: 1080px;
+    padding: 44px 100px 80px;
+    display: flex; flex-direction: column;
+    position: relative;
+    background:
+      radial-gradient(900px 600px at -10% 110%, #ede6ff 0%, transparent 60%),
+      radial-gradient(700px 500px at 110% -10%, #e0f4ff 0%, transparent 60%),
+      #ffffff;
+  }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 14px 28px; border-radius: 999px;
+    background: #863bff; color: #fff;
+    font-weight: 700; font-size: 22px; letter-spacing: 0.18em;
+  }
+  .chip::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: #47bfff; }
+  .brand { display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: 28px; }
+  .brand .dot { width: 22px; height: 22px; border-radius: 6px; background: linear-gradient(135deg, #863bff, #47bfff); }
+
+  .headline {
+    font-weight: 800; font-size: 58px; line-height: 1.18;
+    margin-top: 20px;
+    letter-spacing: -0.02em;
+  }
+  .headline em { color: #863bff; font-style: normal; }
+  .sub {
+    margin-top: 12px;
+    font-size: 22px; font-weight: 600; color: #475569;
+  }
+
+  /* MAIN GRID: mockup + content */
+  .main {
+    margin-top: 26px;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 48px;
+    min-height: 0;
+  }
+
+  /* MOCKUP (LEFT) */
+  .mockup-side {
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .mockup {
+    position: relative;
+    background: linear-gradient(180deg, #1a1530 0%, #0a0e1a 100%);
+    border-radius: 38px;
+    padding: 12px;
+    box-shadow:
+      0 30px 70px rgba(126,20,255,0.22),
+      0 8px 24px rgba(0,0,0,0.12);
+    display: flex; flex-direction: column;
+    width: 380px;
+    height: 100%;
+  }
+  .mockup::before {
+    content: '';
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 78px; height: 5px;
+    background: #2a2540;
+    border-radius: 999px;
+    z-index: 2;
+  }
+  .mockup-badge {
+    position: absolute;
+    top: 12px; right: -14px;
+    background: linear-gradient(135deg, #863bff, #47bfff);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 14px; font-weight: 800;
+    box-shadow: 0 8px 20px rgba(126,20,255,0.35);
+    z-index: 3;
+    letter-spacing: 0.04em;
+  }
+  .mockup .screen {
+    flex: 1;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    display: flex; align-items: flex-start; justify-content: center;
+  }
+  .mockup .screen img {
+    height: 100%; width: auto;
+    display: block;
+  }
+  .mockup-caption {
+    margin-top: 16px;
+    font-size: 18px; font-weight: 800; color: #7e14ff;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .mockup-caption small {
+    display: block;
+    font-size: 14px; font-weight: 600; color: #94a3b8;
+    margin-top: 4px;
+  }
+
+  /* RIGHT CONTENT */
+  .right { display: flex; flex-direction: column; gap: 22px; min-height: 0; }
+
+  /* PIPELINE */
+  .pipeline {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .step {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid #ede6ff;
+    padding: 22px 22px 20px;
+    box-shadow: 0 12px 36px rgba(126, 20, 255, 0.06);
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .step.last {
+    background: linear-gradient(135deg, #7e14ff 0%, #47bfff 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 16px 48px rgba(126, 20, 255, 0.28);
+  }
+  .step-no {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ede6ff, #fff);
+    color: #7e14ff;
+    font-weight: 800; font-size: 18px;
+    border: 2px solid #863bff;
+  }
+  .step.last .step-no {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border-color: #fff;
+  }
+  .step-emoji {
+    margin-left: auto;
+    font-size: 32px; line-height: 1;
+  }
+  .step-head {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .step-title {
+    margin-top: 16px;
+    font-size: 22px; font-weight: 800; letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .step-desc {
+    margin-top: 10px;
+    font-size: 15px; font-weight: 500; color: #475569;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .step.last .step-desc { color: rgba(255,255,255,0.92); }
+  .step-tech {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed #ede6ff;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .step.last .step-tech { border-top-color: rgba(255,255,255,0.3); }
+  .tech-pill {
+    background: #f1f5f9;
+    color: #475569;
+    padding: 5px 11px;
+    border-radius: 999px;
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+  .step.last .tech-pill {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    backdrop-filter: blur(8px);
+  }
+
+  /* CORE ASSETS */
+  .assets-section {
+    display: flex; flex-direction: column;
+  }
+  .assets-title {
+    font-size: 22px; font-weight: 800; color: #7e14ff;
+    letter-spacing: 0.14em;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .assets-title .dot { width: 10px; height: 10px; border-radius: 50%; background: #47bfff; }
+  .assets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .asset {
+    background: #fff;
+    border-radius: 18px;
+    border: 1px solid #ede6ff;
+    padding: 22px 26px;
+    box-shadow: 0 12px 36px rgba(126, 20, 255, 0.06);
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+  .asset-tag {
+    font-size: 14px; font-weight: 800; color: #863bff;
+    letter-spacing: 0.12em;
+  }
+  .asset-name {
+    margin-top: 6px;
+    font-size: 26px; font-weight: 800; letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .asset-desc {
+    margin-top: 12px;
+    font-size: 15px; font-weight: 500; color: #475569;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .asset-meta {
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px dashed #ede6ff;
+    font-size: 13px; font-weight: 700; color: #7e14ff;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .asset-meta .pill {
+    background: #f6f3ff;
+    padding: 5px 10px;
+    border-radius: 999px;
+    border: 1px solid #d8c5ff;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="top">
+    <div class="chip">HOW IT WORKS</div>
+    <div class="brand"><div class="dot"></div>ArtPrep</div>
+  </div>
+
+  <div class="headline">
+    학생이 그림을 올리면 <em>5단계 자동 파이프라인</em>이 작동합니다.
+  </div>
+  <div class="sub">비전 AI + 도메인 채점 기준 + 합격작 DB가 결합되어 평균 10초 내 리포트 생성</div>
+
+  <div class="main">
+    <!-- LEFT: Report mockup -->
+    <div class="mockup-side">
+      <div class="mockup">
+        <div class="mockup-badge">실제 운영 화면</div>
+        <div class="screen"><img src="mvp-report-sm.png" alt="AI 분석 리포트"></div>
+      </div>
+      <div class="mockup-caption">
+        AI 분석 리포트
+        <small>학생에게 보여지는 최종 결과</small>
+      </div>
+    </div>
+
+    <!-- RIGHT: Pipeline + Assets -->
+    <div class="right">
+      <div class="pipeline">
+        <div class="step">
+          <div class="step-head"><div class="step-no">1</div><div class="step-emoji">📤</div></div>
+          <div class="step-title">그림 업로드</div>
+          <div class="step-desc">모바일 웹앱에서 그림 캡쳐 또는 갤러리 선택. Supabase Storage에 비공개 업로드.</div>
+          <div class="step-tech">
+            <span class="tech-pill">Next.js 14</span>
+            <span class="tech-pill">Supabase Storage</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-head"><div class="step-no">2</div><div class="step-emoji">👁️</div></div>
+          <div class="step-title">비전 AI 분석</div>
+          <div class="step-desc">GPT-4 Vision이 이미지를 인식해 구도·비례·명암·표현·완성도 5축 <br>정량 평가, JSON 구조화.</div>
+          <div class="step-tech">
+            <span class="tech-pill">GPT-4 Vision</span>
+            <span class="tech-pill">Gemini 1.5</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-head"><div class="step-no">3</div><div class="step-emoji">🌳</div></div>
+          <div class="step-title">프롬프트 트리 분기</div>
+          <div class="step-desc">대표 2년 200명 컨설팅 채점 <br>기준을 그림 유형별로 분기되는 AI 프롬프트 체인으로 코드화.</div>
+          <div class="step-tech">
+            <span class="tech-pill">LangChain</span>
+            <span class="tech-pill">Edge Functions</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-head"><div class="step-no">4</div><div class="step-emoji">🎯</div></div>
+          <div class="step-title">합격작 DB 매칭</div>
+          <div class="step-desc">대학·전형·평가축별 태깅된 합격작 임베딩과 학생 그림 임베딩을 벡터 유사도로 매칭.</div>
+          <div class="step-tech">
+            <span class="tech-pill">pgvector</span>
+            <span class="tech-pill">PostgreSQL</span>
+          </div>
+        </div>
+        <div class="step last">
+          <div class="step-head"><div class="step-no">5</div><div class="step-emoji">⚡</div></div>
+          <div class="step-title">10초 리포트 출력</div>
+          <div class="step-desc">5축 점수 + 합격 비교 + 다음 학습 코멘트를 모바일 UI로 렌더링. <br>평균 9.4초.</div>
+          <div class="step-tech">
+            <span class="tech-pill">RSC</span>
+            <span class="tech-pill">Streaming</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="assets-section">
+        <div class="assets-title"><span class="dot"></span>CORE TECHNICAL ASSETS</div>
+        <div class="assets">
+          <div class="asset">
+            <div class="asset-tag">DOMAIN</div>
+            <div class="asset-name">분기형 프롬프트 트리</div>
+            <div class="asset-desc">누적 12년 팀 내부 컨설팅 경험을 LLM 프롬프트로 코드화. 그림 유형(발상과표현/사고의전환/기초디자인)에 따라 평가 흐름 자동 분기.</div>
+            <div class="asset-meta">
+              <span class="pill">도메인 지식</span>
+              <span class="pill">Branching Logic</span>
+            </div>
+          </div>
+          <div class="asset">
+            <div class="asset-tag">DATA</div>
+            <div class="asset-name">합격작 라벨링 DB</div>
+            <div class="asset-desc">합격작 1,000+건을 대학·전형·평가축별로 태깅한 데이터셋 + pgvector 임베딩 인덱스. 단순 이미지 수집과 달리 기준별 <br>검색·매칭 가능.</div>
+            <div class="asset-meta">
+              <span class="pill">PostgreSQL + pgvector</span>
+              <span class="pill">CLIP Embeddings</span>
+            </div>
+          </div>
+          <div class="asset">
+            <div class="asset-tag">BEHAVIOR</div>
+            <div class="asset-name">행동 편차 메트릭</div>
+            <div class="asset-desc">사용자의 저장·열람·필터 로그를 실시간으로 수집해 개인 취향과 합격 기준 사이 간극을 수치화. 사용 누적 시 매칭 알고리즘이 고도화되어 사용자에게 최적화된 큐레이션 제공.</div>
+            <div class="asset-meta">
+              <span class="pill">Supabase Realtime</span>
+              <span class="pill">Event Logging</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
