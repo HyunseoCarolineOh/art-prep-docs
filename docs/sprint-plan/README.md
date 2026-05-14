@@ -1,6 +1,10 @@
 # ArtPrep 스프린트 (2026-04-22 수 → 2026-06-20 토)
 
 > 기간: **8주+3일** · 주간 경계 수-화
+>
+> ⚠️ **2026-04-25부터 [`/calendar`](https://hyunseo-oh.vercel.app/calendar)가 SoT.** 본 문서는 비태스크 컨텍스트(결정·게이트·리스크) 보관용. 태스크는 calendar 또는 [/art-prep](https://hyunseo-oh.vercel.app/art-prep) Roadmap 탭에서 관리.
+>
+> 완료 주차(w01-w03)는 [`archive/`](./archive/)에 보관.
 
 ## 스프린트 목표
 
@@ -37,18 +41,19 @@
 ## 파일 구조
 
 ```
-docs/sprint-2026-06-20/
+docs/sprint-plan/
 ├── 00-life-goal-context.md   ← 북극성 (Step 1-5 전체 흐름)
 ├── README.md                 ← 이 파일
-├── w01-kickoff.md            ← 4/22 수 - 4/28 화
-├── w02-alpha-prep.md         ← 4/29 수 - 5/5 화
-├── w03-alpha-launch.md       ← 5/6 수 - 5/12 화
-├── w04-beta-prep.md          ← 5/13 수 - 5/19 화
+├── w04-beta-prep.md          ← 5/13 수 - 5/19 화 (현재)
 ├── w05-gate-1.md             ← 5/20 수 - 5/26 화 (1차 게이트)
 ├── w06-beta-push.md          ← 5/27 수 - 6/2 화
 ├── w07-100-push.md           ← 6/3 수 - 6/9 화
 ├── w08-measure.md            ← 6/10 수 - 6/16 화 (내부 100명 마감)
-└── w09-final-gate.md         ← 6/17 수 - 6/20 토 (4일, 최종 게이트)
+├── w09-final-gate.md         ← 6/17 수 - 6/20 토 (4일, 최종 게이트)
+└── archive/
+    ├── w01-kickoff.md        ← 4/22 수 - 4/28 화 (완료)
+    ├── w02-alpha-prep.md     ← 4/29 수 - 5/5 화 (완료)
+    └── w03-alpha-launch.md   ← 5/6 수 - 5/12 화 (완료)
 ```
 
 ## 게이트 요약
