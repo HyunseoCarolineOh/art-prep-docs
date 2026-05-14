@@ -14,7 +14,7 @@
 | UI 컴포넌트 | **shadcn/ui** | 고품질 접근성 컴포넌트, Tailwind 기반 |
 | 스타일링 | **Tailwind CSS** | 빠른 반응형 UI, shadcn/ui 기본 시스템 |
 | DB/백엔드 | **Supabase** (PostgreSQL + Storage + Auth) | 서버리스, RLS, Realtime, 무료 시작 |
-| AI | **비전 AI API (모델 선정 검토 중)** | 이미지 Vision + 비용 효율 (종량제) |
+| AI | **비전 AI API** (현재 Gemini Flash 2.0, [05_LIGHTPREP_A_PRD §4.1](./05_LIGHTPREP_A_PRD.md) 참조) | 이미지 Vision + 비용 효율 (종량제) |
 | 배포 | **Vercel** | Next.js 공식 지원, 자동 CI/CD |
 
 ---
@@ -29,7 +29,7 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=   # 서버사이드(API Route)에서만 사용
 
-# AI
+# AI (현재는 Gemini Flash 2.0. 추후 모델 교체 가능 — 변수명은 추상 유지)
 VISION_AI_API_KEY=
 ```
 
@@ -157,11 +157,12 @@ export async function createClient() {
 
 ```js
 // app/api/curate/route.js
+// 현재는 Gemini Flash 2.0 사용. 모델 교체 시 import·생성자만 변경.
 import { VisionAIClient } from '@vendor/vision-ai-sdk'
 
 export async function POST(request) {
   const genAI = new VisionAIClient(process.env.VISION_AI_API_KEY)
-  const model = genAI.getGenerativeModel({ model: 'TBD-vision-model' })
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
 
   const { userProfile, artworks } = await request.json()
 

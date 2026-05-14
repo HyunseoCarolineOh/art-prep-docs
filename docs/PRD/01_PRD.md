@@ -106,6 +106,9 @@
 > 아래 항목은 추후 결정 필요 — Phase 진입 전에 확정할 것
 
 - [ ] **결제 시스템**: 토스페이먼츠 vs Stripe → Phase 2 시작 전 결정
-- [ ] **AI 큐레이션 프롬프트 상세 설계**: 비전 AI 프롬프트 템플릿 작성 필요
-- [ ] **합격 DB 초기 데이터**: 1만건 확보 방법 및 타임라인
+- [x] **AI 큐레이션 프롬프트 상세 설계**: [05_LIGHTPREP_A_PRD Appendix A](./05_LIGHTPREP_A_PRD.md#appendix-a-prompt-template) 5블록 프롬프트 템플릿 확정
+- [ ] **합격 DB 초기 데이터 확보 단계**:
+  - Phase 1 (sprint W7, 2026-06): **100장** 수동 수집 목표 (calendar w7-hj)
+  - Phase 2 (~26.10): 1,000장 확보 + 데이터 라벨링 자동화
+  - Phase 3 (~27.06): 1만건 도달 — business-plan V9 "협약기간 내" 목표
 - [ ] **이미지 스토리지 용량 예산**: Supabase Storage 무료 플랜 한계(1GB) 확인
