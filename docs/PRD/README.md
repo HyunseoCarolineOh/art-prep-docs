@@ -12,6 +12,7 @@
 | [02_DATA_MODEL.md](./02_DATA_MODEL.md) | 데이터 모델 | ERD, 엔티티 상세, RLS 정책 |
 | [03_PHASES.md](./03_PHASES.md) | Phase 분리 계획 | Phase 1~3 범위 및 일정 |
 | [04_PROJECT_SPEC.md](./04_PROJECT_SPEC.md) | 프로젝트 스펙 (AI 행동 규칙) | 기술 스택, DO/DON'T, 환경변수 |
+| [05_LIGHTPREP_A_PRD.md](./05_LIGHTPREP_A_PRD.md) | LightPrep A안 (AI 리포트 생성) | AI 5블록 리포트 기능 — 2026-05-20 시연 목표 |
 
 ---
 
