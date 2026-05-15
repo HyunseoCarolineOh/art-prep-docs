@@ -9,6 +9,11 @@
 *.jpeg
 *.gif
 
+# Logo assets — git에 추적
+!docs/assets/logos/*.png
+!docs/assets/logos/*.svg
+!docs/assets/logos/*.jpg
+
 # IDE and editor files
 .DS_Store
 .vscode/
