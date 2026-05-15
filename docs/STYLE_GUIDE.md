@@ -75,7 +75,7 @@ CLAUDE.md 기준: **8장 내외**. 외부 발표는 6~10장, 지원사업 제출
 
 ## 3. 브랜드 컬러 & 로고 (art-prep)
 
-> **디자인 토큰 소스**: 실서비스 [art-prep.vercel.app](https://art-prep-7gw9f6r7s-hyunseocarolineohs-projects.vercel.app/). 신규 장표 만들기 전, 현재 사이트의 컬러·로고를 한 번 확인 후 본 토큰과 다르면 사이트 기준으로 갱신.
+> **디자인 토큰 소스**: 실서비스 [art-prep.vercel.app](https://art-prep.vercel.app/). art-prep은 듀얼 컬러 시스템 — **(A) 브랜드 마크/장표용**은 보라/청록 강한 톤, **(B) 서비스 UI 본체**는 shadcn/ui slate + 파란 강조의 절제된 톤. 본 가이드는 **(A) 장표용**이 메인이므로 §3.1을 기본으로 사용.
 
 ### 3.1. 메인 팔레트 — 보라/청록
 
@@ -110,13 +110,42 @@ CLAUDE.md 기준: **8장 내외**. 외부 발표는 6~10장, 지원사업 제출
 
 기본은 §3.1, 특별한 이유가 있을 때만 §3.2.
 
+### 3.3-pre. 서비스 UI 컬러 (참고용)
+
+art-prep 서비스 본체(art-prep.vercel.app)는 shadcn/ui slate 디폴트를 따름. 장표에 **서비스 스크린샷이 함께 들어가는 경우**, 인접 영역 컬러를 사이트와 맞추면 자연스럽다:
+
+```css
+/* shadcn slate 디폴트 */
+--ui-background: #ffffff;
+--ui-foreground: #0f172a;       /* hsl(222.2 84% 4.9%) */
+--ui-primary: #0f172a;
+--ui-secondary: #f1f5f9;        /* hsl(210 40% 96.1%) */
+--ui-muted-foreground: #64748b; /* hsl(215.4 16.3% 46.9%) */
+--ui-border: #e2e8f0;           /* hsl(214.3 31.8% 91.4%) */
+
+/* 사이트 강조 컬러 (자주 등장) */
+--ui-blue-accent: #195AE6;
+```
+
+장표 메인 컬러는 어디까지나 §3.1, §3.2. 서비스 UI 컬러는 스크린샷 인접 영역 톤만 맞추는 용도.
+
 ### 3.3. 로고
 
-art-prep 로고는 **텍스트 "ArtPrep" + 보라→청록 그라데이션 dot** 형태:
+**정식 art-prep 마크**: art-prep.vercel.app의 favicon SVG. 보라/청록 컬러의 번개 같은 추상 도형 (zig-zag로 자른 빈 공간이 시그니처).
+
+저장 위치: [`docs/assets/logos/art-prep-icon.svg`](./assets/logos/art-prep-icon.svg). 신규 장표에서는 이 파일을 inline SVG로 박거나 `<img>`로 참조.
 
 ```html
+<!-- 방법 A: inline SVG (자유로운 색 제어, 의존성 0) -->
 <div class="brand">
-  <div class="dot"></div>
+  <!-- docs/assets/logos/art-prep-icon.svg 내용을 그대로 붙여넣기 -->
+  <svg width="40" height="38" viewBox="0 0 48 46" fill="none">...</svg>
+  <span>ArtPrep</span>
+</div>
+
+<!-- 방법 B: 이미지 참조 (간단하지만 색 제어 불가) -->
+<div class="brand">
+  <img src="../../assets/logos/art-prep-icon.svg" alt="ArtPrep" width="40" height="38">
   <span>ArtPrep</span>
 </div>
 ```
@@ -126,14 +155,11 @@ art-prep 로고는 **텍스트 "ArtPrep" + 보라→청록 그라데이션 dot**
   display: flex; align-items: center; gap: 14px;
   font-weight: 800; font-size: 28px; color: var(--ap-ink);
 }
-.brand .dot {
-  width: 22px; height: 22px; border-radius: 6px;
-  background: var(--ap-gradient);
-}
 ```
 
-- 색 반전 환경(다크 배경)에서는 텍스트 색만 `#fff`로 교체. dot 그라데이션은 유지.
-- 별도 SVG 로고 파일이 art-prep 서비스에 추가되면 본 가이드를 갱신.
+- 다크 배경 환경에서는 텍스트 색만 `#fff`로 교체. SVG 마크는 그대로 보라/청록 유지 (단색 배경에도 잘 보임).
+- 매우 작은 사이즈(< 24px)에서는 marks-only 사용. 24px 이상에서 "ArtPrep" 워드마크 병기.
+- 마크 비율: 너비:높이 = 48:46 (≈ 1.04:1). 가로 폭 기준으로 사이즈 지정 권장.
 
 ---
 
@@ -214,7 +240,7 @@ docs/
 | 결과 출력 PNG (이미지 추출용 HTML의 산출물) | `.png` | **`.gitignore`** | `docs/application/<program>/images/*.png` |
 | 다이어그램·아이콘 (장표 본문 안 박힌 이미지) | `.svg` 우선 | git 추적 | 같은 폴더의 `assets/` 또는 인접 디렉터리 |
 | 사진·스크린샷 | `.jpg`/`.png` | **`.gitignore`** (`.gitignore`의 `*.png` 룰 그대로) | 같은 폴더 |
-| 로고 (art-prep 서비스 로고가 추후 SVG로 추가될 경우) | `.svg` 우선 | git 추적 | `docs/assets/logos/` (있다면) |
+| **art-prep 로고/마크** | `.svg` | git 추적 | [`docs/assets/logos/art-prep-icon.svg`](./assets/logos/art-prep-icon.svg) — 단일 진실 소스 |
 
 ### 6.2. 참조 방식
 
@@ -251,7 +277,7 @@ docs/
 - [ ] 외부 의존성 없음 (또는 fallback 있음). 오프라인 환경에서 열어봤을 때 깨지지 않음
 - [ ] 슬라이드 번호 chip이 모든 슬라이드에 있음
 - [ ] §3.1 (또는 §3.2) 컬러 팔레트를 일관되게 사용 (혼용 X)
-- [ ] art-prep 로고가 있다면 §3.3 그라데이션 dot + 텍스트 형태
+- [ ] art-prep 로고가 있다면 [`docs/assets/logos/art-prep-icon.svg`](./assets/logos/art-prep-icon.svg) 사용 (inline SVG 또는 `<img>`)
 - [ ] 슬라이드 8장 내외 (외부 발표는 6~10장 OK)
 - [ ] 인쇄 호환 필요한 경우 `page-break-after: always` 명시
 - [ ] **모든 이미지가 슬라이드 가장자리에서 80px 이상 여백 확보** (§6.4)
