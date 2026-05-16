@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArtPrep IR Deck</title>
+<style>
+  :root {
+    --ap-background: #ffffff;
+    --ap-foreground: #0f172a;
+    --ap-primary: #0f172a;
+    --ap-primary-fg: #f8fafc;
+    --ap-secondary: #f1f5f9;
+    --ap-muted: #f1f5f9;
+    --ap-muted-fg: #64748b;
+    --ap-border: #e2e8f0;
+    --ap-accent: #195AE6;
+    --ap-accent-soft: #eff6ff;
+    --ap-good: #16a34a;
+    --ap-warn: #d97706;
+    --ap-bad: #dc2626;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: #0b1220;
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+                 system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic',
+                 sans-serif;
+    color: var(--ap-foreground);
+    word-break: keep-all;
+    overflow: hidden;
+  }
+
+  .stage {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .deck {
+    width: 1920px;
+    height: 1080px;
+    transform-origin: center center;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute; inset: 0;
+    width: 1920px; height: 1080px;
+    background: var(--ap-background);
+    padding: 100px 120px;
+    display: none;
+    flex-direction: column;
+    color: var(--ap-foreground);
+    overflow: hidden;
+  }
+
+  .slide.active { display: flex; }
+
+  /* 워드마크 텍스트 렌더링 (STYLE_GUIDE §3.2) */
+  .ap-wordmark {
+    font-style: italic;
+    color: var(--ap-accent);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    line-height: 1;
+    display: inline-block;
+  }
+  .ap-art  { font-weight: 500; }
+  .ap-prep { font-weight: 800; }
+  .ap-wordmark.size-header { font-size: 28px; }
+  .ap-wordmark.size-cover  { font-size: 96px; }
+  .ap-wordmark.size-small  { font-size: 20px; }
+
+  /* 헤더 공통 */
+  .eyebrow {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--ap-accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .title {
+    font-size: 68px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--ap-foreground);
+  }
+
+  .subtitle {
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--ap-foreground);
+    margin-top: 18px;
+    line-height: 1.4;
+  }
+
+  .body {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--ap-foreground);
+    line-height: 1.6;
+  }
+
+  .muted {
+    color: var(--ap-muted-fg);
+    font-size: 20px;
+  }
+
+  .accent { color: var(--ap-accent); font-weight: 700; }
+  .num    { color: var(--ap-foreground); font-weight: 800; }
+  .nowrap { white-space: nowrap; }
+
+  /* 슬라이드 번호 chip */
+  .chip {
+    position: absolute;
+    top: 60px; right: 100px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ap-muted-fg);
+    background: var(--ap-secondary);
+    border: 1px solid var(--ap-border);
+    padding: 8px 16px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+
+  .brand {
+    position: absolute;
+    top: 60px; left: 120px;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  /* 카드·박스 */
+  .card {
+    background: var(--ap-secondary);
+    border: 1px solid var(--ap-border);
+    border-radius: 16px;
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-accent {
+    background: var(--ap-accent-soft);
+    border: 1px solid color-mix(in srgb, var(--ap-accent) 18%, transparent);
+    border-left: 4px solid var(--ap-accent);
+    border-radius: 16px;
+    padding: 32px 36px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card h4, .card-accent h4 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .card h4 { color: var(--ap-foreground); }
+  .card-accent h4 { color: var(--ap-accent); }
+  .card p, .card-accent p {
+    font-size: 22px;
+    color: var(--ap-foreground);
+    line-height: 1.6;
+  }
+
+  /* 표 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 22px;
+    margin-top: 24px;
+  }
+  th, td {
+    text-align: left;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--ap-border);
+  }
+  th {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ap-muted-fg);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--ap-secondary);
+  }
+  td { color: var(--ap-foreground); }
+  td.col-label { width: 240px; font-weight: 700; }
+
+  /* 리스트 */
+  ul.bullets { list-style: none; }
+  ul.bullets li {
+    font-size: 22px;
+    color: var(--ap-foreground);
+    line-height: 1.6;
+    padding-left: 28px;
+    margin: 14px 0;
+    position: relative;
+  }
+  ul.bullets li::before {
+    content: ""; position: absolute;
+    left: 0; top: 14px;
+    width: 10px; height: 10px;
+    background: var(--ap-accent);
+    border-radius: 2px;
+  }
+
+  /* 통계 큰 숫자 */
+  .stat-xl { font-size: 128px; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: var(--ap-accent); }
+  .stat-l  { font-size: 72px;  font-weight: 800; color: var(--ap-foreground); line-height: 1; }
+  .stat-m  { font-size: 44px;  font-weight: 800; color: var(--ap-foreground); line-height: 1; }
+
+  /* 레이아웃 헬퍼: grid 자식 동일 높이 (STYLE_GUIDE §7.10) */
+  .header-block { margin-bottom: 56px; }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 36px;
+    align-items: stretch;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+    align-items: stretch;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    align-items: stretch;
+  }
+  .grid-2 > *, .grid-3 > *, .grid-4 > * {
+    height: 100%;
+  }
+  .gap-12 { gap: 12px; }
+  .gap-24 { gap: 24px; }
+  .flex-col { display: flex; flex-direction: column; }
+  .stretch { flex: 1; }
+  .mt-24 { margin-top: 24px; }
+  .mt-32 { margin-top: 32px; }
+  .mt-48 { margin-top: 48px; }
+
+  /* 표지 전용 */
+  .cover {
+    align-items: center; justify-content: center; text-align: center;
+  }
+  .cover .lead {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    max-width: 1400px;
+    margin: 48px auto 24px;
+    color: var(--ap-foreground);
+  }
+  .cover .sublead {
+    font-size: 24px;
+    color: var(--ap-muted-fg);
+    line-height: 1.6;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .cover .meta {
+    margin-top: 80px;
+    font-size: 18px;
+    color: var(--ap-muted-fg);
+    letter-spacing: 0.1em;
+  }
+
+  /* 타임라인 */
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 32px;
+    align-items: start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--ap-border);
+  }
+  .timeline-row:last-child { border-bottom: none; }
+  .timeline-date {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ap-accent);
+    letter-spacing: 0.05em;
+  }
+  .timeline-body {
+    font-size: 24px;
+    color: var(--ap-foreground);
+    line-height: 1.5;
+  }
+
+  /* 시장 규모 */
+  .market-tier {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 28px;
+    align-items: center;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--ap-border);
+  }
+  .market-tier:last-child { border: none; }
+  .tier-tag {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ap-accent);
+    letter-spacing: 0.05em;
+  }
+  .tier-amount {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--ap-foreground);
+    margin-bottom: 4px;
+  }
+  .tier-note {
+    font-size: 20px;
+    color: var(--ap-muted-fg);
+  }
+
+  /* 팀 카드의 포지션 라벨 */
+  .position {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ap-accent);
+    margin-top: -4px;
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
+  }
+  .card .bio-list {
+    font-size: 18px;
+    color: var(--ap-foreground);
+    line-height: 1.7;
+  }
+  .card .bio-list li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* AI 리포트 처리 흐름 도식 */
+  .flow-step {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    align-items: center;
+    gap: 20px;
+    background: var(--ap-accent-soft);
+    border: 1px solid color-mix(in srgb, var(--ap-accent) 18%, transparent);
+    border-left: 4px solid var(--ap-accent);
+    border-radius: 14px;
+    padding: 20px 26px;
+  }
+  .flow-step .flow-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: var(--ap-accent);
+    color: var(--ap-primary-fg);
+    font-weight: 800;
+    font-size: 22px;
+    border-radius: 50%;
+  }
+  .flow-step .flow-body strong {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ap-foreground);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .flow-step .flow-sub {
+    font-size: 22px;
+    color: var(--ap-foreground);
+    line-height: 1.5;
+  }
+  .flow-arrow {
+    text-align: center;
+    color: var(--ap-accent);
+    font-size: 20px;
+    line-height: 1;
+    opacity: 0.6;
+    margin: 4px 0;
+  }
+
+  /* 프로덕트 스크린샷 */
+  .shot-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+    align-items: stretch;
+  }
+  .shot {
+    background: var(--ap-secondary);
+    border: 1px solid var(--ap-border);
+    border-radius: 16px;
+    padding: 24px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+  }
+  .shot img {
+    width: 100%;
+    max-height: 380px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 4px 24px rgba(15,23,42,0.08);
+    border: 1px solid var(--ap-border);
+    display: block;
+  }
+  .shot .caption-title {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ap-foreground);
+  }
+  .shot .caption-sub {
+    margin-top: 4px;
+    font-size: 16px;
+    color: var(--ap-muted-fg);
+  }
+
+  /* 프레임 없는 스크린샷 + 캡션 상단 */
+  .shot-clean {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+  }
+  .shot-clean .caption-title-top {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ap-foreground);
+    margin-bottom: 6px;
+  }
+  .shot-clean .caption-sub-top {
+    font-size: 20px;
+    color: var(--ap-muted-fg);
+    margin-bottom: 28px;
+  }
+  .shot-clean img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: top center;
+    filter: drop-shadow(0 40px 80px rgba(15,23,42,0.12)) drop-shadow(0 12px 30px rgba(15,23,42,0.05));
+    border-radius: 18px;
+    display: block;
+  }
+
+  /* 푸터 캡션 */
+  .footnote {
+    position: absolute;
+    bottom: 60px; left: 120px;
+    font-size: 14px;
+    color: var(--ap-muted-fg);
+    letter-spacing: 0.04em;
+  }
+
+  /* 네비 hint */
+  .nav-hint {
+    position: fixed;
+    bottom: 16px; right: 20px;
+    background: rgba(15,23,42,0.6);
+    color: #f8fafc;
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+    z-index: 50;
+  }
+
+  @media print {
+    html, body { background: #ffffff; overflow: visible; }
+    .stage { position: static; }
+    .deck { width: 1920px; height: auto; transform: none !important; }
+    .slide { position: relative; display: flex !important; page-break-after: always; }
+    .nav-hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="deck" id="deck">
+
+    <!-- SLIDE 1 / 10 : 표지 -->
+    <section class="slide cover active" data-slide="1">
+      <span class="ap-wordmark size-cover"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span>
+      <div class="lead">
+        132분의 SNS 탐색을 10초의 AI 분석으로
+      </div>
+      <div class="sublead">
+        12년의 컨설팅 노하우 + 합격작 데이터<br>
+        학생 그림을 AI가 분석하고, 비슷한 합격작을 추천하는 미대입시 학습 플랫폼
+      </div>
+      <div class="meta">
+        IR DECK · 2026
+      </div>
+    </section>
+
+    <!-- SLIDE 2 / 10 : 문제 (시장 통증) -->
+    <section class="slide" data-slide="2">
+      <div class="brand"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip">01 / 09</div>
+
+      <div class="header-block" style="margin-top: 100px;">
+        <div class="eyebrow">Problem</div>
+        <h1 class="title">연 5만 미대 수험생, 하루 <span class="accent">132분</span>을<br>SNS에서 헤매고 있습니다</h1>
+      </div>
+
+      <div class="grid-2 stretch">
+        <div class="flex-col gap-24">
+          <div class="card">
+            <h4>자기 취향대로 자료를 고른다</h4>
+            <p>전체의 <span class="accent">85%</span>가 입시 평가 기준이 아니라 <span class="accent">본인 보기에 예쁜 그림</span>을 따라합니다. <br>합격과 거리가 먼 방향으로 연습하게 됩니다.</p>
+          </div>
+          <div class="card">
+            <h4>시간을 들이고도 멀어진다</h4>
+            <p>합격 기준 대비 판단 오류율이 <span class="accent">65%</span>. <br>노력을 해도 합격선에 가까워지지 않습니다.</p>
+          </div>
+        </div>
+
+        <div class="flex-col gap-24">
+          <div class="card">
+            <h4>정보·인프라가 수도권에 몰려 있다</h4>
+            <p>합격 데이터·강사·학원이 수도권 중심. <br>지방 수험생은 <span class="accent">정보 격차에 거주비 부담</span>까지 이중고를 겪습니다.</p>
+          </div>
+          <div class="card">
+            <h4>학원비는 비싼데 도구는 없다</h4>
+            <p><span class="accent">월 200만원</span> 가까운 학원비를 내도, <br>합격 패턴을 체계적으로 학습할 수 있는 도구는 시장에 없습니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footnote">출처: 25년 자체 설문 150명, 심층 인터뷰 10명 (ArtPrep, 2025)</div>
+    </section>
+
+    <!-- SLIDE 3 / 10 : 시장 공백 -->
+    <section class="slide" data-slide="3">
+      <div class="brand"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip">02 / 09</div>
+
+      <div class="header-block" style="margin-top: 100px;">
+        <div class="eyebrow">Market Gap</div>
+        <h1 class="title">지금의 대안은<span class="accent"> 모두 한계가 있습니다</span></h1>
+      </div>
+
+      <table class="stretch">
+        <thead>
+          <tr>
+            <th style="width: 28%;">대안</th>
+            <th>왜 부족한가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="col-label">미대입시닷컴 (게시판 커뮤니티)</td><td>유용한 정보보다 광고가 많고, 작품 분석·추천 기능이 없습니다</td></tr>
+          <tr><td class="col-label">인스타그램 · 핀터레스트</td><td>취향 기반 추천이라 입시 평가 기준과 맞지 않습니다</td></tr>
+          <tr><td class="col-label">학원</td><td>월 200만원 비용, 강사마다 편차가 커서 일관된 기준을 잡기 어렵습니다</td></tr>
+          <tr><td class="col-label">ChatGPT 같은 일반 AI</td><td>미대 입시의 채점 기준을 모르기 때문에 도움이 제한적입니다</td></tr>
+        </tbody>
+      </table>
+
+      <div class="mt-48" style="font-size: 24px; color: var(--ap-foreground); line-height: 1.5;">
+        → "<strong>내 그림이 합격에 얼마나 가까운지</strong>" 객관적으로 평가해 주는 도구가 지금까지 없었습니다
+      </div>
+    </section>
+
+    <!-- SLIDE 4 / 10 : 강점 3가지 -->
+    <section class="slide" data-slide="4">
+      <div class="brand"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip">03 / 09</div>
+
+      <div class="header-block" style="margin-top: 100px;">
+        <div class="eyebrow">Our Strengths</div>
+        <h1 class="title">후발주자가 따라잡기 어려운<br><span class="accent">3가지 강점</span></h1>
+      </div>
+
+      <div class="grid-3">
+        <div class="card-accent">
+          <h4>1. 12년의 채점 노하우</h4>
+          <p>합격·불합격 그림을 12년간 현장에서 직접 봐온 컨설팅 경험을 AI 평가 로직으로 옮겼습니다. 누구나 같은 기준으로 평가받을 수 있습니다.</p>
+        </div>
+        <div class="card-accent">
+          <h4>2. 합격작 1만 건 데이터셋</h4>
+          <p>실제 합격한 작품만 모아 대학·전형·평가 항목별로 정리. 학생 그림과 비슷한 합격작을 골라 보여줍니다. 데이터가 쌓일수록 가치가 커집니다.</p>
+        </div>
+        <div class="card-accent">
+          <h4>3. 사용자가 늘수록 똑똑해지는 AI</h4>
+          <p>학생들이 어떤 작품을 저장하고 다시 보는지를 AI가 학습합니다. 사용자가 많아질수록 추천 정확도가 올라갑니다.</p>
+        </div>
+      </div>
+
+      <div class="mt-32" style="font-size: 22px; color: var(--ap-foreground); line-height: 1.6;">
+        합격 DB 1만 건 도달 시 개인화 정확도 <span class="accent">95%+</span> 목표
+      </div>
+    </section>
+
+    <!-- SLIDE 5 / 10 : 프로덕트 (검색·저장) -->
+    <section class="slide" data-slide="5" style="padding-bottom: 0;">
+      <div class="brand"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip">04 / 09</div>
+
+      <div class="header-block" style="margin-top: 100px; margin-bottom: 36px;">
+        <div class="eyebrow">Product</div>
+        <h1 class="title">합격작 검색 · 저장 · 평가를 <span class="accent">한 화면에서</span></h1>
+        <div class="subtitle" style="color: var(--ap-muted-fg); font-weight: 500; margin-top: 14px;">
+          이미 라이브로 운영중인 MVP. 사전신청자 125명이 사용하고 있습니다.
+        </div>
+      </div>
+
+      <div class="shot-grid-clean stretch" style="grid-template-columns: repeat(3, 1fr); display: grid; gap: 48px; align-items: end; flex: 1; min-height: 0;">
+        <div class="shot-clean">
+          <div class="caption-title-top">메인 · 합격작 그리드</div>
+          <div class="caption-sub-top">대학 · 전형 · 연도 큐레이션</div>
+          <img src="images/mvp-home.png" alt="ArtPrep 메인 그리드">
+        </div>
+        <div class="shot-clean">
+          <div class="caption-title-top">검색 · 필터</div>
+          <div class="caption-sub-top">대학 · 전형 유형 · 연도</div>
+          <img src="images/mvp-filter.png" alt="ArtPrep 검색·필터">
+        </div>
+        <div class="shot-clean">
+          <div class="caption-title-top">저장 · 개인 컬렉션</div>
+          <div class="caption-sub-top">합격 기준 학습 자료화</div>
+          <img src="images/mvp-saved.png" alt="ArtPrep 저장한 작품">
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6 / 10 : AI 리포트 (프로덕트 상세) -->
+    <section class="slide" data-slide="6" style="position: relative; overflow: hidden;">
+      <div class="brand" style="z-index: 3;"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip" style="z-index: 3;">05 / 09</div>
+
+      <!-- 우측: AI 리포트 이미지 — absolute로 슬라이드 위에서 아래까지 가득 -->
+      <img src="images/mvp-report-5parts.png" alt="ArtPrep AI 리포트 5개 섹션"
+           style="position: absolute;
+                  top: 60px;
+                  right: 280px;
+                  height: calc(100% - 120px);
+                  width: auto;
+                  max-width: 560px;
+                  object-fit: contain;
+                  object-position: top center;
+                  filter: drop-shadow(0 40px 80px rgba(15,23,42,0.12)) drop-shadow(0 12px 30px rgba(15,23,42,0.05));
+                  border-radius: 18px;
+                  z-index: 1;">
+
+      <div class="header-block" style="margin-top: 100px; position: relative; z-index: 2;">
+        <div class="eyebrow">Product · AI Report</div>
+        <h1 class="title"><span class="accent">5단계 AI 분석</span>으로<br>합격작을 추천합니다</h1>
+        <div class="subtitle" style="color: var(--ap-muted-fg); font-weight: 500; margin-top: 14px;">
+          12년 컨설팅 노하우 + 합격작 DB · 처리 시간 10초
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 700px 1fr; gap: 60px; align-items: stretch; flex: 1; min-height: 0; position: relative; z-index: 2;">
+        <!-- 좌측: 처리 흐름 도식 (2x2 그리드) + 기술 특징 -->
+        <div class="flex-col" style="gap: 28px; height: 100%; justify-content: center;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="flow-step">
+              <span class="flow-num">1</span>
+              <div class="flow-body"><strong>업로드</strong><div class="flow-sub">학생이 자기 그림을 사진으로 업로드</div></div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-num">2</span>
+              <div class="flow-body"><strong>AI 5축 평가</strong><div class="flow-sub">구도 · 명암 · 소재 · 완성도 · 표현력</div></div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-num">3</span>
+              <div class="flow-body"><strong>합격작 DB 교차 비교</strong><div class="flow-sub">평가 점수로 1만 건 합격작과 매칭</div></div>
+            </div>
+            <div class="flow-step">
+              <span class="flow-num">4</span>
+              <div class="flow-body"><strong>맞춤 추천</strong><div class="flow-sub">비슷한 합격작 + 부족한 부분 개선 포인트</div></div>
+            </div>
+          </div>
+
+          <div style="font-size: 18px; color: var(--ap-muted-fg); line-height: 1.6;">
+            <strong style="color: var(--ap-foreground);">기술 포인트</strong> · 분기형 평가 로직(인물·정물·구성), 모델 독립 설계(GPT-4V·Gemini·Claude 교체 가능), 이미지당 비용 약 13원
+          </div>
+        </div>
+        <!-- 우측 컬럼은 비움 (이미지가 absolute로 그 위에 위치) -->
+        <div></div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7 / 10 : 트랙션 -->
+    <section class="slide" data-slide="7">
+      <div class="brand"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip">06 / 09</div>
+
+      <div class="header-block" style="margin-top: 100px;">
+        <div class="eyebrow">Traction</div>
+        <h1 class="title">사전신청 <span class="accent">125명</span>,<br>전환율 <span class="accent">22%</span></h1>
+      </div>
+
+      <div class="stretch">
+        <div class="timeline-row">
+          <div class="timeline-date">23년</div>
+          <div class="timeline-body">
+            홍익대 경영대학 아이디어 경진대회 <strong>1위</strong>, 창업페스티벌 <strong>3위</strong>
+            <div class="muted" style="margin-top: 6px;">시장성을 외부에서 처음 인정받은 시점</div>
+          </div>
+        </div>
+        <div class="timeline-row">
+          <div class="timeline-date">25년</div>
+          <div class="timeline-body">
+            온라인 설문 <strong>150명</strong>, 심층 인터뷰 <strong>10명</strong>
+            <div class="muted" style="margin-top: 6px;">수험생 문제와 결제 의향을 직접 데이터로 확인</div>
+          </div>
+        </div>
+        <div class="timeline-row">
+          <div class="timeline-date">26.01</div>
+          <div class="timeline-body">
+            MVP 랜딩페이지 전환율 <strong>22%</strong>, 사전신청자 <strong>125명</strong>
+            <div class="muted" style="margin-top: 6px;">광고 없이 입소문만으로 모인 결과. 시장에서 원하는 제품임을 첫 검증</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footnote">출처: 자체 데이터 (ArtPrep, 2023 ~ 2026)</div>
+    </section>
+
+    <!-- SLIDE 8 / 10 : 시장 규모 -->
+    <section class="slide" data-slide="8">
+      <div class="brand"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip">07 / 09</div>
+
+      <div class="header-block" style="margin-top: 100px;">
+        <div class="eyebrow">Market Size</div>
+        <h1 class="title">정보 격차가 가장 큰 곳부터 시작,<br>이후 <span class="accent">동남아·중국</span>으로</h1>
+      </div>
+
+      <div class="grid-2 gap-24" style="align-items: start;">
+        <div class="flex-col" style="height: auto;">
+          <div class="market-tier">
+            <div class="tier-tag">전체 시장</div>
+            <div>
+              <div class="tier-amount">27조원</div>
+              <div class="tier-note">한국 전체 사교육 시장 규모 (2024)</div>
+            </div>
+          </div>
+          <div class="market-tier">
+            <div class="tier-tag">타깃 시장</div>
+            <div>
+              <div class="tier-amount">약 0.8조원</div>
+              <div class="tier-note">미대 입시 사교육 시장 — 우리가 직접 닿는 영역</div>
+            </div>
+          </div>
+          <div class="market-tier">
+            <div class="tier-tag">초기 시장</div>
+            <div>
+              <div class="tier-amount">약 0.2조원</div>
+              <div class="tier-note">비수도권 미대 입시 사교육 시장. 정보 격차가 가장 크고, 가장 빨리 진입할 수 있는 영역</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="align-self: stretch;">
+          <h4>확장 로드맵</h4>
+          <p>한국형 입시 노하우는 그대로 해외로 옮길 수 있습니다.</p>
+          <ul class="bullets mt-24">
+            <li>1단계 · 정보가 가장 부족한 비수도권 수험생부터</li>
+            <li>2단계 · 학종 · 비실기 전형으로 확대</li>
+            <li>3단계 · 동남아 · 중국 미대 입시 시장 진출</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footnote">출처: 통계청 사교육비 조사 (2024), 시장 추정 (ArtPrep)</div>
+    </section>
+
+    <!-- SLIDE 9 / 10 : 팀 -->
+    <section class="slide" data-slide="9">
+      <div class="brand"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip">08 / 09</div>
+
+      <div class="header-block" style="margin-top: 100px;">
+        <div class="eyebrow">Team</div>
+        <h1 class="title">현장 경험 · 제품 · 디자인을<br><span class="accent">한 팀에 모았습니다</span></h1>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <h4>오현서</h4>
+          <div class="position">대표 / 제품 · 사업개발</div>
+          <ul class="bio-list">
+            <li>홍익대학교 시각디자인과 학사 (5학기 장학·졸업예정)</li>
+            <li>미대입시 컨설팅 2년, 200명 이상 지도</li>
+            <li>Inspiroom 창업·운영 (주간 예약 1,900% 성장)</li>
+            <li>ANTIEGG 프로덕트 매니저 (영업 전환율 75→92%)</li>
+            <li>TechEquity AI 글로벌 사업개발 매니저 (실리콘밸리)</li>
+            <li>UC Berkeley Haas Summer Session 수료</li>
+            <li>AWS Cloud Solution Architect Associate</li>
+            <li>AWS Demand Generation Rep 인턴</li>
+            <li>홍익대 경영대학 아이디어 경진대회 1위</li>
+            <li>홍익인 창업페스티벌 3위</li>
+            <li>Supabase 백엔드·모바일 앱 구조 직접 구현</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>우정민</h4>
+          <div class="position">컨설팅 · 커리큘럼 헤드</div>
+          <ul class="bio-list">
+            <li>홍익대학교 판화과 학사 졸업</li>
+            <li>미대입시·생기부 컨설팅 5년</li>
+            <li>비실기 미대입시·미술활동보고서·세특 전문</li>
+            <li>홍익대·고려대·이화여대·경희대 미대 다수 합격 지도</li>
+            <li>학생 개별 성향 기반 포트폴리오·프로젝트 설계</li>
+            <li>데이터 기반 학생 관리·주간 피드백 프로세스 구축</li>
+            <li>IT 서비스 UX/UI 디자인 경험 3년</li>
+            <li>AI 미술교육 서비스·콘텐츠 플랫폼 기획 진행</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>한혜진</h4>
+          <div class="position">디자인 · 아트디렉팅 / 마케팅</div>
+          <ul class="bio-list">
+            <li>홍익대학교 금속조형디자인·공간디자인 학사 (졸업예정)</li>
+            <li>그린섬·플라이미술학원 비실기·학종 컨설턴트 5년</li>
+            <li>MAM Jewelry Exhibition Collective 아트디렉터 4년</li>
+            <li>전시 9회 · 방문객·매출 2배 성장</li>
+            <li>종로구청 공공 문화행사 아트디렉터 2건</li>
+            <li>서울시장상 수상</li>
+            <li>홍대 인터랙션 미디어아트 공공미술 학생대표</li>
+            <li>KISD Awards 국제공모전 입선</li>
+            <li>AI 미술교육 플랫폼 LightSchool 기획</li>
+            <li>학원장 네트워크 20곳 보유</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10 / 10 : 로드맵 & Ask -->
+    <section class="slide" data-slide="10">
+      <div class="brand"><span class="ap-wordmark size-header"><span class="ap-art">Art</span><span class="ap-prep">PREP</span></span></div>
+      <div class="chip">09 / 09</div>
+
+      <div class="header-block" style="margin-top: 100px;">
+        <div class="eyebrow">Roadmap · What we need</div>
+        <h1 class="title">합격 DB <span class="accent">1만 건</span> 달성, <br>시드 투자유치까지</h1>
+      </div>
+
+      <div class="grid-2 gap-24" style="align-items: start;">
+        <div class="flex-col" style="height: auto;">
+          <div class="timeline-row">
+            <div class="timeline-date">26년 2분기</div>
+            <div class="timeline-body">서비스 정식 출시, 외부 데이터분석가와 협업 완료</div>
+          </div>
+          <div class="timeline-row">
+            <div class="timeline-date">26년 3분기</div>
+            <div class="timeline-body">협력 학원 <strong>10곳</strong> 확보, 합격작 DB 라벨링 본격화</div>
+          </div>
+          <div class="timeline-row">
+            <div class="timeline-date">26년 4분기</div>
+            <div class="timeline-body">데이터분석가 정식 채용, 학원용 B2B 서비스 추가</div>
+          </div>
+          <div class="timeline-row">
+            <div class="timeline-date">27년 상반기</div>
+            <div class="timeline-body">합격 DB <strong>1만 건</strong> 달성, 개인화 정확도 검증</div>
+          </div>
+          <div class="timeline-row">
+            <div class="timeline-date">27년 하반기</div>
+            <div class="timeline-body">동남아 · 중국 시장 진출 검토, 시드 <strong>1억원</strong> 투자유치</div>
+          </div>
+        </div>
+
+        <div class="card-accent" style="align-self: stretch;">
+          <h4>지금 도움이 필요한 부분</h4>
+          <p style="font-size: 24px; line-height: 1.6;">
+            <strong>① 정식 출시 자금 (26년 2분기까지)</strong><br>
+            합격작 데이터 라벨링과 데이터분석가 합류에 사용<br><br>
+            <strong>② 사업화·투자유치 멘토링 (26년 상반기)</strong><br>
+            수익 모델 정교화와 시드 라운드 준비
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div class="nav-hint">← →  ·  1 ~ 10  ·  S</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const deck   = document.getElementById('deck');
+  let idx = 0;
+
+  function show(i) {
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, n) => s.classList.toggle('active', n === idx));
+    location.hash = '#' + (idx + 1);
+  }
+
+  function fit() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const scale = Math.min(w / 1920, h / 1080);
+    deck.style.transform = 'scale(' + scale + ')';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ' || e.key === 'n') show(idx + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'm') show(idx - 1);
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 's') document.body.requestFullscreen?.();
+    else if (/^[1-9]$/.test(e.key)) show(parseInt(e.key, 10) - 1);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('a, button')) return;
+    show(idx + 1);
+  });
+
+  window.addEventListener('resize', fit);
+  window.addEventListener('hashchange', () => {
+    const n = parseInt(location.hash.replace('#', ''), 10);
+    if (!isNaN(n)) show(n - 1);
+  });
+
+  const initial = parseInt(location.hash.replace('#', ''), 10);
+  show(isNaN(initial) ? 0 : initial - 1);
+  fit();
+</script>
+
+</body>
+</html>
