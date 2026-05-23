@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 980" width="900" height="980" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="black"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="898" height="978" fill="white" stroke="black" stroke-width="1.5"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="bold">[도 4] 가중치 보정 알고리즘 흐름도</text>
+  <line x1="40" y1="50" x2="860" y2="50" stroke="black" stroke-width="1"/>
+
+  <!-- B100 -->
+  <rect x="200" y="80" width="500" height="60" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="105" text-anchor="middle" font-size="14" font-weight="bold">[B100] 사용자 행동 이벤트 발생</text>
+  <text x="450" y="128" text-anchor="middle" font-size="12">saved_items / 페이지뷰 / 필터 선택</text>
+
+  <line x1="450" y1="140" x2="450" y2="170" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- B200 -->
+  <rect x="200" y="170" width="500" height="60" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="195" text-anchor="middle" font-size="14" font-weight="bold">[B200] 행동 이력 테이블 적재 (Realtime)</text>
+  <text x="450" y="218" text-anchor="middle" font-size="12">saved_items / curation_sessions</text>
+
+  <line x1="450" y1="230" x2="450" y2="260" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- B300 -->
+  <rect x="200" y="260" width="500" height="80" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="285" text-anchor="middle" font-size="14" font-weight="bold">[B300] 사용자 잠재 취향 벡터 산출</text>
+  <text x="450" y="308" text-anchor="middle" font-size="11">preference_vector = aggregate(saved_items, sessions)</text>
+  <text x="450" y="326" text-anchor="middle" font-size="11">저장 작품 평가축 점수 평균 + 필터 선택 빈도 가중</text>
+
+  <line x1="450" y1="340" x2="450" y2="370" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- B400 -->
+  <rect x="200" y="370" width="500" height="60" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="395" text-anchor="middle" font-size="14" font-weight="bold">[B400] 합격 기준 벡터 조회</text>
+  <text x="450" y="418" text-anchor="middle" font-size="11">passing_criteria_vector = lookup(target_school)</text>
+
+  <line x1="450" y1="430" x2="450" y2="460" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- B500 -->
+  <rect x="200" y="460" width="500" height="60" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="485" text-anchor="middle" font-size="14" font-weight="bold">[B500] 편차 벡터(gap) 산출</text>
+  <text x="450" y="508" text-anchor="middle" font-size="11">gap = preference_vector − passing_criteria_vector</text>
+
+  <line x1="450" y1="520" x2="450" y2="550" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- B600 -->
+  <rect x="200" y="550" width="500" height="60" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="575" text-anchor="middle" font-size="14" font-weight="bold">[B600] 보정 가중치 산출</text>
+  <text x="450" y="598" text-anchor="middle" font-size="11">adjusted_weights = base_weights · normalize(gap)</text>
+
+  <line x1="450" y1="610" x2="450" y2="640" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- B700 Decision (다이아몬드) -->
+  <polygon points="450,640 700,720 450,800 200,720" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="710" text-anchor="middle" font-size="14" font-weight="bold">[B700] 누적 행동 수 ≥ 임계값?</text>
+  <text x="450" y="732" text-anchor="middle" font-size="11">(예: N ≥ 30 등)</text>
+
+  <!-- NO 분기 -->
+  <line x1="200" y1="720" x2="100" y2="720" stroke="black" stroke-width="1.5"/>
+  <line x1="100" y1="720" x2="100" y2="870" stroke="black" stroke-width="1.5"/>
+  <line x1="100" y1="870" x2="200" y2="870" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="110" y="713" font-size="12" font-weight="bold">NO</text>
+
+  <!-- YES 분기 -->
+  <line x1="700" y1="720" x2="800" y2="720" stroke="black" stroke-width="1.5"/>
+  <line x1="800" y1="720" x2="800" y2="870" stroke="black" stroke-width="1.5"/>
+  <line x1="800" y1="870" x2="700" y2="870" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="780" y="713" font-size="12" font-weight="bold">YES</text>
+
+  <!-- B810 Rule-based -->
+  <rect x="200" y="840" width="280" height="80" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="340" y="870" text-anchor="middle" font-size="14" font-weight="bold">[B810] Rule-based 가중치</text>
+  <text x="340" y="893" text-anchor="middle" font-size="12">adjusted_weights를</text>
+  <text x="340" y="910" text-anchor="middle" font-size="12">추천 엔진부(150)에 전달</text>
+
+  <!-- B820 ML -->
+  <rect x="420" y="840" width="280" height="80" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="560" y="870" text-anchor="middle" font-size="14" font-weight="bold">[B820] 개인화 고도화부(170)</text>
+  <text x="560" y="893" text-anchor="middle" font-size="12">ML 회귀 모델로 가중치 학습</text>
+  <text x="560" y="910" text-anchor="middle" font-size="12">→ 추천 엔진부(150)에 전달</text>
+
+  <!-- 범례 -->
+  <rect x="40" y="940" width="820" height="30" fill="white" stroke="black" stroke-width="0.5"/>
+  <text x="60" y="960" font-size="11">범례: 다이아몬드 = 조건 분기 / 사각형 = 처리 단계 / 화살표 = 처리 순서</text>
+</svg>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900" width="900" height="900" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="black"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="898" height="898" fill="white" stroke="black" stroke-width="1.5"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="bold">[도 2] 데이터 플로우도 (사용자 입력 → 추천 결과 출력)</text>
+  <line x1="40" y1="50" x2="860" y2="50" stroke="black" stroke-width="1"/>
+
+  <!-- S100 -->
+  <rect x="200" y="80" width="500" height="60" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="105" text-anchor="middle" font-size="14" font-weight="bold">[S100] 사용자 프로필 입력</text>
+  <text x="450" y="128" text-anchor="middle" font-size="12">목표 대학 / 실기 유형 / 실력 수준 / 합격연도 범위</text>
+
+  <line x1="450" y1="140" x2="450" y2="170" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- S200 -->
+  <rect x="200" y="170" width="500" height="70" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="195" text-anchor="middle" font-size="14" font-weight="bold">[S200] 합격작 DB(110)에서 후보군 조회</text>
+  <text x="450" y="218" text-anchor="middle" font-size="11">WHERE school = target_school AND exam_type = target_exam</text>
+  <text x="450" y="234" text-anchor="middle" font-size="11">AND pass_year BETWEEN pref_year_from AND pref_year_to</text>
+
+  <line x1="450" y1="240" x2="450" y2="270" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- S300 -->
+  <rect x="200" y="270" width="500" height="70" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="295" text-anchor="middle" font-size="14" font-weight="bold">[S300] 비전 AI 분석부(130) — ai_report 조회</text>
+  <text x="450" y="318" text-anchor="middle" font-size="12">cache hit: 즉시 반환</text>
+  <text x="450" y="334" text-anchor="middle" font-size="12">cache miss: Vision API 호출 후 저장</text>
+
+  <line x1="450" y1="340" x2="450" y2="370" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- S400 -->
+  <rect x="200" y="370" width="500" height="60" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="395" text-anchor="middle" font-size="14" font-weight="bold">[S400] 메타데이터 매칭부(140) — 유사도 산출</text>
+  <text x="450" y="418" text-anchor="middle" font-size="12">similarity = cosine(user_vec, artwork_meta_vec)</text>
+
+  <line x1="450" y1="430" x2="450" y2="460" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- S500 -->
+  <rect x="200" y="460" width="500" height="70" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="485" text-anchor="middle" font-size="14" font-weight="bold">[S500] 행동 데이터 수집·보정부(160) — 가중치 조회</text>
+  <text x="450" y="508" text-anchor="middle" font-size="12">신규 사용자: 기본 가중치</text>
+  <text x="450" y="524" text-anchor="middle" font-size="12">기존 사용자: 보정 가중치 (adjusted_weights)</text>
+
+  <line x1="450" y1="530" x2="450" y2="560" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- S600 -->
+  <rect x="200" y="560" width="500" height="70" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="585" text-anchor="middle" font-size="14" font-weight="bold">[S600] 추천 엔진부(150) — 가중 점수 산출·정렬</text>
+  <text x="450" y="608" text-anchor="middle" font-size="11">Score = w1·Match + w2·Rate + w3·Trend + w4·Personal</text>
+  <text x="450" y="624" text-anchor="middle" font-size="12">상위 N개 작품 선정</text>
+
+  <line x1="450" y1="630" x2="450" y2="660" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- S700 -->
+  <rect x="200" y="660" width="500" height="70" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="685" text-anchor="middle" font-size="14" font-weight="bold">[S700] 출력·사용자 UI(180) — Top N 결과 출력</text>
+  <text x="450" y="708" text-anchor="middle" font-size="12">추천 근거 텍스트 동봉</text>
+  <text x="450" y="724" text-anchor="middle" font-size="12">curation_sessions 테이블에 세션 기록</text>
+
+  <line x1="450" y1="730" x2="450" y2="760" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- S800 -->
+  <rect x="200" y="760" width="500" height="70" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="450" y="785" text-anchor="middle" font-size="14" font-weight="bold">[S800] 사용자 행동 피드백</text>
+  <text x="450" y="808" text-anchor="middle" font-size="12">저장 / 열람 / 필터 선택</text>
+  <text x="450" y="824" text-anchor="middle" font-size="12">→ 행동 데이터 수집·보정부(160)로 입력</text>
+
+  <!-- S800 -> S500 피드백 화살표 (오른쪽 우회) -->
+  <path d="M 700 795 L 820 795 L 820 495 L 700 495" fill="none" stroke="black" stroke-width="1.5" marker-end="url(#arr)" stroke-dasharray="4 3"/>
+  <text x="828" y="650" font-size="11" font-style="italic" transform="rotate(-90 828 650)">가중치 갱신 피드백</text>
+</svg>

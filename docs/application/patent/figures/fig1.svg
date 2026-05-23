@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" width="1000" height="760" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="black"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="998" height="758" fill="white" stroke="black" stroke-width="1.5"/>
+
+  <text x="500" y="34" text-anchor="middle" font-size="20" font-weight="bold">[도 1] 미대 입시 실기 자료의 AI 큐레이션 및 분석 시스템 (100)</text>
+  <line x1="40" y1="50" x2="960" y2="50" stroke="black" stroke-width="1"/>
+
+  <!-- (120) 사용자 프로필 수집부 -->
+  <rect x="40" y="90" width="220" height="120" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="150" y="118" text-anchor="middle" font-size="14" font-weight="bold">(120) 사용자 프로필 수집부</text>
+  <text x="60" y="148" font-size="12">- 목표 대학</text>
+  <text x="60" y="167" font-size="12">- 실기 유형</text>
+  <text x="60" y="186" font-size="12">- 실력 수준</text>
+  <text x="60" y="205" font-size="12">- 합격연도 범위</text>
+
+  <!-- (140) 메타데이터 매칭부 -->
+  <rect x="390" y="90" width="220" height="120" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="118" text-anchor="middle" font-size="14" font-weight="bold">(140) 메타데이터 매칭부</text>
+  <text x="500" y="150" text-anchor="middle" font-size="12">사용자 프로필 vs 작품 메타</text>
+  <text x="500" y="172" text-anchor="middle" font-size="12">코사인 유사도 / 벡터 임베딩</text>
+  <text x="500" y="194" text-anchor="middle" font-size="12">similarity 산출</text>
+
+  <!-- (180) 출력·사용자 UI -->
+  <rect x="740" y="90" width="220" height="120" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="850" y="118" text-anchor="middle" font-size="14" font-weight="bold">(180) 출력·사용자 UI</text>
+  <text x="760" y="148" font-size="12">- Top N 작품 그리드</text>
+  <text x="760" y="167" font-size="12">- AI 분석 리포트 카드</text>
+  <text x="760" y="186" font-size="12">- 저장 보드 / 대시보드</text>
+
+  <!-- (150) 추천 엔진부 -->
+  <rect x="390" y="290" width="220" height="120" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="318" text-anchor="middle" font-size="14" font-weight="bold">(150) 추천 엔진부</text>
+  <text x="500" y="345" text-anchor="middle" font-size="11">Score = w1·Match + w2·Rate</text>
+  <text x="500" y="365" text-anchor="middle" font-size="11">     + w3·Trend + w4·Personal</text>
+  <text x="500" y="392" text-anchor="middle" font-size="12">상위 N개 작품 선정</text>
+
+  <!-- (110) 합격작 DB 구축부 -->
+  <rect x="40" y="290" width="220" height="120" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="150" y="318" text-anchor="middle" font-size="14" font-weight="bold">(110) 합격작 DB 구축부</text>
+  <text x="60" y="348" font-size="12">- image_url</text>
+  <text x="60" y="367" font-size="12">- school / exam_type</text>
+  <text x="60" y="386" font-size="12">- pass_year / region</text>
+  <text x="60" y="405" font-size="12">- tags / ai_report</text>
+
+  <!-- (130) 비전 AI 분석부 -->
+  <rect x="40" y="490" width="320" height="160" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="200" y="518" text-anchor="middle" font-size="14" font-weight="bold">(130) 비전 AI 분석부</text>
+  <text x="200" y="544" text-anchor="middle" font-size="12">대학별 분기형 프롬프트 동반 입력</text>
+  <text x="60" y="574" font-size="12">① 출제 문제 분석</text>
+  <text x="60" y="593" font-size="12">② 평가 포인트 추출</text>
+  <text x="60" y="612" font-size="12">③ 작품 의도 분석 (구도·명암·선질·완성도·표현력)</text>
+  <text x="60" y="631" font-size="12">④ 평가 기준 부합도 산출   ⑤ 유사 합격작 안내</text>
+
+  <!-- (160) 행동 데이터 수집·보정부 -->
+  <rect x="640" y="290" width="320" height="120" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="800" y="318" text-anchor="middle" font-size="14" font-weight="bold">(160) 행동 데이터 수집·보정부</text>
+  <text x="800" y="348" text-anchor="middle" font-size="12">saved_items / 열람 / 필터 선택 적재</text>
+  <text x="800" y="370" text-anchor="middle" font-size="11">gap = preference_vector − criteria_vector</text>
+  <text x="800" y="392" text-anchor="middle" font-size="11">adjusted_weights = base · normalize(gap)</text>
+
+  <!-- (170) 개인화 고도화부 -->
+  <rect x="640" y="490" width="320" height="100" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="800" y="518" text-anchor="middle" font-size="14" font-weight="bold">(170) 개인화 고도화부</text>
+  <text x="800" y="548" text-anchor="middle" font-size="12">누적량 ≥ 임계값 시 Rule-based → ML 전환</text>
+  <text x="800" y="572" text-anchor="middle" font-size="12">사용자별 추천 정확도 95%+ 수렴</text>
+
+  <!-- (190) 데이터 저장소 -->
+  <rect x="390" y="490" width="220" height="100" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="518" text-anchor="middle" font-size="14" font-weight="bold">(190) 데이터 저장소</text>
+  <text x="500" y="544" text-anchor="middle" font-size="12">artworks / users</text>
+  <text x="500" y="562" text-anchor="middle" font-size="12">saved_items</text>
+  <text x="500" y="580" text-anchor="middle" font-size="12">curation_sessions</text>
+
+  <!-- (200) B2B 학원 대시보드부 -->
+  <rect x="40" y="680" width="920" height="60" fill="white" stroke="black" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="500" y="705" text-anchor="middle" font-size="14" font-weight="bold">(200) B2B 학원 대시보드부 (선택적 실시예)</text>
+  <text x="500" y="725" text-anchor="middle" font-size="12">학원별 작품 분포 / 인기 작품 / 가입자 추이 — 일별 배치(KST 06:00) Materialized View</text>
+
+  <!-- 화살표 -->
+  <!-- 120 -> 140 -->
+  <line x1="260" y1="150" x2="388" y2="150" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- 140 -> 150 -->
+  <line x1="500" y1="210" x2="500" y2="288" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- 150 -> 180 -->
+  <line x1="610" y1="200" x2="740" y2="200" stroke="black" stroke-width="1.5" marker-end="url(#arr)" stroke-dasharray="0"/>
+  <path d="M 610 350 L 700 350 L 700 200 L 740 200" fill="none" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- 110 -> 140 (위로) -->
+  <path d="M 150 290 L 150 240 L 450 240 L 450 210" fill="none" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- 110 -> 130 -->
+  <line x1="150" y1="410" x2="150" y2="488" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- 130 -> 190 (ai_report 저장) -->
+  <path d="M 360 570 L 410 570 L 410 540 L 388 540" fill="none" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="370" y="535" font-size="10">ai_report</text>
+  <!-- 180 -> 160 (사용자 행동) -->
+  <path d="M 850 210 L 850 250 L 800 250 L 800 288" fill="none" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="855" y="240" font-size="10">저장·열람·필터</text>
+  <!-- 160 -> 150 (가중치 보정) -->
+  <line x1="640" y1="350" x2="612" y2="350" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="618" y="342" font-size="10">w 보정</text>
+  <!-- 170 -> 160 (ML 가중치 갱신) -->
+  <line x1="800" y1="488" x2="800" y2="412" stroke="black" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- 140 -> 110 (메타 조회) - reverse 점선 -->
+  <path d="M 388 170 L 280 170 L 280 290" fill="none" stroke="black" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+  <text x="290" y="200" font-size="10" font-style="italic">메타 조회</text>
+</svg>

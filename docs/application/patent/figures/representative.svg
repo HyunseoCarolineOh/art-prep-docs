@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700" font-family="'Malgun Gothic','Apple SD Gothic Neo','Noto Sans KR',sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="black"/>
+    </marker>
+  </defs>
+
+  <rect x="1" y="1" width="998" height="698" fill="white" stroke="black" stroke-width="1.5"/>
+
+  <text x="500" y="38" text-anchor="middle" font-size="22" font-weight="bold">[대표도]</text>
+  <text x="500" y="65" text-anchor="middle" font-size="16">미대 입시 실기 자료의 AI 큐레이션 및 분석 시스템(100)</text>
+  <line x1="60" y1="80" x2="940" y2="80" stroke="black" stroke-width="1"/>
+
+  <!-- (120) 사용자 프로필 (입력 좌) -->
+  <rect x="80" y="120" width="320" height="120" fill="white" stroke="black" stroke-width="2"/>
+  <text x="240" y="150" text-anchor="middle" font-size="16" font-weight="bold">(120) 사용자 프로필 수집부</text>
+  <text x="240" y="180" text-anchor="middle" font-size="13">목표 대학 · 실기 유형</text>
+  <text x="240" y="202" text-anchor="middle" font-size="13">현재 실력 수준</text>
+  <text x="240" y="224" text-anchor="middle" font-size="13">선호 합격연도 범위</text>
+
+  <!-- (110) 합격작 DB (입력 우) -->
+  <rect x="600" y="120" width="320" height="120" fill="white" stroke="black" stroke-width="2"/>
+  <text x="760" y="150" text-anchor="middle" font-size="16" font-weight="bold">(110) 합격작 데이터베이스</text>
+  <text x="760" y="180" text-anchor="middle" font-size="13">실기 작품 이미지</text>
+  <text x="760" y="202" text-anchor="middle" font-size="13">대학·전형·연도·지역 메타데이터</text>
+  <text x="760" y="224" text-anchor="middle" font-size="13">AI 분석 리포트(ai_report)</text>
+
+  <!-- 화살표 → 가운데 시스템 -->
+  <line x1="240" y1="240" x2="380" y2="298" stroke="black" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="760" y1="240" x2="620" y2="298" stroke="black" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- (100) 중앙 큐레이션 시스템 -->
+  <rect x="180" y="300" width="640" height="180" fill="white" stroke="black" stroke-width="3"/>
+  <text x="500" y="335" text-anchor="middle" font-size="18" font-weight="bold">(100) AI 큐레이션 시스템</text>
+
+  <!-- 내부 3개 모듈 -->
+  <rect x="210" y="360" width="180" height="100" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="300" y="388" text-anchor="middle" font-size="13" font-weight="bold">(130) 비전 AI 분석부</text>
+  <text x="300" y="412" text-anchor="middle" font-size="11">대학별 분기형 프롬프트</text>
+  <text x="300" y="430" text-anchor="middle" font-size="11">5단계 분석</text>
+  <text x="300" y="450" text-anchor="middle" font-size="11">(구도·명암·선질·완성도·표현력)</text>
+
+  <rect x="410" y="360" width="180" height="100" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="500" y="388" text-anchor="middle" font-size="13" font-weight="bold">(150) 추천 엔진부</text>
+  <text x="500" y="412" text-anchor="middle" font-size="11">유사도 + 평가 부합도</text>
+  <text x="500" y="430" text-anchor="middle" font-size="11">+ 트렌드 + 개인화</text>
+  <text x="500" y="450" text-anchor="middle" font-size="11">가중 점수 산출</text>
+
+  <rect x="610" y="360" width="180" height="100" fill="white" stroke="black" stroke-width="1.5"/>
+  <text x="700" y="388" text-anchor="middle" font-size="13" font-weight="bold">(160) 행동 데이터</text>
+  <text x="700" y="406" text-anchor="middle" font-size="13" font-weight="bold">수집·보정부</text>
+  <text x="700" y="430" text-anchor="middle" font-size="11">취향 벡터 vs 합격 기준</text>
+  <text x="700" y="450" text-anchor="middle" font-size="11">편차 보정 가중치</text>
+
+  <!-- 가운데 → 출력 -->
+  <line x1="500" y1="480" x2="500" y2="540" stroke="black" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- (180) 출력 -->
+  <rect x="180" y="540" width="640" height="120" fill="white" stroke="black" stroke-width="2"/>
+  <text x="500" y="572" text-anchor="middle" font-size="16" font-weight="bold">(180) 출력 — 개인화 큐레이션 결과</text>
+  <text x="500" y="600" text-anchor="middle" font-size="13">목표 대학·전형에 최적화된 합격작 Top N</text>
+  <text x="500" y="622" text-anchor="middle" font-size="13">+ AI 5단계 분석 리포트 + 유사 합격작 안내</text>
+  <text x="500" y="648" text-anchor="middle" font-size="13" font-weight="bold">탐색 시간 132분 → 10초</text>
+
+  <!-- 피드백 (180→160 점선) -->
+  <path d="M 820 600 L 880 600 L 880 410 L 790 410" fill="none" stroke="black" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr)"/>
+  <text x="888" y="510" font-size="11" font-style="italic" transform="rotate(-90 888 510)">저장·열람·필터 피드백</text>
+</svg>
