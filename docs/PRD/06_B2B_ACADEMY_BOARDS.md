@@ -1,6 +1,7 @@
 # 06 B2B 학원 보드 스펙 + 학원 식별 컬럼 안
 
-> ArtPrep v1.0 | 작성일: 2026-05-16 (최종 보강: 2026-05-17) | 상태: 데이터팀 회신 대기 (영향도 회신 후 확정)
+> ArtPrep v1.0 | 작성일: 2026-05-16 (최종 보강: 2026-05-17) | **현행화: 2026-06-09**
+> 상태: §2 academies 마스터는 **축소판으로 이미 구현됨**(천시원 5/17). 잔여 §8 영향도 회신 대기. 상세는 §0.3.
 
 ---
 
@@ -48,14 +49,50 @@
 
 데이터팀이 컬럼 추가 영향도를 가늠할 수 있도록 현재 상태 요약. 자세한 정의는 Supabase 직접 조회.
 
-| 테이블 | 현재 rows | 주요 컬럼 | 비고 |
+> ⚠️ 아래 rows는 **작성 시점(5/16)** 기준. **현재(6/9) 실제 수치는 §0.3 참조** (artworks 27 / profiles 2 / saved_items 6 / academies 2).
+
+| 테이블 | 작성시 rows | 주요 컬럼 | 비고 |
 |--------|----------|----------|------|
 | `artworks` | 0 | id (bigint), title, image_url, image_path, university, art_type, academy_type, year, user_id (uploader), tags | **academy_type은 학원 카테고리(분류)지 개별 학원 식별자가 아님**. 현재 시드 비어있음. |
 | `profiles` | 0 | id (uuid, FK→auth.users), user_type ('student'/'teacher'/'academy'), name, nickname, target_university, target_major, **academy_name (text, 자유 입력)**, exam_types | **`academy_name`이 이미 있음** — 학생이 본인 다니는 학원명을 자유 텍스트로 적도록 한 컬럼. 표준화는 안 되어 있음. |
 | `saved_items` | 3 | user_id, artwork_id | 학생의 "하트". 인기 작품 지표의 원천. |
 | `filter_options` | 15 | category ('university'/'art_type'/'academy_type'), value, display_order, is_active | 화면 필터 드롭다운의 마스터 옵션. **개별 학원 목록이 아님** — academy_type은 "학원 분류"(예: 대형/소형 같은 타입). |
 
-**핵심**: 현재 스키마에는 **개별 학원을 식별하는 정식 키가 없습니다**. `profiles.academy_name`이 자유 텍스트로 들어오긴 하지만 표준화 불가. 그래서 §2에서 별도 마스터 테이블을 제안합니다.
+**핵심(작성 시점)**: 당시 스키마에는 개별 학원을 식별하는 정식 키가 없어 §2에서 별도 마스터 테이블을 제안했음. → **이후 천시원이 5/17에 축소판 `academies`를 실제 생성**(§0.3).
+
+---
+
+## 0.3 현행화 노트 (2026-06-09) — 제안 vs 실제 구현
+
+> 6/9 Supabase 직접 조회로 PRD 작성 이후 변경분을 반영. **본문 §2~§9의 "제안"과 아래 "실제"가 갈리는 지점**을 명시.
+
+### 실제 rows (6/9)
+| 테이블 | 작성시 | 현재 | 메모 |
+|--------|--------|------|------|
+| artworks | 0 | **27** | 시드 27개(4/9 일괄, `user_id`·`academy_id` 모두 null). 테스트 1개(id 68)는 6/9 삭제 |
+| profiles | 0 | **2** | 실가입 2명 (GA signup_complete 2건과 일치) |
+| saved_items | 3 | **6** | |
+| academies | (없음) | **2** | 미지정 / 테스트미술학원 — **실제 학원장 네트워크 20명 미입력** |
+| ai_reports | — | **2** | |
+
+### academies 스키마 — 제안(§2) vs 실제
+| 항목 | PRD 제안 (§2) | 실제 구현 (5/17) |
+|------|--------------|------------------|
+| 테이블 | 신설 제안 | ✅ **생성됨** |
+| 컬럼 | id, name, region, contact_name, contact_phone, **contract_status**, **owner_user_id**, notes, created_at, updated_at | id, name, region, **is_active**, created_at, updated_at |
+| 차이 | — | contract_status·owner_user_id·contact_*·notes **미구현**, is_active 추가 |
+| `artworks.academy_id` | ALTER 제안 | ✅ 컬럼+인덱스(`idx_artworks_academy_id`) 존재 |
+| `profiles.academy_id` | ALTER 제안 | ❌ **미구현** (academy_name 자유텍스트만 존재) |
+| 인덱스 | academy_id 2종 + contract_status | artworks academy_id ✅ / academies는 `idx_academies_active_name`(제안과 다름) / profiles academy_id ❌ |
+
+### 옵션 A(학원별 보드)를 막는 실제 blocker (→ comm-log Open #16)
+1. **데이터 공백**: 작품 27개 `academy_id` 전부 null → 보드 ①②가 구조적으로 빈 화면. academies에 실제 학원 0개 → 영업 자료 불가.
+2. **스키마 갭**: 보드 ③(가입자 추이)의 핵심 지표가 `contract_status`(영업 깔때기)·`profiles.academy_id`(학원 소속 학생 수)에 의존하는데 둘 다 미구현.
+3. **선결 작업**: 합격작 100장 수집 시 `academy_id` 동반 입력 규칙 + 학원장 네트워크 20명 academies 등록 + (보드 ③ 원하면) contract_status·profiles.academy_id ALTER.
+
+### §8 회신에 미치는 영향
+- **§8.1 마이그레이션**: academies + artworks.academy_id는 **이미 적용 완료**. 잔여 = profiles.academy_id, contract_status, RLS 4종 적용 여부 확인.
+- **§8.2 시드/academy_id**: 시드 정리 **완료**(6/9). 시드 27개는 academy_id null 유지 → 합격작 교체 시 채우는 방향으로 정리됨.
 
 ---
 
